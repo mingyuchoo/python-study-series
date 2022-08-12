@@ -5,7 +5,7 @@ from time import sleep
 # Connect to the database
 connection = pymysql.connect(host='localhost',
                              user='root',
-                             password='localmysql1234',
+                             password='root-password-here',
                              db='test',
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
