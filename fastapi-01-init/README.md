@@ -2,7 +2,7 @@
 
 ## How to install
 
-```sh
+```bash
 pip install fastapi
 pip install "uvicorn[standard]"
 pip install mypy
@@ -10,12 +10,12 @@ pip install mypy
 
 ## How to check data type
 
-```sh
+```bash
 mypy main.py
 ```
 
 ## How to run
 
-```sh
+```bash
 uvicorn main:app --reload
 ```
