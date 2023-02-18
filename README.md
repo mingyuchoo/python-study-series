@@ -5,3 +5,15 @@
 </p>
 
 # python-study-series
+
+## How to create a python project
+
+```bash
+cd <project-name>
+python -m venv venv
+. ./venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install <some-package-to-install>  #python -m pip install camelcase
+python -m pip list
+python -m pip freeze > docs/requirements.txt
+```
