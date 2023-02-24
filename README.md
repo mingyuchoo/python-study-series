@@ -9,11 +9,14 @@
 ## How to create a python project
 
 ```bash
-cd <project-name>
-python -m venv venv
-. ./venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install <some-package-to-install>  #python -m pip install camelcase
-python -m pip list
-python -m pip freeze > docs/requirements.txt
+$ nix-shell
+$ mkdir <project-name>
+$ cd <project-name>
+$ python -m venv venv
+$ source ./venv/bin/activate
+$ python -m pip install behave
+$ python -m pip install coverage
+$ python -m pip install pydantic
+$ pythom -m list
+$ python -m pip freeze > requirements.txt
 ```
