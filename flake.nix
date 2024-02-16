@@ -19,7 +19,7 @@
               export LANG=C.UTF-8
               export EDITOR=emacs
               eval "$(direnv hook bash)"
-              python -m venv venv
+              python -m venv $HOME/.venv
               source $PWD/venv/bin/activate
               python -m pip install \
                      --requirement requirements.txt \
