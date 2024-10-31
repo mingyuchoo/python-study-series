@@ -5,7 +5,7 @@
 groups = ["default"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:c8a84c9cd11a092fa9cb8714c4a592136645bdf1cfd05203ce62e40bbe98d604"
+content_hash = "sha256:7c7715cf456f4a5253b3077927d21c3081954851c149479f8439107868a71e3c"
 
 [[metadata.targets]]
 requires_python = "==3.12.*"
@@ -420,20 +420,20 @@ files = [
 
 [[package]]
 name = "langchain-aws"
-version = "0.2.5"
+version = "0.2.6"
 requires_python = "<4.0,>=3.9"
 summary = "An integration package connecting AWS and LangChain"
 groups = ["default"]
 dependencies = [
     "boto3>=1.34.131",
-    "langchain-core<0.4,>=0.3.14",
+    "langchain-core<0.4,>=0.3.15",
     "numpy<2,>=1; python_version < \"3.12\"",
     "numpy<2.0.0,>=1.26.0; python_version >= \"3.12\"",
     "pydantic<3,>=2",
 ]
 files = [
-    {file = "langchain_aws-0.2.5-py3-none-any.whl", hash = "sha256:b1d1a886b6d399d602dd81ef9e74c5ed9db6752fec86b4db9aebe76ccdc0307c"},
-    {file = "langchain_aws-0.2.5.tar.gz", hash = "sha256:f16b91a0a2a3b6f4840a1569a895b65b5bfdb1a759bdb42789a8c6fd4a674716"},
+    {file = "langchain_aws-0.2.6-py3-none-any.whl", hash = "sha256:b22c0046d5795bc4a2d5d09b45f25a359c7bd31961b206622ef22727e7891f26"},
+    {file = "langchain_aws-0.2.6.tar.gz", hash = "sha256:73235e429267ba48a1c32a1c7f2e7ae356da5b4fd00cb3a53b6b24bf10b9985f"},
 ]
 
 [[package]]
@@ -464,7 +464,7 @@ files = [
 
 [[package]]
 name = "langchain-core"
-version = "0.3.14"
+version = "0.3.15"
 requires_python = "<4.0,>=3.9"
 summary = "Building applications with LLMs through composability"
 groups = ["default"]
@@ -479,8 +479,8 @@ dependencies = [
     "typing-extensions>=4.7",
 ]
 files = [
-    {file = "langchain_core-0.3.14-py3-none-any.whl", hash = "sha256:3b1e031820ef60af7134ffb7fd15393c5be87031b4288cc1978130f4f468dca8"},
-    {file = "langchain_core-0.3.14.tar.gz", hash = "sha256:cef68958d59d0970a89c778004dfa7d4559a89139abbf8b0e348e18511792e84"},
+    {file = "langchain_core-0.3.15-py3-none-any.whl", hash = "sha256:3d4ca6dbb8ed396a6ee061063832a2451b0ce8c345570f7b086ffa7288e4fa29"},
+    {file = "langchain_core-0.3.15.tar.gz", hash = "sha256:b1a29787a4ffb7ec2103b4e97d435287201da7809b369740dd1e32f176325aba"},
 ]
 
 [[package]]
@@ -514,18 +514,18 @@ files = [
 
 [[package]]
 name = "langgraph"
-version = "0.2.40"
+version = "0.2.43"
 requires_python = "<4.0,>=3.9.0"
 summary = "Building stateful, multi-actor applications with LLMs"
 groups = ["default"]
 dependencies = [
-    "langchain-core<0.4,>=0.2.39",
+    "langchain-core!=0.3.0,!=0.3.1,!=0.3.10,!=0.3.11,!=0.3.12,!=0.3.13,!=0.3.14,!=0.3.2,!=0.3.3,!=0.3.4,!=0.3.5,!=0.3.6,!=0.3.7,!=0.3.8,!=0.3.9,<0.4.0,>=0.2.43",
     "langgraph-checkpoint<3.0.0,>=2.0.0",
     "langgraph-sdk<0.2.0,>=0.1.32",
 ]
 files = [
-    {file = "langgraph-0.2.40-py3-none-any.whl", hash = "sha256:e117d37d8b529ceb9dd08402ff26501888d6785f2e46555b48e6ac0a95324c27"},
-    {file = "langgraph-0.2.40.tar.gz", hash = "sha256:36442f692983a81a798f4d4617afbffb6a418a74408f5142f776c10a8b3d4db9"},
+    {file = "langgraph-0.2.43-py3-none-any.whl", hash = "sha256:65b712569248f671d25a2825ba12369a8e990b787f98fd2c4b71fbb5495d2145"},
+    {file = "langgraph-0.2.43.tar.gz", hash = "sha256:42126538312d3c65634f44b4169f3d4f4440ad8b906f03f3035c8b468f6efaaa"},
 ]
 
 [[package]]
