@@ -1,0 +1,23 @@
+[project]
+name = "tutorials"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = [
+    {name = "mingyuchoo", email = "mingyuchoo@gmail.com"},
+]
+dependencies = [
+    "langchain-aws>=0.2.5",
+    "langchain>=0.3.6",
+    "langchain-core>=0.3.14",
+    "langchain-community>=0.3.4",
+    "langchain-experimental>=0.3.2",
+    "langgraph>=0.2.40",
+    "langserve[all]>=0.3.0",
+]
+requires-python = "==3.12.*"
+readme = "README.md"
+license = {text = "MIT"}
+
+
+[tool.pdm]
+distribution = false
