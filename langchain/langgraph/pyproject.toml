@@ -16,4 +16,4 @@ distribution = false
 
 
 [tool.pdm.scripts]
-start = "python src/main.py"
+start = "python src/functional_main.py"
