@@ -11,7 +11,6 @@ pdm lock
 ## How to run
 
 ```bash
-pdm install
 pdm run python src/main.py
 # or
 pdm run start
