@@ -1,14 +1,14 @@
 [tool.poetry]
-name = "sanic-01-init"
-version = "0.1.0"
-description = ""
-authors = ["mingyuchoo <mingyuchoo@gmail.com>"]
-readme = "README.md"
+  authors     = ["mingyuchoo <mingyuchoo@gmail.com>"]
+  description = ""
+  name        = "sanic-01-init"
+  readme      = "README.md"
+  version     = "0.1.0"
 
-[tool.poetry.dependencies]
-python = "^3.9"
+  [tool.poetry.dependencies]
+    python = "^3.9"
 
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+  build-backend = "poetry.core.masonry.api"
+  requires      = ["poetry-core"]
