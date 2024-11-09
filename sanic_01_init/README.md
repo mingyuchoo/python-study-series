@@ -12,8 +12,8 @@ $ pip install poetry
 ## How to create a project
 
 ```bash
-$ poetry new <project-name>
-$ cd <project-name>
+$ poetry new {project-name}
+$ cd {project-name}
 ```
 
 ## How to add essential dependencies

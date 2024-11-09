@@ -18,8 +18,8 @@ curl -sSL https://pdm-project.org/install-pdm.py | python3 -
 
 ```bash
 source $HOME/.local/share/pdm/venv/bin/activate
-mkdir <project-name>
-cd <project-name>
+mkdir {project-name}
+cd {project-name}
 pdm init
 pdm add behave
 pdm add coverage
@@ -34,8 +34,8 @@ pdm add mypy
  
 ```bash
 nix-shell
-mkdir <project-name>
-cd <project-name>
+mkdir {project-name}
+cd {project-name}
 python -m venv $HOME/.venv
 source $HOME/.venv/bin/activate
 python -m pip install behave
