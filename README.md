@@ -6,7 +6,60 @@
 
 # python-study-series
 
-## Prerequsites
+## Package Managers
+
+### UV
+
+#### Install UV
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+#### Create a project
+
+```bash
+uv init {project_name}
+cd {project_name}
+```
+#### Add packages current project
+
+```bash
+uv add {package_name}
+uv run {pacage_name} check
+```
+
+#### Install tools
+
+```bash
+uv tool install {tool_name}
+```
+
+#### Install multiple Python versions
+
+```bash
+uv python install 3.10 3.11 3.12
+```
+
+#### Create venv with a specific Python version
+
+```bash
+uv venv --python 3.12.0
+```
+
+#### Use a specific Python version in the current directory
+
+```bash
+uv python pin 3.11
+```
+#### Run a script
+
+```bash
+uv run {script_name}.py
+```
+
+
+### PDM
 
 Install PDM for Python package management
 
@@ -14,7 +67,7 @@ Install PDM for Python package management
 curl -sSL https://pdm-project.org/install-pdm.py | python3 -
 ```
 
-## Hwo to create a Python project with PDM
+#### Hwo to create a Python project with PDM
 
 ```bash
 source $HOME/.local/share/pdm/venv/bin/activate
@@ -30,7 +83,7 @@ pdm add pylint
 pdm add mypy
 ```
 
-## How to create a Python project with PIP on Nix
+#### How to create a Python project with PIP on Nix
  
 ```bash
 nix-shell
@@ -51,4 +104,5 @@ python -m pip freeze > requirements.txt
 
 ## References
 
+- https://docs.astral.sh/uv/
 - https://github.com/pdm-project/pdm
