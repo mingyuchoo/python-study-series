@@ -14,6 +14,8 @@
 
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
+# or
+cargo install --git https://github.com/astral-sh/uv uv
 ```
 
 #### Create a project
