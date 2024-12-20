@@ -60,6 +60,11 @@ uv python pin 3.11
 uv run {script_name}.py
 ```
 
+#### Install packages again
+
+```bash
+uv pip install .
+```
 
 ### PDM
 
