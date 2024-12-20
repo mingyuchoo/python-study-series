@@ -24,6 +24,13 @@ cargo install --git https://github.com/astral-sh/uv uv
 uv init {project_name}
 cd {project_name}
 ```
+
+#### Add package globally
+
+```bash
+uv pip install {package_name}
+```
+
 #### Add packages current project
 
 ```bash
@@ -107,6 +114,23 @@ python -m pip install pylint
 python -m pip install mypy
 pythom -m list
 python -m pip freeze > requirements.txt
+```
+
+## Jupyter Notebook
+
+### How to install Jupyter Notebook
+
+```bash
+cd
+uv python install 3.13
+uv venv --python 3.13
+uv pip install notebook
+```
+
+### How to run Jupyter Notebook
+
+```bash
+jupyter notebook
 ```
 
 ## References
