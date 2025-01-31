@@ -25,24 +25,6 @@ uv init {project_name}
 cd {project_name}
 ```
 
-#### Add package globally
-
-```bash
-uv pip install {package_name}
-```
-
-#### Add packages current project
-
-```bash
-uv add {package_name}
-uv run {pacage_name} check
-```
-
-#### Install tools
-
-```bash
-uv tool install {tool_name}
-```
 
 #### Install multiple Python versions
 
@@ -60,6 +42,25 @@ uv venv --python 3.12.0
 
 ```bash
 uv python pin 3.11
+```
+  
+#### Add package globally
+
+```bash
+uv pip install {package_name}
+```
+
+#### Install tools
+
+```bash
+uv tool install {tool_name}
+```
+
+#### Add packages current project
+
+```bash
+uv add {package_name}
+uv run {pacage_name} check
 ```
 #### Run a script
 
