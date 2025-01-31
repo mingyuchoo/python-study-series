@@ -12,7 +12,7 @@
     "langserve[all]>=0.3.0",
   ]
   description = "Default template for PDM package"
-  license = {text = "MIT"}
+  license = {text = "BSD 3-Clause"}
   name = "tutorials"
   readme = "README.md"
   requires-python = "==3.12.*"

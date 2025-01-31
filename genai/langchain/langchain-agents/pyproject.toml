@@ -10,7 +10,7 @@
     "langgraph>=0.2.44",
   ]
   description = "Default template for PDM package"
-  license = {text = "MIT"}
+  license = {text = "BSD 3-Clause"}
   name = "langchain-agents"
   readme = "README.md"
   requires-python = ">=3.12"

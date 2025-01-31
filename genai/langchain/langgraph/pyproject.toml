@@ -10,7 +10,7 @@
     "tavily-python>=0.5.0",
   ]
   description = "Default template for PDM package"
-  license = {text = "MIT"}
+  license = {text = "BSD 3-Clause"}
   name = "langgraph"
   readme = "README.md"
   requires-python = "==3.12.*"
