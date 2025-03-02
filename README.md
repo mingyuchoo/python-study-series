@@ -54,6 +54,13 @@ uv pip install {package_name}
 
 ```bash
 uv tool install {tool_name}
+uv tool install behave
+uv tool install coverage
+uv tool install pydantic
+uv tool install python-lsp-server
+uv tool install pyright
+uv tool install pylint
+uv tool install mypy
 ```
 
 #### Add packages current project
