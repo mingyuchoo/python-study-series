@@ -57,6 +57,9 @@ uv pip install pyright
 uv pip install python-lsp-server
 uv pip install jupyter
 uv pip install notebook
+uv pip install numpy
+uv pip install pandas
+uv pip install streamlit
 ```
 
 #### Add packages current project
