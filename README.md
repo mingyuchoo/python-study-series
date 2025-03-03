@@ -48,19 +48,15 @@ uv python pin 3.11
 
 ```bash
 uv pip install {package_name}
-```
-
-#### Install tools
-
-```bash
-uv tool install {tool_name}
-uv tool install behave
-uv tool install coverage
-uv tool install pydantic
-uv tool install python-lsp-server
-uv tool install pyright
-uv tool install pylint
-uv tool install mypy
+uv pip install behave
+uv pip install coverage
+uv pip install mypy
+uv pip install notebook
+uv pip install pylint
+uv pip install pyright
+uv pip install python-lsp-server
+uv pip install jupyter
+uv pip install notebook
 ```
 
 #### Add packages current project
