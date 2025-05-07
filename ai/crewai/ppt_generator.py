@@ -2,8 +2,6 @@ import os
 
 import matplotlib
 import matplotlib.pyplot as plt
-import numpy as np
-import matplotlib
 import matplotlib.font_manager as fm
 matplotlib.use("Agg")  # Use non-interactive backend
 # --- 한글 폰트 설정 시작 ---
