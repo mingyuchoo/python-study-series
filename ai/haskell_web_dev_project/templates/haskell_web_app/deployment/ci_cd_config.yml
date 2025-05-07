@@ -1,0 +1,259 @@
+# CI/CD Configuration for Haskell Web Application
+
+# This file provides configuration examples for various CI/CD platforms
+
+# GitHub Actions (already implemented in .github/workflows/ci.yml)
+# This is a reference copy of the configuration
+github_actions: |
+  name: Haskell CI/CD
+
+  on:
+    push:
+      branches: [ main, master ]
+    pull_request:
+      branches: [ main, master ]
+
+  jobs:
+    build:
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Haskell
+        uses: haskell/actions/setup@v2
+        with:
+          ghc-version: '9.2.5'
+          cabal-version: '3.6.2.0'
+
+      - name: Cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cabal/store
+            dist-newstyle
+          key: ${{ runner.os }}-cabal-${{ hashFiles('**/*.cabal') }}-${{ hashFiles('**/cabal.project') }}
+          restore-keys: |
+            ${{ runner.os }}-cabal-
+
+      - name: Install dependencies
+        run: cabal build --only-dependencies --enable-tests
+
+      - name: Build
+        run: cabal build --enable-tests
+
+      - name: Run tests
+        run: cabal test
+
+    docker:
+      needs: build
+      if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/haskell-web-app:latest
+
+# GitLab CI/CD Configuration Example
+gitlab_ci: |
+  stages:
+    - build
+    - test
+    - deploy
+
+  variables:
+    GHC_VERSION: "9.2.5"
+
+  cache:
+    paths:
+      - .cabal-store/
+      - dist-newstyle/
+
+  build:
+    stage: build
+    image: haskell:$GHC_VERSION
+    script:
+      - cabal update
+      - cabal build --only-dependencies
+      - cabal build
+    artifacts:
+      paths:
+        - dist-newstyle/
+
+  test:
+    stage: test
+    image: haskell:$GHC_VERSION
+    script:
+      - cabal test
+    dependencies:
+      - build
+
+  deploy_staging:
+    stage: deploy
+    image: docker:latest
+    services:
+      - docker:dind
+    script:
+      - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG .
+      - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+      - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+    only:
+      - develop
+
+  deploy_production:
+    stage: deploy
+    image: docker:latest
+    services:
+      - docker:dind
+    script:
+      - docker build -t $CI_REGISTRY_IMAGE:latest .
+      - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+      - docker push $CI_REGISTRY_IMAGE:latest
+    only:
+      - main
+      - master
+
+# Jenkins Pipeline Configuration Example
+jenkins_pipeline: |
+  pipeline {
+    agent {
+      docker {
+        image 'haskell:9.2.5'
+      }
+    }
+    
+    stages {
+      stage('Checkout') {
+        steps {
+          checkout scm
+        }
+      }
+      
+      stage('Build') {
+        steps {
+          sh 'cabal update'
+          sh 'cabal build --only-dependencies'
+          sh 'cabal build'
+        }
+      }
+      
+      stage('Test') {
+        steps {
+          sh 'cabal test'
+        }
+      }
+      
+      stage('Package') {
+        steps {
+          sh 'cabal install --installdir=./dist/bin'
+          sh 'tar -czvf haskell-web-app.tar.gz -C dist/bin .'
+          archiveArtifacts artifacts: 'haskell-web-app.tar.gz', fingerprint: true
+        }
+      }
+      
+      stage('Deploy') {
+        when {
+          branch 'main'
+        }
+        steps {
+          sh 'docker build -t haskell-web-app:latest .'
+          sh 'docker tag haskell-web-app:latest ${DOCKER_REGISTRY}/haskell-web-app:latest'
+          withCredentials([usernamePassword(credentialsId: 'docker-registry-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
+            sh 'docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${DOCKER_REGISTRY}'
+            sh 'docker push ${DOCKER_REGISTRY}/haskell-web-app:latest'
+          }
+        }
+      }
+    }
+    
+    post {
+      always {
+        cleanWs()
+      }
+    }
+  }
+
+# CircleCI Configuration Example
+circleci_config: |
+  version: 2.1
+  
+  orbs:
+    haskell: haskell/haskell@1.0.1
+  
+  jobs:
+    build:
+      docker:
+        - image: haskell:9.2.5
+      steps:
+        - checkout
+        - restore_cache:
+            keys:
+              - cabal-{{ checksum "haskell-web-app.cabal" }}
+        - run:
+            name: Update package list
+            command: cabal update
+        - run:
+            name: Install dependencies
+            command: cabal build --only-dependencies
+        - save_cache:
+            key: cabal-{{ checksum "haskell-web-app.cabal" }}
+            paths:
+              - ~/.cabal/store
+              - dist-newstyle
+        - run:
+            name: Build application
+            command: cabal build
+    
+    test:
+      docker:
+        - image: haskell:9.2.5
+      steps:
+        - checkout
+        - restore_cache:
+            keys:
+              - cabal-{{ checksum "haskell-web-app.cabal" }}
+        - run:
+            name: Run tests
+            command: cabal test
+    
+    deploy:
+      docker:
+        - image: cimg/base:2022.06
+      steps:
+        - checkout
+        - setup_remote_docker:
+            version: 20.10.7
+        - run:
+            name: Build and push Docker image
+            command: |
+              docker build -t ${DOCKER_USERNAME}/haskell-web-app:latest .
+              echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+              docker push ${DOCKER_USERNAME}/haskell-web-app:latest
+  
+  workflows:
+    version: 2
+    build-test-deploy:
+      jobs:
+        - build
+        - test:
+            requires:
+              - build
+        - deploy:
+            requires:
+              - test
+            filters:
+              branches:
+                only: main

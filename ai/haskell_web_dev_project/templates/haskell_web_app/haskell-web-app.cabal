@@ -1,0 +1,22 @@
+cabal-version:      2.4
+name:               haskell-web-app
+version:            0.1.0.0
+synopsis:           A web application written in Haskell
+
+description:        A template for Haskell web applications using Scotty.
+license:            MIT
+license-file:       LICENSE
+author:             Haskell Developer
+maintainer:         developer@example.com
+
+executable haskell-web-app
+    main-is:          app.hs
+    build-depends:    base ^>=4.14.1.0,
+                      scotty ^>=0.12,
+                      wai-middleware-static ^>=0.9.0,
+                      wai-extra ^>=3.1.6,
+                      aeson ^>=1.5.6.0,
+                      text ^>=1.2.4.1
+    hs-source-dirs:   .
+    default-language: Haskell2010
+    ghc-options:      -Wall -threaded -rtsopts -with-rtsopts=-N

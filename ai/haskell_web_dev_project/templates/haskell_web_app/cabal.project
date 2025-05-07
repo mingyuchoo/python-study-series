@@ -1,0 +1,19 @@
+packages: .
+
+package haskell-web-app
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates
+              -Wincomplete-uni-patterns -Wmissing-export-lists
+              -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
+
+constraints:
+  scotty == 0.12.*,
+  wai-middleware-static == 0.9.*,
+  wai-extra == 3.1.*,
+  aeson == 1.5.*,
+  text == 1.2.*,
+  hspec == 2.7.*,
+  hspec-wai == 0.11.*,
+  QuickCheck == 2.14.*,
+  http-types == 0.12.*
+
+allow-newer: all
