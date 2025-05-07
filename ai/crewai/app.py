@@ -188,14 +188,16 @@ def generate_presentation(report_topic, crew_results, output_dir="output"):
 
         # Debug the structure of crew_results
         print(f"CrewAI Results Type: {type(crew_results)}")
-        
+
         # Extract content from crew results - handle different possible formats
         if isinstance(crew_results, list) and len(crew_results) >= 3:
             # Original expected format
             data_analysis = crew_results[0]
             content = crew_results[1]
             visual_design = crew_results[2]
-        elif hasattr(crew_results, 'values') and callable(getattr(crew_results, 'values', None)):
+        elif hasattr(crew_results, "values") and callable(
+            getattr(crew_results, "values", None)
+        ):
             # Dictionary-like format
             values = list(crew_results.values())
             if len(values) >= 3:
@@ -203,13 +205,19 @@ def generate_presentation(report_topic, crew_results, output_dir="output"):
                 content = values[1]
                 visual_design = values[2]
             else:
-                raise ValueError(f"Not enough values in crew_results: {len(values)} values found, need at least 3")
-        elif hasattr(crew_results, 'get_task_output'):
+                raise ValueError(
+                    f"Not enough values in crew_results: {len(values)} values found, need at least 3"
+                )
+        elif hasattr(crew_results, "get_task_output"):
             # Newer CrewAI format with task outputs
             # Assuming tasks are in the same order as defined in create_report_tasks
-            data_analysis = crew_results.get_task_output(0) or "No data analysis available"
+            data_analysis = (
+                crew_results.get_task_output(0) or "No data analysis available"
+            )
             content = crew_results.get_task_output(1) or "No content available"
-            visual_design = crew_results.get_task_output(2) or "No visual design available"
+            visual_design = (
+                crew_results.get_task_output(2) or "No visual design available"
+            )
         else:
             # Last resort - try to convert to string and use as content
             print(f"Unknown crew_results format: {crew_results}")
@@ -230,6 +238,7 @@ def generate_presentation(report_topic, crew_results, output_dir="output"):
     except Exception as e:
         print(f"Error generating presentation: {e}")
         import traceback
+
         traceback.print_exc()
         return None
 

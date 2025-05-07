@@ -8,16 +8,16 @@ import pandas as pd
 matplotlib.use("Agg")  # Use non-interactive backend
 # --- 한글 폰트 설정 시작 ---
 try:
-    matplotlib.rc('font', family='NanumGothic')  # 시스템에 설치된 경우
+    matplotlib.rc("font", family="NanumGothic")  # 시스템에 설치된 경우
 except:
     try:
-        matplotlib.rc('font', family='Malgun Gothic')  # Windows
+        matplotlib.rc("font", family="Malgun Gothic")  # Windows
     except:
         try:
-            matplotlib.rc('font', family='AppleGothic')  # macOS
+            matplotlib.rc("font", family="AppleGothic")  # macOS
         except:
             pass  # fallback
-matplotlib.rcParams['axes.unicode_minus'] = False
+matplotlib.rcParams["axes.unicode_minus"] = False
 # --- 한글 폰트 설정 끝 ---
 import re
 
@@ -256,7 +256,7 @@ class PPTGenerator:
         """
         # Print the content for debugging
         print(f"Content to parse: {content[:200]}...")
-        
+
         # Define patterns for section headings (both English and Korean)
         section_patterns = [
             # English patterns
@@ -294,67 +294,93 @@ class PPTGenerator:
         for i, pattern in enumerate(section_patterns):
             match = re.search(pattern, content, re.DOTALL)
             if match:
-                section_key = section_titles[i % 5]  # Use modulo to map to the 5 main sections
+                section_key = section_titles[
+                    i % 5
+                ]  # Use modulo to map to the 5 main sections
                 sections[section_key] = match.group(1).strip()
-                print(f"Found section {section_key} with content length: {len(sections[section_key])}")
+                print(
+                    f"Found section {section_key} with content length: {len(sections[section_key])}"
+                )
 
         # If no sections were found, try to extract content using headings
         if not any(sections.values()):
-            print("No sections found with regex patterns, trying heading-based extraction")
+            print(
+                "No sections found with regex patterns, trying heading-based extraction"
+            )
             # Split by common heading markers
-            lines = content.split('\n')
+            lines = content.split("\n")
             current_section = None
             section_content = []
-            
+
             for line in lines:
                 # Check if this line looks like a heading
-                if re.match(r'^#+\s+|^\d+\.\s+|^[A-Z가-힣][A-Z가-힣\s]+:$', line.strip()):
+                if re.match(
+                    r"^#+\s+|^\d+\.\s+|^[A-Z가-힣][A-Z가-힣\s]+:$", line.strip()
+                ):
                     # Save previous section if we were collecting one
                     if current_section and section_content:
-                        sections[current_section] = '\n'.join(section_content)
+                        sections[current_section] = "\n".join(section_content)
                         section_content = []
-                    
+
                     # Determine which section this heading belongs to
                     lower_line = line.lower()
-                    if any(term in lower_line for term in ['executive', 'summary', '요약', '개요']):
+                    if any(
+                        term in lower_line
+                        for term in ["executive", "summary", "요약", "개요"]
+                    ):
                         current_section = "Executive Summary"
-                    elif any(term in lower_line for term in ['introduction', '소개', '서론']):
+                    elif any(
+                        term in lower_line for term in ["introduction", "소개", "서론"]
+                    ):
                         current_section = "Introduction"
-                    elif any(term in lower_line for term in ['finding', 'analysis', '발견', '분석']):
+                    elif any(
+                        term in lower_line
+                        for term in ["finding", "analysis", "발견", "분석"]
+                    ):
                         current_section = "Key Findings"
-                    elif any(term in lower_line for term in ['recommendation', 'strategy', '권장', '전략']):
+                    elif any(
+                        term in lower_line
+                        for term in ["recommendation", "strategy", "권장", "전략"]
+                    ):
                         current_section = "Strategic Recommendations"
-                    elif any(term in lower_line for term in ['conclusion', 'summary', '결론', '요약']):
+                    elif any(
+                        term in lower_line
+                        for term in ["conclusion", "summary", "결론", "요약"]
+                    ):
                         current_section = "Conclusion"
                     else:
                         current_section = None
                 elif current_section:
                     section_content.append(line)
-            
+
             # Save the last section
             if current_section and section_content:
-                sections[current_section] = '\n'.join(section_content)
+                sections[current_section] = "\n".join(section_content)
 
         # If still no sections found, create a default structure from the content
         if not any(sections.values()):
             print("Creating default sections from content")
-            content_parts = content.split('\n\n')
+            content_parts = content.split("\n\n")
             total_parts = len(content_parts)
-            
+
             if total_parts >= 5:
                 sections["Executive Summary"] = content_parts[0]
                 sections["Introduction"] = content_parts[1]
-                sections["Key Findings"] = '\n\n'.join(content_parts[2:total_parts-2])
-                sections["Strategic Recommendations"] = content_parts[total_parts-2]
-                sections["Conclusion"] = content_parts[total_parts-1]
+                sections["Key Findings"] = "\n\n".join(
+                    content_parts[2 : total_parts - 2]
+                )
+                sections["Strategic Recommendations"] = content_parts[total_parts - 2]
+                sections["Conclusion"] = content_parts[total_parts - 1]
             elif total_parts >= 3:
                 sections["Executive Summary"] = content_parts[0]
-                sections["Key Findings"] = '\n\n'.join(content_parts[1:total_parts-1])
-                sections["Conclusion"] = content_parts[total_parts-1]
+                sections["Key Findings"] = "\n\n".join(
+                    content_parts[1 : total_parts - 1]
+                )
+                sections["Conclusion"] = content_parts[total_parts - 1]
             else:
                 # Just put all content in Key Findings if we can't split it
                 sections["Key Findings"] = content
-        
+
         return sections
 
     def generate_from_agent_results(self, data_analysis, content, visual_design):
@@ -442,15 +468,19 @@ class PPTGenerator:
         Returns:
             list: List of chart information dictionaries
         """
-        print(f"Extracting chart suggestions from data analysis: {data_analysis[:200]}...")
-        
+        print(
+            f"Extracting chart suggestions from data analysis: {data_analysis[:200]}..."
+        )
+
         chart_suggestions = []
-        
+
         # Try to extract actual data from the analysis text
         # Look for patterns that might indicate data points
-        
+
         # Pattern 1: Look for percentage values (e.g., 45%, 20%, 18%)
-        percentage_matches = re.findall(r'(\d+)\s*%\s*(?:의|of)?\s*([^,.\n]+)', data_analysis)
+        percentage_matches = re.findall(
+            r"(\d+)\s*%\s*(?:의|of)?\s*([^,.\n]+)", data_analysis
+        )
         if percentage_matches and len(percentage_matches) >= 3:
             # Create a pie chart from percentages
             percentage_data = {}
@@ -458,37 +488,41 @@ class PPTGenerator:
                 value = int(match[0])
                 label = match[1].strip()
                 percentage_data[label] = value
-            
-            chart_suggestions.append({
-                "type": "pie",
-                "title": "분포 분석",  # Distribution Analysis
-                "data": percentage_data
-            })
-        
+
+            chart_suggestions.append(
+                {
+                    "type": "pie",
+                    "title": "분포 분석",  # Distribution Analysis
+                    "data": percentage_data,
+                }
+            )
+
         # Pattern 2: Look for quarterly data
-        quarters = ['Q1', 'Q2', 'Q3', 'Q4', '1분기', '2분기', '3분기', '4분기']
+        quarters = ["Q1", "Q2", "Q3", "Q4", "1분기", "2분기", "3분기", "4분기"]
         quarter_data = {}
-        
+
         for quarter in quarters:
             # Look for patterns like "Q1: 120,000" or "1분기: 120,000"
-            matches = re.findall(f'{quarter}[^\d]+(\d[\d,.]+)', data_analysis)
+            matches = re.findall(f"{quarter}[^\d]+(\d[\d,.]+)", data_analysis)
             if matches:
                 # Clean the number and convert to float
-                value_str = matches[0].replace(',', '')
+                value_str = matches[0].replace(",", "")
                 try:
                     quarter_data[quarter] = float(value_str)
                 except ValueError:
                     pass
-        
+
         if quarter_data and len(quarter_data) >= 2:
-            chart_suggestions.append({
-                "type": "bar",
-                "title": "분기별 실적",  # Quarterly Performance
-                "data": quarter_data,
-                "x_label": "분기",  # Quarter
-                "y_label": "매출 (원)"  # Sales (KRW)
-            })
-        
+            chart_suggestions.append(
+                {
+                    "type": "bar",
+                    "title": "분기별 실적",  # Quarterly Performance
+                    "data": quarter_data,
+                    "x_label": "분기",  # Quarter
+                    "y_label": "매출 (원)",  # Sales (KRW)
+                }
+            )
+
         # If we couldn't extract real data, provide default charts
         if not chart_suggestions:
             print("Using default chart suggestions")
