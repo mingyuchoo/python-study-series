@@ -10,7 +10,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 # Import the existing functionality
-from app import generate_business_report
+from report_service import generate_business_report
 
 app = FastAPI(title="CrewAI Business Report Generator")
 
