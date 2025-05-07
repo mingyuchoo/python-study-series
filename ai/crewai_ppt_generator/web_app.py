@@ -1,7 +1,7 @@
 import os
 import uuid
 from pathlib import Path
-from typing import List, Optional
+from typing import List, Optional, Any
 
 import uvicorn
 from fastapi import BackgroundTasks, FastAPI, File, Form, Request, UploadFile
@@ -23,7 +23,7 @@ jobs = {}
 
 
 @app.get("/")
-async def home(request: Request):
+async def home(request: Request) -> any:
     """Render the home page"""
     return templates.TemplateResponse(
         "index.html", {"request": request, "title": "CrewAI Business Report Generator"}
@@ -36,7 +36,7 @@ async def generate_report(
     background_tasks: BackgroundTasks,
     topic: str = Form(...),
     files: List[UploadFile] = File(None),
-):
+) -> RedirectResponse:
     """Generate a business report based on the provided topic and optional data files"""
     # Generate a unique job ID
     job_id = str(uuid.uuid4())
@@ -77,7 +77,7 @@ async def generate_report(
 
 
 @app.get("/status/{job_id}")
-async def job_status(request: Request, job_id: str):
+async def job_status(request: Request, job_id: str) -> any:
     """Check the status of a report generation job"""
     if job_id not in jobs:
         return templates.TemplateResponse(
@@ -98,7 +98,7 @@ async def job_status(request: Request, job_id: str):
 
 
 @app.get("/api/status/{job_id}")
-async def api_job_status(job_id: str):
+async def api_job_status(job_id: str) -> dict[str, any]:
     """API endpoint to check job status"""
     if job_id not in jobs:
         return {"error": "작업을 찾을 수 없습니다."}
@@ -107,7 +107,7 @@ async def api_job_status(job_id: str):
 
 
 @app.get("/download/{job_id}")
-async def download_report(job_id: str):
+async def download_report(job_id: str) -> any:
     """Download the generated report"""
     if job_id not in jobs or not jobs[job_id]["output_file"]:
         return {"error": "보고서를 찾을 수 없거나 아직 준비되지 않았습니다."}
@@ -121,7 +121,7 @@ async def download_report(job_id: str):
 
 async def run_report_generation(
     job_id: str, topic: str, data_sources: Optional[List[str]], output_dir: str
-):
+) -> None:
     """Run the report generation process in the background"""
     try:
         output_file = generate_business_report(topic, data_sources, output_dir)

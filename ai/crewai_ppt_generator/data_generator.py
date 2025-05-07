@@ -1,7 +1,7 @@
 import os
 import random
 from datetime import datetime, timedelta
-
+from typing import Optional, List
 import pandas as pd
 
 
@@ -102,7 +102,7 @@ def generate_sales_data(periods=12, start_date=None):
     return df
 
 
-def generate_market_trends(periods=12, start_date=None):
+def generate_market_trends(periods: int = 12, start_date: Optional[datetime] = None) -> pd.DataFrame:
     """
     Generate sample market trend data
 
@@ -181,7 +181,7 @@ def generate_market_trends(periods=12, start_date=None):
     return df
 
 
-def generate_customer_feedback(n_samples=500):
+def generate_customer_feedback(n_samples: int = 500) -> pd.DataFrame:
     """
     Generate sample customer feedback data
 
@@ -261,7 +261,7 @@ def generate_customer_feedback(n_samples=500):
     return df
 
 
-def save_sample_data(output_dir="sample_data"):
+def save_sample_data(output_dir: str = "sample_data") -> list[str]:
     """
     Generate and save sample data files
 

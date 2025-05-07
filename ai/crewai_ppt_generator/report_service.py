@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
+from typing import Optional, List, Any
 
 from crewai import Agent, Crew, Process, Task
 from data_generator import save_sample_data
@@ -26,7 +27,7 @@ llm = ChatOpenAI(
 
 
 # Define the agents with specific roles
-def create_agents():
+def create_agents() -> tuple[Agent, Agent, Agent, Agent]:
     """
     Create and return the agents for the CrewAI system
 
@@ -79,7 +80,7 @@ def create_agents():
 
 
 # Define the tasks for each agent
-def create_report_tasks(agents, report_topic, data_sources=None):
+def create_report_tasks(agents: tuple[Agent, Agent, Agent, Agent], report_topic: str, data_sources: Optional[list[str]] = None) -> list[Task]:
     """
     Create tasks for generating a business report on the specified topic
 
@@ -167,7 +168,7 @@ def create_report_tasks(agents, report_topic, data_sources=None):
 
 
 # Function to generate the PowerPoint presentation
-def generate_presentation(report_topic, crew_results, output_dir="output"):
+def generate_presentation(report_topic: str, crew_results: Any, output_dir: str = "output") -> Optional[str]:
     """
     Generate a PowerPoint presentation based on the crew's results
 
@@ -240,7 +241,7 @@ def generate_presentation(report_topic, crew_results, output_dir="output"):
 
 
 # Main function to run the report generation process
-def generate_business_report(report_topic, data_sources=None, output_dir="output"):
+def generate_business_report(report_topic: str, data_sources: Optional[list[str]] = None, output_dir: str = "output") -> Optional[str]:
     """
     Generate a complete business report on the specified topic
 
