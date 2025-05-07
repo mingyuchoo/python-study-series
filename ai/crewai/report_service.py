@@ -235,10 +235,9 @@ def generate_presentation(report_topic, crew_results, output_dir="output"):
 
         return output_file
 
-    except Exception as e:
-        print(f"Error generating presentation: {e}")
+    except Exception as e:  # 예외 발생 시
+        print(f"프레젠테이션 생성 중 오류가 발생했습니다: {e}")
         import traceback
-
         traceback.print_exc()
         return None
 

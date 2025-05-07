@@ -82,7 +82,7 @@ async def job_status(request: Request, job_id: str):
     if job_id not in jobs:
         return templates.TemplateResponse(
             "error.html",
-            {"request": request, "error": "Job not found"},
+            {"request": request, "error": "작업을 찾을 수 없습니다."},
             status_code=404,
         )
 
@@ -101,7 +101,7 @@ async def job_status(request: Request, job_id: str):
 async def api_job_status(job_id: str):
     """API endpoint to check job status"""
     if job_id not in jobs:
-        return {"error": "Job not found"}
+        return {"error": "작업을 찾을 수 없습니다."}
 
     return jobs[job_id]
 
@@ -110,7 +110,7 @@ async def api_job_status(job_id: str):
 async def download_report(job_id: str):
     """Download the generated report"""
     if job_id not in jobs or not jobs[job_id]["output_file"]:
-        return {"error": "Report not found or not ready yet"}
+        return {"error": "보고서를 찾을 수 없거나 아직 준비되지 않았습니다."}
 
     return FileResponse(
         path=jobs[job_id]["output_file"],

@@ -7,6 +7,7 @@ import matplotlib
 import matplotlib.font_manager as fm
 matplotlib.use("Agg")  # Use non-interactive backend
 # --- 한글 폰트 설정 시작 ---
+import os
 FONT_PATHS = [
     "/usr/share/fonts/truetype/nanum/NanumGothic.ttf",  # Ubuntu/Debian
     "/usr/share/fonts/truetype/nanum/NanumGothic-Regular.ttf",  # 일부 시스템
@@ -15,8 +16,9 @@ FONT_PATHS = [
 ]
 font_found = False
 for font_path in FONT_PATHS:
-    if fm.fontManager.addfont(font_path):
+    if os.path.exists(font_path):
         try:
+            fm.fontManager.addfont(font_path)
             font_prop = fm.FontProperties(fname=font_path)
             matplotlib.rc("font", family=font_prop.get_name())
             font_found = True
@@ -24,7 +26,7 @@ for font_path in FONT_PATHS:
         except Exception:
             continue
 if not font_found:
-    print("Warning: 한글 폰트를 찾을 수 없습니다. 시스템에 NanumGothic 또는 대체 폰트를 설치하세요.")
+    print("경고: 한글 폰트를 찾을 수 없습니다. 시스템에 NanumGothic 또는 대체 폰트를 설치하세요.")
 matplotlib.rcParams["axes.unicode_minus"] = False
 # --- 한글 폰트 설정 끝 ---
 import re
