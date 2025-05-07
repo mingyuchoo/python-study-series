@@ -16,7 +16,7 @@
 1. 필요한 패키지 설치:
 
 ```bash
-pip install -r requirements.txt
+uv pip install -r requirements.txt
 ```
 
 2. OpenAI API 키 설정:
