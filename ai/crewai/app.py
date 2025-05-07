@@ -10,7 +10,19 @@ from crewai import Agent, Crew, Process, Task
 load_dotenv()
 
 # Set up the LLM
-llm = ChatOpenAI(model="gpt-4o")
+# Set environment variables for Azure OpenAI - LiteLLM will use these directly
+os.environ["AZURE_API_KEY"] = os.environ["OPENAI_API_KEY"]
+os.environ["AZURE_API_BASE"] = os.environ["OPENAI_API_URL"]
+os.environ["AZURE_API_VERSION"] = "2023-05-15"
+
+# Create the LLM instance with Azure OpenAI model
+# Format: azure/<deployment_name>
+model_name = f"azure/{os.environ['OPENAI_API_MODEL']}"
+
+llm = ChatOpenAI(
+    model=model_name,
+    temperature=float(os.environ.get("OPENAI_API_TEMPERATURE", 1.0)),
+)
 
 # Define the agents with specific roles
 data_analyst = Agent(

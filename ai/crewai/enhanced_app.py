@@ -13,7 +13,19 @@ from ppt_generator import PPTGenerator
 load_dotenv()
 
 # Set up the LLM
-llm = ChatOpenAI(model="gpt-4o")
+# Set environment variables for Azure OpenAI - LiteLLM will use these directly
+os.environ["AZURE_API_KEY"] = os.environ["OPENAI_API_KEY"]
+os.environ["AZURE_API_BASE"] = os.environ["OPENAI_API_URL"]
+os.environ["AZURE_API_VERSION"] = "2023-05-15"
+
+# Create the LLM instance with Azure OpenAI model
+# Format: azure/<deployment_name>
+model_name = f"azure/{os.environ['OPENAI_API_MODEL']}"
+
+llm = ChatOpenAI(
+    model=model_name,
+    temperature=float(os.environ.get("OPENAI_API_TEMPERATURE", 1.0)),
+)
 
 
 # Define the agents with specific roles
@@ -164,7 +176,7 @@ def generate_presentation(report_topic, crew_results, output_dir="output"):
 
     Args:
         report_topic (str): The main topic of the business report
-        crew_results (list): Results from the crew's work
+        crew_results: Results from the crew's work (CrewAI output)
         output_dir (str): Directory to save output files
 
     Returns:
@@ -174,10 +186,36 @@ def generate_presentation(report_topic, crew_results, output_dir="output"):
         # Create output directory if it doesn't exist
         os.makedirs(output_dir, exist_ok=True)
 
-        # Extract content from crew results
-        data_analysis = crew_results[0]
-        content = crew_results[1]
-        visual_design = crew_results[2]
+        # Debug the structure of crew_results
+        print(f"CrewAI Results Type: {type(crew_results)}")
+        
+        # Extract content from crew results - handle different possible formats
+        if isinstance(crew_results, list) and len(crew_results) >= 3:
+            # Original expected format
+            data_analysis = crew_results[0]
+            content = crew_results[1]
+            visual_design = crew_results[2]
+        elif hasattr(crew_results, 'values') and callable(getattr(crew_results, 'values', None)):
+            # Dictionary-like format
+            values = list(crew_results.values())
+            if len(values) >= 3:
+                data_analysis = values[0]
+                content = values[1]
+                visual_design = values[2]
+            else:
+                raise ValueError(f"Not enough values in crew_results: {len(values)} values found, need at least 3")
+        elif hasattr(crew_results, 'get_task_output'):
+            # Newer CrewAI format with task outputs
+            # Assuming tasks are in the same order as defined in create_report_tasks
+            data_analysis = crew_results.get_task_output(0) or "No data analysis available"
+            content = crew_results.get_task_output(1) or "No content available"
+            visual_design = crew_results.get_task_output(2) or "No visual design available"
+        else:
+            # Last resort - try to convert to string and use as content
+            print(f"Unknown crew_results format: {crew_results}")
+            data_analysis = str(crew_results)
+            content = str(crew_results)
+            visual_design = str(crew_results)
 
         # Create PowerPoint generator
         ppt_gen = PPTGenerator(report_topic, output_dir)
@@ -191,6 +229,8 @@ def generate_presentation(report_topic, crew_results, output_dir="output"):
 
     except Exception as e:
         print(f"Error generating presentation: {e}")
+        import traceback
+        traceback.print_exc()
         return None
 
 
