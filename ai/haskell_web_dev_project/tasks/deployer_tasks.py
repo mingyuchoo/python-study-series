@@ -1,15 +1,19 @@
-from crewai import Task
-from typing import List
 import os
+from typing import List
 
-def create_deployer_tasks(agent, project_name: str, testing_result: str, project_dir: str) -> List[Task]:
+from crewai import Task
+
+
+def create_deployer_tasks(
+    agent, project_name: str, testing_result: str, project_dir: str
+) -> List[Task]:
     """Creates tasks for the DevOps engineer agent."""
-    
+
     deployment_dir = os.path.join(project_dir, "deployment")
     os.makedirs(deployment_dir, exist_ok=True)
-    
+
     deployment_report = os.path.join(project_dir, "deployment_report.md")
-    
+
     return [
         Task(
             description=f"""Prepare deployment configuration for the Haskell web application:
@@ -42,6 +46,6 @@ def create_deployer_tasks(agent, project_name: str, testing_result: str, project
             """,
             agent=agent,
             expected_output="A comprehensive deployment configuration and documentation",
-            output_file=deployment_report
+            output_file=deployment_report,
         )
     ]

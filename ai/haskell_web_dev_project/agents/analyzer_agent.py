@@ -1,11 +1,14 @@
+from typing import List
+
 from crewai import Agent
 from langchain.tools import Tool
-from typing import List
+
 from utils.crew_config import create_crew_agent
+
 
 def create_analyzer_agent() -> Agent:
     """Creates an agent specialized in analyzing requirements for Haskell web applications."""
-    
+
     return create_crew_agent(
         role="Requirements Analyzer",
         goal="Thoroughly analyze project requirements and provide detailed specifications for Haskell web applications",
@@ -15,5 +18,5 @@ def create_analyzer_agent() -> Agent:
         Haskell's strengths for web development.""",
         verbose=True,
         allow_delegation=True,
-        tools=[]
+        tools=[],
     )

@@ -1,15 +1,19 @@
-from crewai import Task
-from typing import List
 import os
+from typing import List
 
-def create_developer_tasks(agent, project_name: str, design_result: str, project_dir: str) -> List[Task]:
+from crewai import Task
+
+
+def create_developer_tasks(
+    agent, project_name: str, design_result: str, project_dir: str
+) -> List[Task]:
     """Creates tasks for the Haskell developer agent."""
-    
+
     implementation_dir = os.path.join(project_dir, "implementation")
     os.makedirs(implementation_dir, exist_ok=True)
-    
+
     implementation_report = os.path.join(project_dir, "implementation_report.md")
-    
+
     return [
         Task(
             description=f"""Implement the Haskell web application based on the architecture design:
@@ -43,6 +47,6 @@ def create_developer_tasks(agent, project_name: str, design_result: str, project
             """,
             agent=agent,
             expected_output="A complete implementation of the Haskell web application with documentation",
-            output_file=implementation_report
+            output_file=implementation_report,
         )
     ]

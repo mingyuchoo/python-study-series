@@ -1,12 +1,16 @@
-from crewai import Task
-from typing import List
 import os
+from typing import List
 
-def create_designer_tasks(agent, project_name: str, analysis_result: str, project_dir: str) -> List[Task]:
+from crewai import Task
+
+
+def create_designer_tasks(
+    agent, project_name: str, analysis_result: str, project_dir: str
+) -> List[Task]:
     """Creates tasks for the system architect agent."""
-    
+
     architecture_file = os.path.join(project_dir, "architecture_design.md")
-    
+
     return [
         Task(
             description=f"""Design the architecture for the Haskell web application based on the requirements analysis:
@@ -31,6 +35,6 @@ def create_designer_tasks(agent, project_name: str, analysis_result: str, projec
             """,
             agent=agent,
             expected_output="A detailed architecture design document for a Haskell web application",
-            output_file=architecture_file
+            output_file=architecture_file,
         )
     ]

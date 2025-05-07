@@ -1,63 +1,54 @@
-from crewai import Agent, Task, Crew, Process
-from langchain_openai import AzureChatOpenAI, ChatOpenAI
 import os
-from utils.api_helpers import get_openai_config
+from typing import List, Optional
 
-def get_llm():
-    """
-    Get the appropriate LLM (Language Learning Model) based on configuration.
-    Handles both standard OpenAI and Azure OpenAI.
-    
-    Returns:
-        An instance of either ChatOpenAI or AzureChatOpenAI
-    """
-    config = get_openai_config()
-    api_url = os.environ.get("OPENAI_API_URL", "")
-    
-    # Check if using Azure OpenAI
-    if api_url and api_url.endswith("openai.azure.com"):
-        # Azure OpenAI configuration
-        return AzureChatOpenAI(
-            openai_api_version=config.get("api_version"),
-            azure_deployment=config.get("deployment_id"),
-            openai_api_key=config.get("api_key"),
-            azure_endpoint=config.get("api_base"),
-            temperature=config.get("temperature"),
-            max_tokens=config.get("max_tokens"),
-            top_p=config.get("top_p"),
-            streaming=config.get("stream")
-        )
-    else:
-        # Standard OpenAI configuration
-        return ChatOpenAI(
-            api_key=config.get("api_key"),
-            model=config.get("model"),
-            temperature=config.get("temperature"),
-            max_tokens=config.get("max_tokens"),
-            top_p=config.get("top_p"),
-            streaming=config.get("stream")
-        )
+from crewai import Agent
+from dotenv import load_dotenv
+from langchain.chat_models import ChatOpenAI
+from langchain.tools import Tool
 
-def create_crew_agent(role, goal, backstory, verbose=True, allow_delegation=True, tools=None):
-    """
-    Create a CrewAI agent with the appropriate LLM configuration.
-    
+# Load environment variables
+load_dotenv()
+
+# Set up the LLM
+# Set environment variables for Azure OpenAI - LiteLLM will use these directly
+os.environ["AZURE_API_KEY"] = os.environ["OPENAI_API_KEY"]
+os.environ["AZURE_API_BASE"] = os.environ["OPENAI_API_URL"]
+os.environ["AZURE_API_VERSION"] = "2023-05-15"
+
+# Create the LLM instance with Azure OpenAI model
+# Format: azure/<deployment_name>
+model_name = f"azure/{os.environ['OPENAI_API_MODEL']}"
+
+llm = ChatOpenAI(
+    model=model_name,
+    temperature=float(os.environ.get("OPENAI_API_TEMPERATURE", 1.0)),
+)
+
+
+def create_crew_agent(
+    role: str,
+    goal: str,
+    backstory: str,
+    verbose: bool = False,
+    allow_delegation: bool = False,
+    tools: Optional[List[Tool]] = None,
+) -> Agent:
+    """Creates a CrewAI agent with the specified configuration.
+
     Args:
-        role (str): The role of the agent
-        goal (str): The goal of the agent
-        backstory (str): The backstory of the agent
-        verbose (bool): Whether to enable verbose output
-        allow_delegation (bool): Whether to allow delegation
-        tools (list): List of tools available to the agent
-        
+        role: The role of the agent
+        goal: The goal of the agent
+        backstory: The backstory of the agent
+        verbose: Whether to enable verbose output
+        allow_delegation: Whether to allow delegation to other agents
+        tools: List of tools available to the agent
+
     Returns:
-        Agent: A CrewAI agent
+        A configured CrewAI agent
     """
     if tools is None:
         tools = []
-        
-    llm = get_llm()
-    
+
     return Agent(
         role=role,
         goal=goal,
@@ -65,5 +56,5 @@ def create_crew_agent(role, goal, backstory, verbose=True, allow_delegation=True
         verbose=verbose,
         allow_delegation=allow_delegation,
         tools=tools,
-        llm=llm
+        llm=llm,
     )

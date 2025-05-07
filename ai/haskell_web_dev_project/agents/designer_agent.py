@@ -1,11 +1,14 @@
+from typing import List
+
 from crewai import Agent
 from langchain.tools import Tool
-from typing import List
+
 from utils.crew_config import create_crew_agent
+
 
 def create_designer_agent() -> Agent:
     """Creates an agent specialized in designing Haskell web applications."""
-    
+
     return create_crew_agent(
         role="Application Designer",
         goal="Design elegant, functional, and user-friendly Haskell web applications",
@@ -16,5 +19,5 @@ def create_designer_agent() -> Agent:
         Haskell web development.""",
         verbose=True,
         allow_delegation=True,
-        tools=[]
+        tools=[],
     )

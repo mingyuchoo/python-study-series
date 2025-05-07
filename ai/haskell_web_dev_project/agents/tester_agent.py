@@ -1,11 +1,14 @@
+from typing import List
+
 from crewai import Agent
 from langchain.tools import Tool
-from typing import List
+
 from utils.crew_config import create_crew_agent
+
 
 def create_tester_agent() -> Agent:
     """Creates an agent specialized in testing Haskell web applications."""
-    
+
     return create_crew_agent(
         role="Quality Assurance Tester",
         goal="Ensure Haskell web applications are robust, reliable, and free of bugs",
@@ -16,5 +19,5 @@ def create_tester_agent() -> Agent:
         to ensuring application quality.""",
         verbose=True,
         allow_delegation=True,
-        tools=[]
+        tools=[],
     )

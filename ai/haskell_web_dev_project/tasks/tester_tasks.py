@@ -1,15 +1,19 @@
-from crewai import Task
-from typing import List
 import os
+from typing import List
 
-def create_tester_tasks(agent, project_name: str, implementation_result: str, project_dir: str) -> List[Task]:
+from crewai import Task
+
+
+def create_tester_tasks(
+    agent, project_name: str, implementation_result: str, project_dir: str
+) -> List[Task]:
     """Creates tasks for the QA engineer agent."""
-    
+
     testing_dir = os.path.join(project_dir, "tests")
     os.makedirs(testing_dir, exist_ok=True)
-    
+
     testing_report = os.path.join(project_dir, "testing_report.md")
-    
+
     return [
         Task(
             description=f"""Test the Haskell web application implementation:
@@ -43,6 +47,6 @@ def create_tester_tasks(agent, project_name: str, implementation_result: str, pr
             """,
             agent=agent,
             expected_output="A comprehensive testing report with example test implementations",
-            output_file=testing_report
+            output_file=testing_report,
         )
     ]

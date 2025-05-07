@@ -1,11 +1,14 @@
+from typing import List
+
 from crewai import Agent
 from langchain.tools import Tool
-from typing import List
+
 from utils.crew_config import create_crew_agent
+
 
 def create_deployer_agent() -> Agent:
     """Creates an agent specialized in deploying Haskell web applications."""
-    
+
     return create_crew_agent(
         role="DevOps Engineer",
         goal="Deploy Haskell web applications efficiently and securely with proper configuration",
@@ -15,5 +18,5 @@ def create_deployer_agent() -> Agent:
         and CI/CD pipelines for Haskell projects. You ensure that deployments are secure, scalable, and maintainable.""",
         verbose=True,
         allow_delegation=True,
-        tools=[]
+        tools=[],
     )

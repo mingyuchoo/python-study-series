@@ -1,12 +1,16 @@
-from crewai import Task
-from typing import List
 import os
+from typing import List
 
-def create_analyzer_tasks(agent, project_name: str, project_description: str, project_dir: str) -> List[Task]:
+from crewai import Task
+
+
+def create_analyzer_tasks(
+    agent, project_name: str, project_description: str, project_dir: str
+) -> List[Task]:
     """Creates tasks for the requirements analyzer agent."""
-    
+
     requirements_file = os.path.join(project_dir, "requirements_analysis.md")
-    
+
     return [
         Task(
             description=f"""Analyze the following Haskell web application project requirements and create a detailed specification document:
@@ -30,6 +34,6 @@ def create_analyzer_tasks(agent, project_name: str, project_description: str, pr
             """,
             agent=agent,
             expected_output="A detailed requirements analysis document for a Haskell web application",
-            output_file=requirements_file
+            output_file=requirements_file,
         )
     ]
