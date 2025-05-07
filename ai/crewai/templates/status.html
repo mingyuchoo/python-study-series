@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-lg">
+            <div class="card-header bg-primary text-white">
+                <h2 class="mb-0"><i class="fas fa-tasks me-2"></i>보고서 생성 상태</h2>
+            </div>
+            <div class="card-body">
+                <div class="mb-4">
+                    <h4>주제: {{ job.topic }}</h4>
+                    <p class="text-muted">Job ID: {{ job_id }}</p>
+                </div>
+                
+                <div class="mb-4">
+                    <h5>상태:</h5>
+                    {% if job.status == "running" %}
+                    <div class="alert alert-info">
+                        <div class="d-flex align-items-center">
+                            <div class="spinner-border text-primary me-3" role="status">
+                                <span class="visually-hidden">로딩 중...</span>
+                            </div>
+                            <div>
+                                <strong>진행 중</strong> - 보고서를 생성하고 있습니다. 이 페이지는 자동으로 업데이트됩니다.
+                            </div>
+                        </div>
+                    </div>
+                    {% elif job.status == "completed" %}
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <strong>완료됨</strong> - 보고서가 성공적으로 생성되었습니다.
+                    </div>
+                    {% else %}
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        <strong>실패</strong> - 보고서 생성 중 오류가 발생했습니다.
+                        {% if job.error %}
+                        <p class="mt-2 mb-0"><strong>오류:</strong> {{ job.error }}</p>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+                
+                {% if job.status == "completed" %}
+                <div class="d-grid gap-2">
+                    <a href="/download/{{ job_id }}" class="btn btn-success btn-lg">
+                        <i class="fas fa-download me-2"></i>PowerPoint 보고서 다운로드
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+            <div class="card-footer bg-light">
+                <div class="d-grid gap-2">
+                    <a href="/" class="btn btn-outline-primary">
+                        <i class="fas fa-home me-2"></i>홈으로 돌아가기
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if job.status == "running" %}
+<script>
+    // Auto-refresh the page every 5 seconds if the job is still running
+    setTimeout(function() {
+        location.reload();
+    }, 5000);
+    
+    // Periodically check the job status via API
+    function checkStatus() {
+        fetch('/api/status/{{ job_id }}')
+            .then(response => response.json())
+            .then(data => {
+                if (data.status !== "running") {
+                    location.reload();
+                }
+            });
+    }
+    
+    // Check status every 2 seconds
+    setInterval(checkStatus, 2000);
+</script>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-lg">
+            <div class="card-header bg-primary text-white">
+                <h2 class="mb-0"><i class="fas fa-file-powerpoint me-2"></i>비즈니스 보고서 생성</h2>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>CrewAI 멀티에이전트 시스템</strong>을 활용하여 전문적인 비즈니스 보고서를 생성합니다.
+                    여러 AI 에이전트가 협업하여 데이터 분석, 콘텐츠 작성, 시각적 디자인을 수행합니다.
+                </div>
+                
+                <form action="/generate" method="post" enctype="multipart/form-data" class="mt-4">
+                    <div class="mb-4">
+                        <label for="topic" class="form-label fw-bold">보고서 주제</label>
+                        <input type="text" class="form-control form-control-lg" id="topic" name="topic" 
+                               placeholder="예: 분기별 영업 실적, 시장 동향 분석, 고객 만족도 조사" required>
+                        <div class="form-text">생성할 비즈니스 보고서의 주제를 입력하세요.</div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="files" class="form-label fw-bold">데이터 파일 (선택사항)</label>
+                        <input type="file" class="form-control" id="files" name="files" multiple accept=".csv,.xlsx,.xls">
+                        <div class="form-text">분석할 데이터 파일을 업로드하세요. 제공하지 않으면 샘플 데이터가 생성됩니다.</div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-cogs me-2"></i>보고서 생성 시작
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer bg-light">
+                <h5>사용 예시:</h5>
+                <ul>
+                    <li>분기별 영업 실적에 대한 보고서 생성</li>
+                    <li>시장 동향 분석 보고서 작성</li>
+                    <li>고객 만족도 조사 결과 요약 및 시각화</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

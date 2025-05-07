@@ -1,6 +1,6 @@
 # CrewAI 멀티에이전트 PPT 보고서 생성기
 
-이 프로젝트는 CrewAI를 활용한 멀티에이전트 협업 시스템으로, 여러 AI 에이전트가 각자의 역할을 맡아 협력하며 PowerPoint 업무 보고서를 자동으로 생성합니다.
+이 프로젝트는 CrewAI를 활용한 멀티에이전트 협업 시스템으로, 여러 AI 에이전트가 각자의 역할을 맡아 협력하며 PowerPoint 업무 보고서를 자동으로 생성합니다. CLI 및 웹 인터페이스를 통해 사용할 수 있습니다.
 
 ## 주요 기능
 
@@ -29,9 +29,27 @@ OPENAI_API_KEY=your_api_key_here
 
 ## 사용 방법
 
+### 웹 인터페이스
+
+웹 애플리케이션을 실행하여 브라우저에서 사용할 수 있습니다:
+
+```bash
+python web_app.py
+```
+
+웹 브라우저에서 http://localhost:8000 으로 접속하면 사용자 친화적인 인터페이스를 통해 보고서를 생성할 수 있습니다.
+
+#### 웹 인터페이스 기능:
+
+- 직관적인 폼을 통한 보고서 주제 입력
+- 드래그 앤 드롭으로 데이터 파일 업로드
+- 실시간 보고서 생성 상태 확인
+- 완료된 PowerPoint 보고서 다운로드
+- 반응형 디자인으로 모바일 기기에서도 사용 가능
+
 ### 명령줄 인터페이스 (CLI)
 
-가장 간단한 방법은 `cli.py` 스크립트를 사용하는 것입니다:
+명령줄에서 사용하려면 `cli.py` 스크립트를 사용하세요:
 
 ```bash
 python cli.py --topic "분기별 영업 실적" --output "my_reports"
@@ -46,7 +64,7 @@ python cli.py --topic "분기별 영업 실적" --output "my_reports"
 ### 프로그래밍 방식 사용
 
 ```python
-from enhanced_app import generate_business_report
+from app import generate_business_report
 
 # 보고서 생성
 output_file = generate_business_report(
@@ -68,12 +86,19 @@ print(f"보고서가 생성되었습니다: {output_file}")
 
 ## 프로젝트 구조
 
-- `app.py`: 기본 CrewAI 멀티에이전트 시스템
-- `enhanced_app.py`: 향상된 기능을 갖춘 멀티에이전트 시스템
-- `cli.py`: 명령줄 인터페이스
+### 코어 파일
+- `app.py`: CrewAI 멀티에이전트 시스템 코어
 - `data_generator.py`: 샘플 데이터 생성 도구
 - `ppt_generator.py`: PowerPoint 프레젠테이션 생성 도구
-- `main.py`: 간단한 명령줄 인터페이스
+
+### 인터페이스
+- `cli.py`: 명령줄 인터페이스
+- `web_app.py`: FastAPI 기반 웹 애플리케이션
+
+### 웹 애플리케이션 파일
+- `templates/`: HTML 템플릿 파일들 (base.html, index.html, status.html, error.html)
+- `static/`: 정적 파일들 (CSS, JavaScript, 이미지 등)
+- `uploads/`: 사용자가 업로드한 데이터 파일 저장 디렉토리
 
 ## 에이전트 역할
 

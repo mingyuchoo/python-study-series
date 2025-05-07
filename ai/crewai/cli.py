@@ -4,7 +4,7 @@ import os
 import sys
 from pathlib import Path
 
-from enhanced_app import generate_business_report
+from app import generate_business_report
 
 
 def main():
