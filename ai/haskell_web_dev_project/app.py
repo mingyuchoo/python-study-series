@@ -117,17 +117,7 @@ if 'project_description' not in st.session_state:
 if 'results' not in st.session_state:
     st.session_state.results = {}
     
-if 'api_key' not in st.session_state:
-    st.session_state.api_key = os.environ.get("OPENAI_API_KEY", "")
-    
-if 'api_url' not in st.session_state:
-    st.session_state.api_url = os.environ.get("OPENAI_API_URL", "")
-    
-if 'api_version' not in st.session_state:
-    st.session_state.api_version = os.environ.get("OPENAI_API_VERSION", "")
-    
-if 'api_model' not in st.session_state:
-    st.session_state.api_model = os.environ.get("OPENAI_API_MODEL", "gpt-4o")
+# All API configuration is now loaded from environment variables
     
 if 'error_message' not in st.session_state:
     st.session_state.error_message = None
@@ -175,79 +165,20 @@ if st.session_state.current_step == "input":
         st.session_state.project_description = st.text_area(
             "Project Description", 
             value=st.session_state.project_description,
-            height=200,
-            placeholder="Describe your Haskell web application project. Include features, requirements, and any specific technologies you want to use."
+            height=150,
+            help="Describe the Haskell web application you want to build."
         )
-        
-        # API Configuration section
-        st.subheader("API Configuration")
-        st.info("These settings are required for the AI agents to function. You can either set them in the .env file or provide them here.")
-        
-        api_key_col, model_col = st.columns(2)
-        
-        with api_key_col:
-            st.session_state.api_key = st.text_input(
-                "OpenAI API Key", 
-                value=st.session_state.api_key,
-                type="password",
-                help="Your OpenAI API key. Required for the agents to function."
-            )
-            
-        with model_col:
-            st.session_state.api_model = st.selectbox(
-                "Model",
-                options=["gpt-4o", "gpt-4", "gpt-3.5-turbo"],
-                index=0 if st.session_state.api_model == "gpt-4o" else 
-                      1 if st.session_state.api_model == "gpt-4" else 2,
-                help="The OpenAI model to use. GPT-4o is recommended for best results."
-            )
-        
-        # Azure OpenAI settings (collapsible)
-        with st.expander("Azure OpenAI Settings (Optional)"):
-            st.session_state.api_url = st.text_input(
-                "Azure OpenAI Endpoint", 
-                value=st.session_state.api_url,
-                help="Your Azure OpenAI endpoint URL. Leave empty if not using Azure."
-            )
-            
-            st.session_state.api_version = st.text_input(
-                "Azure API Version", 
-                value=st.session_state.api_version,
-                help="Azure API version (e.g., 2023-05-15). Leave empty if not using Azure."
-            )
         
         submitted = st.form_submit_button("Start Development Process")
         
         if submitted:
             if not st.session_state.project_name or not st.session_state.project_description:
                 st.error("Please fill in the project name and description.")
-            elif not is_valid_openai_key(st.session_state.api_key):
-                st.error("Please provide a valid OpenAI API key.")
+            elif not is_valid_openai_key(os.environ.get("OPENAI_API_KEY")):
+                st.error("Please provide a valid OpenAI API key in your .env file.")
             else:
-                # Update environment variables with the provided values
-                from utils.api_helpers import format_openai_key
-                
-                # Format and validate the API key before setting it
-                formatted_key = format_openai_key(st.session_state.api_key)
-                os.environ["OPENAI_API_KEY"] = formatted_key
-                os.environ["OPENAI_API_MODEL"] = st.session_state.api_model
-                
-                if st.session_state.api_url:
-                    os.environ["OPENAI_API_URL"] = st.session_state.api_url
-                    
-                if st.session_state.api_version:
-                    os.environ["OPENAI_API_VERSION"] = st.session_state.api_version
-                    
-                # Set additional OpenAI API parameters from .env if not overridden in UI
-                if "OPENAI_API_TEMPERATURE" in os.environ:
-                    os.environ["OPENAI_API_TEMPERATURE"] = os.environ.get("OPENAI_API_TEMPERATURE")
-                    
-                if "OPENAI_API_MAX_TOKENS" in os.environ:
-                    os.environ["OPENAI_API_MAX_TOKENS"] = os.environ.get("OPENAI_API_MAX_TOKENS")
-                    
-                if "OPENAI_API_TOP_P" in os.environ:
-                    os.environ["OPENAI_API_TOP_P"] = os.environ.get("OPENAI_API_TOP_P")
-                    
+                # Environment variables are already loaded from .env file
+                # Just proceed with the development process
                 if "OPENAI_API_STREAM" in os.environ:
                     os.environ["OPENAI_API_STREAM"] = os.environ.get("OPENAI_API_STREAM")
                 
