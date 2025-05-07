@@ -3,20 +3,28 @@ import os
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
-
+import matplotlib
+import matplotlib.font_manager as fm
 matplotlib.use("Agg")  # Use non-interactive backend
 # --- 한글 폰트 설정 시작 ---
-try:
-    matplotlib.rc("font", family="NanumGothic")  # 시스템에 설치된 경우
-except:
-    try:
-        matplotlib.rc("font", family="Malgun Gothic")  # Windows
-    except:
+FONT_PATHS = [
+    "/usr/share/fonts/truetype/nanum/NanumGothic.ttf",  # Ubuntu/Debian
+    "/usr/share/fonts/truetype/nanum/NanumGothic-Regular.ttf",  # 일부 시스템
+    "/usr/share/fonts/truetype/malgun/MalgunGothic.ttf",  # Windows WSL
+    "/Library/Fonts/AppleGothic.ttf",  # macOS
+]
+font_found = False
+for font_path in FONT_PATHS:
+    if fm.fontManager.addfont(font_path):
         try:
-            matplotlib.rc("font", family="AppleGothic")  # macOS
-        except:
-            pass  # fallback
+            font_prop = fm.FontProperties(fname=font_path)
+            matplotlib.rc("font", family=font_prop.get_name())
+            font_found = True
+            break
+        except Exception:
+            continue
+if not font_found:
+    print("Warning: 한글 폰트를 찾을 수 없습니다. 시스템에 NanumGothic 또는 대체 폰트를 설치하세요.")
 matplotlib.rcParams["axes.unicode_minus"] = False
 # --- 한글 폰트 설정 끝 ---
 import re
