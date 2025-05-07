@@ -1,501 +1,501 @@
 Category,Customer_Segment,Feedback_Type,Satisfaction_Score,NPS,Would_Recommend
-Clothing,New,Website Experience,5.0,10,1
-Home Goods,VIP,Delivery,4.3,9,1
-Electronics,Returning,Customer Service,3.7,8,0
-Beauty,VIP,Website Experience,4.7,9,1
-Food & Beverage,Returning,Customer Service,3.7,8,0
-Home Goods,VIP,Product Quality,3.7,8,0
-Electronics,New,Product Quality,3.1,8,0
-Clothing,New,Customer Service,4.1,10,1
-Clothing,VIP,Website Experience,4.0,7,0
-Clothing,VIP,Customer Service,3.9,8,0
-Beauty,VIP,Delivery,4.2,9,1
-Home Goods,VIP,Customer Service,3.8,7,0
-Electronics,Returning,Price,3.0,8,0
-Beauty,Loyal,Delivery,4.4,9,1
-Home Goods,Loyal,Price,4.5,10,1
-Clothing,VIP,Product Quality,3.8,7,0
-Food & Beverage,Returning,Product Quality,2.8,1,0
-Food & Beverage,VIP,Website Experience,4.8,9,1
-Food & Beverage,Loyal,Product Quality,4.3,10,1
-Beauty,Loyal,Customer Service,4.6,10,1
-Home Goods,VIP,Delivery,4.1,10,1
-Food & Beverage,Loyal,Price,3.5,8,0
-Home Goods,Loyal,Price,4.3,9,1
-Food & Beverage,Returning,Website Experience,3.6,8,0
-Electronics,New,Website Experience,4.1,9,1
-Home Goods,New,Delivery,2.9,2,0
-Home Goods,New,Delivery,3.9,8,0
-Home Goods,Loyal,Delivery,3.8,7,0
-Beauty,Loyal,Customer Service,4.2,9,1
-Food & Beverage,Loyal,Delivery,4.8,9,1
-Home Goods,Loyal,Product Quality,4.4,10,1
-Electronics,Loyal,Website Experience,4.2,10,1
-Home Goods,Loyal,Price,4.3,10,1
-Home Goods,New,Customer Service,3.7,8,0
-Clothing,Returning,Customer Service,3.5,8,0
-Clothing,Returning,Customer Service,4.4,9,1
-Beauty,Returning,Customer Service,4.5,10,1
-Clothing,Loyal,Customer Service,3.7,7,0
-Electronics,Returning,Product Quality,3.5,7,0
-Food & Beverage,Loyal,Price,3.4,8,0
-Beauty,Returning,Website Experience,4.0,10,1
-Electronics,Returning,Website Experience,4.4,10,1
-Beauty,VIP,Customer Service,4.7,10,1
-Clothing,Loyal,Price,3.9,7,0
-Electronics,New,Price,2.3,5,0
-Clothing,New,Customer Service,3.9,7,0
-Beauty,New,Customer Service,3.4,7,0
-Food & Beverage,VIP,Delivery,4.4,10,1
-Electronics,VIP,Customer Service,3.3,7,0
-Electronics,New,Delivery,4.0,8,0
-Home Goods,VIP,Website Experience,3.9,8,0
-Electronics,Returning,Website Experience,4.3,10,1
-Electronics,Loyal,Price,3.2,8,0
-Home Goods,Loyal,Website Experience,3.7,8,0
-Food & Beverage,Returning,Customer Service,3.7,7,0
-Food & Beverage,VIP,Product Quality,3.5,7,0
-Beauty,VIP,Product Quality,3.7,7,0
-Beauty,Loyal,Price,4.2,9,1
-Clothing,New,Website Experience,3.2,7,0
-Beauty,VIP,Price,3.9,7,0
-Electronics,Returning,Product Quality,3.5,8,0
-Clothing,New,Price,2.8,4,0
-Food & Beverage,Loyal,Website Experience,4.7,10,1
-Food & Beverage,Returning,Delivery,3.3,7,0
-Food & Beverage,New,Delivery,2.6,6,0
-Food & Beverage,Returning,Customer Service,2.7,4,0
-Electronics,Returning,Delivery,3.9,7,0
-Food & Beverage,New,Website Experience,4.1,9,1
-Beauty,New,Website Experience,3.4,8,0
-Food & Beverage,New,Price,4.6,10,1
-Home Goods,Returning,Customer Service,3.8,8,0
-Clothing,Loyal,Price,3.7,8,0
-Home Goods,New,Price,2.9,3,0
-Beauty,Returning,Product Quality,4.0,7,0
-Home Goods,Loyal,Delivery,4.8,10,1
-Clothing,New,Price,2.3,3,0
-Clothing,VIP,Customer Service,4.1,10,1
-Electronics,Loyal,Delivery,3.5,7,0
-Beauty,Loyal,Website Experience,5.0,9,1
-Clothing,New,Delivery,3.6,8,0
-Food & Beverage,Returning,Product Quality,3.2,7,0
-Beauty,New,Website Experience,3.8,7,0
-Beauty,VIP,Website Experience,4.4,9,1
-Clothing,Loyal,Customer Service,4.6,10,1
-Food & Beverage,New,Price,4.3,10,1
-Clothing,VIP,Customer Service,5.0,9,1
-Home Goods,Returning,Product Quality,3.4,8,0
-Clothing,Returning,Website Experience,3.8,7,0
-Food & Beverage,Returning,Product Quality,3.6,8,0
-Electronics,Returning,Delivery,4.4,9,1
-Home Goods,VIP,Delivery,3.6,7,0
-Food & Beverage,Returning,Website Experience,4.0,8,0
-Home Goods,Loyal,Website Experience,4.6,9,1
-Clothing,New,Delivery,2.6,0,0
-Beauty,Loyal,Product Quality,3.8,7,0
-Electronics,New,Price,2.3,6,0
-Food & Beverage,Returning,Customer Service,3.9,7,0
-Electronics,Loyal,Delivery,4.0,10,1
-Clothing,Returning,Price,3.1,8,0
-Clothing,Loyal,Delivery,4.3,10,1
-Beauty,New,Website Experience,4.4,9,1
-Food & Beverage,VIP,Delivery,4.4,9,1
-Electronics,Returning,Product Quality,4.2,9,1
-Clothing,New,Delivery,4.9,9,1
-Beauty,Loyal,Delivery,4.5,10,1
-Home Goods,VIP,Product Quality,3.9,7,0
-Home Goods,VIP,Website Experience,3.6,8,0
-Clothing,Loyal,Price,3.6,7,0
-Clothing,New,Website Experience,2.7,5,0
-Food & Beverage,VIP,Website Experience,4.8,10,1
-Food & Beverage,New,Customer Service,4.9,9,1
-Clothing,Loyal,Website Experience,3.7,7,0
-Home Goods,Returning,Website Experience,3.3,8,0
-Home Goods,Returning,Product Quality,3.9,7,0
-Home Goods,Loyal,Price,3.9,7,0
-Food & Beverage,VIP,Product Quality,3.5,8,0
-Electronics,VIP,Website Experience,3.9,8,0
-Home Goods,VIP,Delivery,4.6,9,1
-Beauty,VIP,Customer Service,3.4,7,0
-Home Goods,VIP,Price,4.0,10,1
-Home Goods,VIP,Product Quality,4.8,9,1
-Clothing,Returning,Price,4.0,9,1
-Clothing,New,Product Quality,2.4,1,0
-Clothing,Loyal,Delivery,4.0,9,1
-Food & Beverage,VIP,Customer Service,4.4,10,1
-Electronics,Returning,Product Quality,3.2,7,0
-Beauty,New,Product Quality,4.5,10,1
-Home Goods,New,Customer Service,3.2,7,0
-Food & Beverage,New,Product Quality,2.4,0,0
-Clothing,Returning,Website Experience,3.5,7,0
-Beauty,Loyal,Customer Service,4.2,9,1
-Food & Beverage,New,Price,4.6,9,1
-Food & Beverage,Returning,Customer Service,4.4,10,1
-Electronics,VIP,Price,4.4,10,1
-Food & Beverage,VIP,Customer Service,3.4,8,0
-Clothing,VIP,Customer Service,4.0,8,0
-Home Goods,New,Product Quality,3.9,7,0
-Home Goods,New,Website Experience,3.5,8,0
-Electronics,New,Price,2.1,6,0
-Beauty,Loyal,Product Quality,4.0,9,1
-Clothing,Loyal,Website Experience,4.1,10,1
-Clothing,VIP,Delivery,4.3,10,1
-Food & Beverage,Returning,Delivery,3.5,7,0
-Food & Beverage,New,Customer Service,3.7,7,0
-Clothing,VIP,Price,4.0,7,0
-Food & Beverage,New,Product Quality,2.7,2,0
-Beauty,VIP,Website Experience,4.3,9,1
-Electronics,New,Price,2.0,4,0
-Clothing,Loyal,Product Quality,4.7,10,1
-Beauty,VIP,Customer Service,3.6,8,0
-Beauty,Loyal,Website Experience,4.4,9,1
-Food & Beverage,Loyal,Price,2.9,4,0
-Electronics,Returning,Price,3.4,8,0
-Food & Beverage,New,Price,3.2,7,0
-Clothing,VIP,Customer Service,3.9,7,0
-Electronics,Returning,Delivery,3.9,7,0
-Electronics,Loyal,Delivery,3.9,7,0
-Food & Beverage,VIP,Website Experience,4.4,9,1
-Beauty,New,Price,4.8,9,1
-Home Goods,Loyal,Website Experience,4.3,10,1
-Home Goods,Returning,Product Quality,4.2,10,1
-Food & Beverage,VIP,Website Experience,3.8,8,0
-Food & Beverage,Returning,Customer Service,3.9,7,0
-Electronics,New,Product Quality,4.1,9,1
-Beauty,VIP,Product Quality,3.5,8,0
-Electronics,VIP,Website Experience,4.7,10,1
-Electronics,Loyal,Price,3.9,8,0
-Food & Beverage,Loyal,Price,4.6,9,1
-Food & Beverage,Returning,Website Experience,3.8,7,0
-Home Goods,Loyal,Website Experience,4.0,9,1
-Clothing,Returning,Product Quality,3.7,8,0
-Electronics,VIP,Price,3.4,8,0
-Electronics,New,Customer Service,3.5,8,0
-Home Goods,VIP,Website Experience,3.5,8,0
-Electronics,New,Product Quality,2.7,5,0
-Beauty,Returning,Website Experience,4.7,10,1
-Beauty,VIP,Website Experience,3.9,7,0
-Home Goods,New,Product Quality,3.3,8,0
-Clothing,New,Product Quality,4.9,9,1
-Beauty,Returning,Delivery,4.2,9,1
-Home Goods,New,Product Quality,3.1,7,0
-Home Goods,VIP,Delivery,4.0,8,0
-Home Goods,Loyal,Delivery,4.7,10,1
-Food & Beverage,New,Website Experience,4.6,10,1
-Food & Beverage,VIP,Price,2.7,6,0
-Home Goods,Loyal,Customer Service,4.2,9,1
-Electronics,New,Customer Service,4.1,9,1
-Home Goods,Loyal,Customer Service,4.7,10,1
-Beauty,Loyal,Price,3.8,8,0
-Clothing,VIP,Delivery,5.0,10,1
-Electronics,Returning,Website Experience,4.0,7,0
-Beauty,VIP,Price,3.2,7,0
-Electronics,New,Product Quality,4.5,9,1
-Food & Beverage,VIP,Product Quality,4.4,9,1
-Electronics,VIP,Customer Service,4.8,9,1
-Home Goods,Returning,Product Quality,3.0,0,0
-Electronics,Returning,Delivery,3.3,7,0
-Beauty,Loyal,Website Experience,4.1,10,1
-Clothing,New,Customer Service,2.9,2,0
-Beauty,New,Delivery,4.1,9,1
-Clothing,Loyal,Price,4.7,10,1
-Food & Beverage,Loyal,Customer Service,3.2,7,0
-Electronics,VIP,Customer Service,5.0,10,1
-Home Goods,New,Website Experience,3.6,8,0
-Home Goods,New,Price,2.4,3,0
-Food & Beverage,New,Website Experience,2.8,3,0
-Clothing,New,Price,1.8,1,0
-Electronics,VIP,Delivery,4.6,10,1
-Clothing,Returning,Website Experience,4.6,10,1
-Clothing,VIP,Customer Service,4.7,9,1
-Beauty,Returning,Product Quality,3.5,8,0
-Electronics,VIP,Product Quality,3.7,7,0
-Food & Beverage,Returning,Delivery,4.3,9,1
-Home Goods,Loyal,Price,3.4,7,0
-Food & Beverage,Loyal,Customer Service,4.9,10,1
-Food & Beverage,Loyal,Product Quality,4.0,10,1
-Electronics,Returning,Delivery,4.2,10,1
-Food & Beverage,Loyal,Product Quality,3.6,8,0
-Home Goods,New,Website Experience,4.2,10,1
-Food & Beverage,Returning,Website Experience,3.3,8,0
-Home Goods,Returning,Website Experience,3.2,7,0
-Electronics,New,Product Quality,4.7,9,1
-Clothing,Returning,Product Quality,3.8,7,0
-Clothing,VIP,Product Quality,3.7,7,0
-Beauty,VIP,Price,3.3,7,0
-Beauty,New,Customer Service,4.6,10,1
-Electronics,Loyal,Product Quality,4.5,9,1
-Beauty,Loyal,Delivery,4.7,9,1
-Clothing,Returning,Customer Service,4.4,10,1
-Food & Beverage,New,Customer Service,2.7,5,0
-Electronics,VIP,Customer Service,4.3,9,1
-Electronics,VIP,Product Quality,4.0,7,0
-Clothing,VIP,Price,2.7,5,0
-Clothing,New,Delivery,4.6,10,1
-Food & Beverage,Returning,Product Quality,4.1,9,1
-Beauty,Loyal,Product Quality,3.7,8,0
-Clothing,New,Delivery,4.6,10,1
-Electronics,Returning,Website Experience,3.5,8,0
-Beauty,Returning,Customer Service,3.6,8,0
-Beauty,Returning,Website Experience,2.9,6,0
-Food & Beverage,VIP,Customer Service,4.6,9,1
-Food & Beverage,VIP,Delivery,4.3,9,1
-Electronics,New,Product Quality,4.9,10,1
-Food & Beverage,Returning,Product Quality,4.7,10,1
-Electronics,New,Customer Service,3.8,7,0
-Beauty,VIP,Product Quality,5.0,10,1
-Food & Beverage,Returning,Delivery,3.6,7,0
-Clothing,Loyal,Price,3.5,8,0
-Beauty,New,Delivery,4.7,10,1
-Electronics,Returning,Price,3.5,7,0
-Electronics,Returning,Product Quality,3.5,7,0
-Food & Beverage,Returning,Website Experience,3.3,7,0
-Food & Beverage,VIP,Website Experience,4.2,10,1
-Food & Beverage,New,Customer Service,4.2,10,1
-Beauty,Loyal,Customer Service,3.9,7,0
-Food & Beverage,VIP,Website Experience,4.9,10,1
-Electronics,VIP,Delivery,5.0,10,1
-Electronics,VIP,Customer Service,3.7,8,0
-Food & Beverage,Returning,Price,3.3,7,0
-Clothing,Loyal,Delivery,3.6,7,0
-Clothing,Loyal,Delivery,4.0,9,1
-Food & Beverage,Loyal,Price,3.2,7,0
-Home Goods,VIP,Price,3.5,8,0
-Food & Beverage,New,Delivery,4.5,9,1
-Home Goods,Loyal,Product Quality,3.9,8,0
-Home Goods,Loyal,Delivery,4.1,9,1
-Home Goods,Loyal,Delivery,4.4,10,1
-Clothing,New,Customer Service,3.1,8,0
-Clothing,VIP,Product Quality,4.1,10,1
-Home Goods,Loyal,Price,4.0,9,1
-Electronics,VIP,Website Experience,4.4,9,1
-Electronics,Returning,Delivery,3.8,8,0
-Beauty,New,Customer Service,2.9,6,0
-Food & Beverage,VIP,Delivery,4.3,9,1
-Food & Beverage,VIP,Price,3.4,7,0
-Home Goods,Loyal,Price,3.0,8,0
-Home Goods,New,Customer Service,2.6,2,0
-Food & Beverage,New,Website Experience,3.9,7,0
-Home Goods,VIP,Website Experience,4.8,9,1
-Home Goods,New,Product Quality,3.4,8,0
-Beauty,Returning,Website Experience,3.0,7,0
-Food & Beverage,VIP,Delivery,4.3,9,1
-Beauty,Returning,Website Experience,4.1,9,1
-Beauty,Returning,Price,2.6,6,0
-Home Goods,Loyal,Customer Service,3.4,8,0
-Food & Beverage,Returning,Website Experience,4.1,9,1
-Clothing,Loyal,Product Quality,4.3,10,1
-Clothing,VIP,Delivery,3.8,7,0
-Home Goods,Loyal,Product Quality,4.6,10,1
-Food & Beverage,VIP,Website Experience,4.8,10,1
-Beauty,Loyal,Delivery,4.2,10,1
-Food & Beverage,VIP,Website Experience,4.2,10,1
-Electronics,Returning,Website Experience,4.5,10,1
-Home Goods,Returning,Customer Service,3.7,7,0
-Home Goods,New,Delivery,4.8,9,1
-Clothing,VIP,Customer Service,3.9,8,0
-Beauty,VIP,Customer Service,4.3,9,1
-Clothing,Loyal,Product Quality,4.9,9,1
-Clothing,Loyal,Delivery,4.6,10,1
+Home Goods,Loyal,Price,3.4,8,0
+Home Goods,VIP,Product Quality,4.7,10,1
+Home Goods,VIP,Website Experience,4.7,10,1
+Home Goods,Returning,Customer Service,4.4,10,1
+Beauty,VIP,Customer Service,4.6,9,1
+Home Goods,VIP,Delivery,4.7,10,1
+Electronics,Loyal,Customer Service,5.0,9,1
+Electronics,New,Website Experience,3.5,8,0
+Beauty,Loyal,Customer Service,3.2,8,0
+Beauty,New,Customer Service,3.1,8,0
+Electronics,VIP,Product Quality,4.5,10,1
+Beauty,New,Website Experience,3.0,7,0
+Electronics,Returning,Product Quality,3.9,7,0
+Clothing,Returning,Product Quality,3.6,8,0
+Electronics,Returning,Product Quality,3.4,8,0
+Clothing,Returning,Product Quality,3.5,8,0
+Home Goods,New,Website Experience,3.8,8,0
+Electronics,New,Price,3.8,7,0
+Clothing,Loyal,Customer Service,5.0,9,1
+Beauty,VIP,Website Experience,5.0,9,1
+Beauty,New,Website Experience,4.7,9,1
+Home Goods,VIP,Customer Service,3.7,7,0
+Clothing,Returning,Delivery,3.1,8,0
+Beauty,Loyal,Product Quality,3.8,8,0
+Home Goods,Loyal,Product Quality,4.5,10,1
+Clothing,New,Website Experience,2.8,1,0
+Home Goods,Returning,Delivery,3.3,8,0
+Food & Beverage,New,Delivery,2.6,4,0
+Beauty,New,Delivery,4.4,10,1
+Home Goods,New,Customer Service,3.0,7,0
 Food & Beverage,VIP,Price,3.7,7,0
-Food & Beverage,New,Delivery,3.1,7,0
-Beauty,Returning,Price,3.1,8,0
-Clothing,Returning,Price,3.0,5,0
-Home Goods,VIP,Delivery,4.3,10,1
-Beauty,New,Website Experience,3.6,8,0
-Electronics,New,Product Quality,4.1,9,1
-Food & Beverage,Returning,Product Quality,4.3,10,1
-Electronics,Returning,Website Experience,4.3,9,1
-Food & Beverage,Loyal,Website Experience,4.0,10,1
-Clothing,Returning,Website Experience,3.8,7,0
+Beauty,Returning,Website Experience,4.2,9,1
+Home Goods,Returning,Delivery,4.1,9,1
+Beauty,Loyal,Delivery,4.5,10,1
+Beauty,New,Website Experience,4.8,9,1
+Clothing,Returning,Customer Service,3.2,8,0
+Clothing,Returning,Website Experience,4.4,9,1
+Food & Beverage,VIP,Customer Service,3.2,7,0
+Clothing,Returning,Delivery,3.9,8,0
+Home Goods,Loyal,Customer Service,3.8,7,0
+Home Goods,New,Website Experience,4.4,9,1
+Clothing,Loyal,Price,4.4,10,1
+Home Goods,Returning,Website Experience,4.0,9,1
+Beauty,New,Price,2.4,6,0
+Home Goods,New,Delivery,3.9,7,0
+Beauty,VIP,Delivery,4.6,9,1
+Home Goods,VIP,Customer Service,4.0,10,1
+Clothing,VIP,Price,4.4,9,1
+Clothing,New,Customer Service,2.9,0,0
+Food & Beverage,Loyal,Customer Service,3.7,7,0
+Electronics,New,Delivery,3.8,7,0
+Home Goods,Returning,Delivery,4.8,10,1
+Food & Beverage,VIP,Website Experience,4.4,10,1
+Beauty,VIP,Delivery,3.6,8,0
+Electronics,VIP,Website Experience,4.0,8,0
+Beauty,VIP,Customer Service,4.5,9,1
+Clothing,Loyal,Customer Service,4.0,9,1
+Electronics,Loyal,Product Quality,4.0,8,0
+Beauty,Loyal,Price,2.9,3,0
+Beauty,New,Customer Service,2.6,0,0
+Clothing,VIP,Website Experience,4.2,10,1
+Home Goods,New,Customer Service,3.9,8,0
 Beauty,Returning,Product Quality,3.9,7,0
-Beauty,Returning,Product Quality,3.6,8,0
-Clothing,Loyal,Delivery,3.5,8,0
-Home Goods,Loyal,Price,4.5,10,1
-Food & Beverage,VIP,Product Quality,3.4,8,0
-Home Goods,VIP,Product Quality,4.1,9,1
-Beauty,New,Delivery,3.2,7,0
-Beauty,VIP,Product Quality,3.8,7,0
-Electronics,Returning,Website Experience,3.8,7,0
-Beauty,New,Customer Service,4.0,7,0
-Food & Beverage,Loyal,Website Experience,3.5,8,0
-Beauty,VIP,Price,4.0,10,1
-Food & Beverage,Loyal,Delivery,3.6,7,0
-Home Goods,Returning,Price,3.7,8,0
-Clothing,VIP,Product Quality,3.6,8,0
-Clothing,VIP,Delivery,5.0,9,1
+Home Goods,VIP,Website Experience,3.6,7,0
+Food & Beverage,Returning,Delivery,2.8,1,0
+Electronics,Returning,Price,2.5,2,0
+Home Goods,VIP,Customer Service,5.0,10,1
 Clothing,VIP,Price,3.9,7,0
-Home Goods,New,Customer Service,4.6,10,1
-Food & Beverage,Loyal,Delivery,4.2,9,1
-Home Goods,Returning,Price,3.9,8,0
-Home Goods,New,Delivery,3.2,8,0
-Food & Beverage,VIP,Price,3.9,8,0
-Home Goods,New,Website Experience,3.5,8,0
-Food & Beverage,Returning,Product Quality,3.3,8,0
-Electronics,Loyal,Delivery,4.7,9,1
-Food & Beverage,VIP,Customer Service,4.1,9,1
-Clothing,Returning,Delivery,3.5,7,0
-Home Goods,New,Customer Service,3.1,7,0
-Food & Beverage,New,Customer Service,2.1,0,0
-Home Goods,New,Website Experience,2.6,0,0
-Home Goods,Returning,Delivery,4.2,10,1
-Food & Beverage,Loyal,Customer Service,4.4,9,1
-Home Goods,VIP,Website Experience,5.0,10,1
-Clothing,VIP,Website Experience,4.7,9,1
-Electronics,New,Customer Service,2.9,2,0
-Clothing,New,Delivery,4.2,10,1
-Clothing,Returning,Customer Service,3.5,8,0
-Food & Beverage,Loyal,Price,3.2,8,0
-Clothing,Loyal,Customer Service,4.5,9,1
-Home Goods,Loyal,Price,3.6,7,0
-Home Goods,Loyal,Product Quality,4.4,9,1
-Home Goods,New,Website Experience,3.0,8,0
-Home Goods,Loyal,Price,3.2,7,0
-Electronics,Loyal,Customer Service,4.6,9,1
-Electronics,New,Product Quality,3.5,8,0
-Beauty,Loyal,Customer Service,4.0,7,0
-Electronics,Loyal,Price,3.5,7,0
-Beauty,Loyal,Customer Service,4.5,9,1
-Food & Beverage,New,Price,3.4,8,0
-Food & Beverage,VIP,Price,3.9,8,0
-Electronics,VIP,Customer Service,3.4,8,0
-Clothing,New,Product Quality,2.7,0,0
-Electronics,VIP,Price,4.2,9,1
-Clothing,Returning,Customer Service,4.1,9,1
-Clothing,Loyal,Customer Service,4.3,9,1
-Clothing,VIP,Website Experience,3.6,8,0
-Beauty,New,Product Quality,2.6,3,0
-Electronics,VIP,Product Quality,4.1,9,1
-Food & Beverage,Returning,Customer Service,4.2,9,1
-Home Goods,VIP,Price,3.6,7,0
-Beauty,VIP,Delivery,4.0,9,1
-Food & Beverage,VIP,Delivery,4.7,9,1
-Beauty,Loyal,Customer Service,3.5,8,0
-Home Goods,VIP,Website Experience,5.0,9,1
-Home Goods,Loyal,Customer Service,5.0,10,1
-Home Goods,Returning,Price,3.0,5,0
-Clothing,Returning,Price,3.7,7,0
-Food & Beverage,New,Product Quality,3.9,7,0
-Home Goods,VIP,Price,3.3,8,0
-Beauty,New,Customer Service,4.2,10,1
-Beauty,VIP,Delivery,3.6,7,0
-Home Goods,Returning,Product Quality,4.5,10,1
-Electronics,New,Product Quality,3.7,8,0
-Beauty,Returning,Price,3.1,7,0
-Food & Beverage,New,Product Quality,3.3,8,0
-Beauty,Returning,Website Experience,3.9,8,0
-Beauty,VIP,Website Experience,4.1,9,1
-Food & Beverage,New,Website Experience,3.4,8,0
-Beauty,Loyal,Delivery,3.7,8,0
-Home Goods,Returning,Price,2.8,1,0
-Electronics,New,Customer Service,5.0,10,1
-Beauty,New,Price,3.2,8,0
-Food & Beverage,Loyal,Website Experience,3.9,7,0
-Beauty,VIP,Customer Service,4.2,10,1
-Home Goods,New,Website Experience,3.0,5,0
-Home Goods,VIP,Customer Service,4.1,10,1
-Beauty,New,Product Quality,5.0,10,1
-Clothing,Returning,Website Experience,4.2,10,1
-Electronics,Returning,Product Quality,3.5,7,0
-Food & Beverage,New,Delivery,4.8,10,1
-Clothing,New,Product Quality,2.9,4,0
-Home Goods,New,Customer Service,3.5,8,0
-Electronics,VIP,Customer Service,4.1,10,1
-Beauty,New,Price,2.5,2,0
-Home Goods,Returning,Price,4.0,9,1
-Food & Beverage,Returning,Delivery,3.5,8,0
-Electronics,Returning,Price,2.6,6,0
-Clothing,VIP,Website Experience,4.8,10,1
-Beauty,Returning,Delivery,2.9,3,0
-Electronics,Returning,Price,2.8,1,0
-Home Goods,Returning,Product Quality,3.9,8,0
-Food & Beverage,VIP,Product Quality,3.5,7,0
-Home Goods,New,Price,2.3,3,0
-Clothing,VIP,Delivery,4.6,9,1
-Clothing,Loyal,Delivery,4.7,9,1
-Clothing,VIP,Website Experience,4.7,9,1
-Food & Beverage,New,Customer Service,3.7,7,0
-Beauty,Loyal,Delivery,4.9,10,1
-Beauty,New,Customer Service,5.0,9,1
-Food & Beverage,New,Delivery,3.3,8,0
-Beauty,Returning,Customer Service,4.5,10,1
-Beauty,VIP,Delivery,4.5,9,1
+Electronics,VIP,Delivery,4.0,7,0
+Food & Beverage,VIP,Website Experience,4.7,9,1
+Clothing,New,Website Experience,3.4,8,0
+Electronics,Loyal,Product Quality,4.0,10,1
+Clothing,Loyal,Delivery,3.9,7,0
+Electronics,Loyal,Price,4.1,9,1
+Food & Beverage,New,Product Quality,4.9,9,1
+Electronics,New,Delivery,3.1,8,0
+Home Goods,Returning,Price,3.3,8,0
+Beauty,VIP,Price,3.3,8,0
+Home Goods,VIP,Price,3.9,8,0
+Electronics,Returning,Delivery,3.2,7,0
+Home Goods,Returning,Delivery,2.9,2,0
+Food & Beverage,VIP,Website Experience,4.7,9,1
+Clothing,Returning,Product Quality,4.2,10,1
+Clothing,Loyal,Product Quality,4.2,9,1
+Food & Beverage,Returning,Price,2.8,0,0
+Home Goods,New,Customer Service,3.7,8,0
+Electronics,Returning,Price,3.5,8,0
+Beauty,Loyal,Customer Service,4.0,10,1
+Food & Beverage,Returning,Customer Service,4.5,9,1
+Electronics,Loyal,Product Quality,4.1,9,1
+Electronics,Returning,Website Experience,3.5,7,0
+Clothing,Loyal,Website Experience,4.6,10,1
+Food & Beverage,VIP,Delivery,4.7,10,1
+Beauty,New,Website Experience,2.8,6,0
+Clothing,New,Price,3.9,7,0
+Electronics,Loyal,Product Quality,3.8,7,0
+Electronics,Returning,Website Experience,2.9,4,0
+Home Goods,VIP,Customer Service,4.2,10,1
+Food & Beverage,New,Customer Service,5.0,9,1
 Beauty,Returning,Customer Service,3.8,8,0
-Electronics,Returning,Customer Service,4.6,10,1
-Food & Beverage,Loyal,Website Experience,4.0,9,1
-Food & Beverage,New,Price,4.3,9,1
-Beauty,Loyal,Product Quality,4.0,10,1
-Clothing,VIP,Delivery,3.5,8,0
-Electronics,VIP,Delivery,4.5,9,1
-Home Goods,Loyal,Website Experience,4.6,10,1
-Clothing,Returning,Customer Service,3.8,7,0
-Food & Beverage,Loyal,Website Experience,3.8,8,0
-Beauty,Loyal,Price,3.6,8,0
-Food & Beverage,Returning,Price,3.8,8,0
-Electronics,Returning,Customer Service,4.5,10,1
-Clothing,Returning,Price,3.2,8,0
-Home Goods,New,Website Experience,4.5,9,1
-Food & Beverage,VIP,Customer Service,4.4,9,1
-Clothing,VIP,Website Experience,5.0,10,1
-Beauty,Returning,Website Experience,2.9,5,0
-Food & Beverage,VIP,Product Quality,4.7,9,1
-Clothing,Loyal,Product Quality,3.2,7,0
-Beauty,VIP,Price,3.6,7,0
-Food & Beverage,VIP,Website Experience,4.2,10,1
-Food & Beverage,New,Delivery,4.3,10,1
-Electronics,VIP,Website Experience,4.7,9,1
-Home Goods,VIP,Delivery,3.4,8,0
-Home Goods,New,Website Experience,4.6,9,1
-Electronics,VIP,Price,2.9,6,0
-Home Goods,Loyal,Product Quality,4.1,9,1
-Clothing,Loyal,Customer Service,3.9,7,0
-Beauty,New,Customer Service,4.6,10,1
-Food & Beverage,VIP,Customer Service,3.8,8,0
-Home Goods,Loyal,Price,2.9,2,0
-Home Goods,VIP,Product Quality,5.0,9,1
-Food & Beverage,Loyal,Product Quality,4.3,9,1
-Home Goods,VIP,Price,4.0,7,0
-Clothing,Returning,Price,4.0,7,0
-Clothing,Loyal,Price,3.6,7,0
-Beauty,New,Price,3.7,8,0
-Food & Beverage,Loyal,Customer Service,4.4,9,1
-Beauty,Loyal,Delivery,4.6,9,1
-Clothing,New,Product Quality,3.6,8,0
-Home Goods,Returning,Price,3.2,7,0
-Clothing,Returning,Customer Service,3.9,7,0
-Electronics,Loyal,Website Experience,3.8,7,0
-Home Goods,Returning,Website Experience,3.2,8,0
-Home Goods,VIP,Price,4.1,9,1
-Food & Beverage,VIP,Product Quality,5.0,10,1
-Home Goods,New,Customer Service,4.0,7,0
-Electronics,Returning,Delivery,4.3,9,1
-Food & Beverage,Returning,Product Quality,3.4,8,0
-Electronics,New,Website Experience,2.8,1,0
-Food & Beverage,New,Delivery,2.5,2,0
-Clothing,New,Website Experience,4.3,10,1
-Food & Beverage,VIP,Delivery,3.5,7,0
-Home Goods,VIP,Delivery,4.0,8,0
-Electronics,Returning,Customer Service,2.7,6,0
-Beauty,Returning,Price,3.1,8,0
-Home Goods,Loyal,Delivery,4.6,10,1
-Home Goods,Returning,Price,4.1,10,1
-Home Goods,VIP,Customer Service,4.7,9,1
-Electronics,New,Product Quality,4.1,10,1
-Clothing,VIP,Delivery,4.2,10,1
-Home Goods,VIP,Price,3.5,8,0
-Electronics,New,Delivery,3.5,7,0
-Food & Beverage,VIP,Customer Service,4.4,9,1
-Home Goods,Returning,Price,3.3,7,0
-Clothing,Returning,Product Quality,3.9,7,0
-Electronics,Returning,Customer Service,3.7,7,0
-Food & Beverage,Loyal,Price,3.1,7,0
-Clothing,Returning,Website Experience,3.8,7,0
-Food & Beverage,New,Customer Service,4.3,9,1
-Beauty,Returning,Delivery,4.1,10,1
-Beauty,Returning,Customer Service,4.0,9,1
-Food & Beverage,VIP,Customer Service,3.9,8,0
-Food & Beverage,New,Customer Service,4.7,9,1
+Clothing,New,Product Quality,4.0,7,0
+Clothing,New,Website Experience,3.7,7,0
+Home Goods,Returning,Product Quality,4.4,10,1
+Clothing,New,Customer Service,5.0,10,1
+Clothing,VIP,Website Experience,3.9,7,0
+Food & Beverage,New,Price,3.6,8,0
+Food & Beverage,Returning,Product Quality,4.2,9,1
+Clothing,VIP,Customer Service,3.8,8,0
+Clothing,Loyal,Delivery,5.0,10,1
+Home Goods,VIP,Product Quality,4.0,9,1
+Home Goods,Returning,Website Experience,4.4,10,1
+Beauty,Returning,Website Experience,3.2,7,0
+Home Goods,Loyal,Price,3.9,8,0
+Food & Beverage,Loyal,Customer Service,4.5,9,1
+Home Goods,New,Customer Service,3.8,7,0
+Food & Beverage,Returning,Price,3.9,7,0
+Beauty,Loyal,Website Experience,4.1,9,1
+Food & Beverage,New,Price,3.0,4,0
+Food & Beverage,New,Price,4.2,10,1
+Food & Beverage,VIP,Delivery,3.8,8,0
+Beauty,VIP,Customer Service,3.3,8,0
+Home Goods,Returning,Price,3.9,8,0
+Clothing,VIP,Customer Service,4.5,9,1
+Electronics,Returning,Product Quality,3.3,8,0
+Beauty,VIP,Customer Service,4.2,9,1
+Home Goods,VIP,Price,3.4,8,0
+Clothing,VIP,Customer Service,4.6,10,1
+Beauty,Loyal,Delivery,4.9,10,1
+Electronics,New,Website Experience,3.4,7,0
+Home Goods,VIP,Delivery,4.0,7,0
+Food & Beverage,Returning,Customer Service,3.0,1,0
+Home Goods,VIP,Website Experience,3.8,8,0
+Food & Beverage,VIP,Delivery,3.7,7,0
+Food & Beverage,New,Product Quality,2.8,1,0
+Beauty,VIP,Price,3.4,7,0
+Electronics,Loyal,Delivery,5.0,9,1
+Beauty,Loyal,Delivery,4.3,9,1
+Home Goods,Returning,Delivery,3.5,8,0
+Beauty,New,Delivery,4.1,9,1
+Electronics,Loyal,Product Quality,3.4,8,0
+Food & Beverage,New,Delivery,3.3,7,0
+Home Goods,VIP,Product Quality,4.8,10,1
+Beauty,Returning,Website Experience,4.2,9,1
+Beauty,Returning,Product Quality,3.1,7,0
+Beauty,Loyal,Price,3.9,7,0
+Beauty,Returning,Customer Service,4.1,10,1
+Home Goods,Returning,Product Quality,4.0,7,0
+Beauty,Loyal,Customer Service,5.0,9,1
+Food & Beverage,VIP,Price,3.5,8,0
+Electronics,Loyal,Delivery,4.5,9,1
+Home Goods,Returning,Price,3.6,7,0
+Beauty,VIP,Website Experience,4.5,10,1
+Home Goods,Returning,Price,2.7,6,0
+Clothing,VIP,Delivery,4.4,9,1
+Beauty,Loyal,Product Quality,3.9,7,0
+Clothing,Loyal,Product Quality,4.2,9,1
+Beauty,New,Price,4.0,7,0
+Clothing,New,Price,2.2,1,0
+Food & Beverage,New,Delivery,3.5,8,0
+Electronics,New,Website Experience,4.9,10,1
+Electronics,Loyal,Price,3.2,8,0
+Electronics,Returning,Delivery,3.2,7,0
+Clothing,Loyal,Website Experience,4.8,10,1
+Food & Beverage,New,Product Quality,4.1,9,1
+Electronics,Returning,Website Experience,4.5,9,1
+Beauty,Returning,Delivery,4.1,9,1
+Electronics,VIP,Price,3.8,7,0
+Home Goods,VIP,Customer Service,4.7,10,1
+Clothing,VIP,Website Experience,4.3,9,1
+Clothing,Returning,Product Quality,3.4,7,0
+Food & Beverage,Loyal,Price,3.5,7,0
+Home Goods,Returning,Product Quality,3.5,7,0
+Home Goods,Loyal,Customer Service,4.8,9,1
+Electronics,Loyal,Delivery,4.0,8,0
+Electronics,VIP,Price,4.5,10,1
+Home Goods,VIP,Website Experience,3.5,7,0
+Clothing,VIP,Product Quality,4.1,9,1
+Home Goods,Loyal,Delivery,4.4,10,1
+Home Goods,Loyal,Website Experience,4.3,9,1
+Home Goods,VIP,Price,3.4,8,0
+Food & Beverage,New,Delivery,4.3,9,1
+Clothing,Loyal,Delivery,3.8,7,0
+Clothing,VIP,Website Experience,4.6,10,1
+Home Goods,Loyal,Customer Service,5.0,9,1
+Clothing,Loyal,Product Quality,3.3,7,0
+Food & Beverage,Loyal,Delivery,4.5,9,1
+Food & Beverage,Loyal,Product Quality,3.5,8,0
+Beauty,New,Delivery,3.1,7,0
+Beauty,Returning,Delivery,3.8,8,0
+Clothing,Loyal,Website Experience,4.4,9,1
+Beauty,New,Product Quality,3.2,8,0
+Beauty,Loyal,Product Quality,4.7,9,1
+Beauty,VIP,Website Experience,3.8,7,0
+Clothing,Loyal,Website Experience,4.1,10,1
+Clothing,Loyal,Customer Service,4.6,9,1
+Food & Beverage,Loyal,Website Experience,3.7,7,0
+Beauty,New,Price,3.0,8,0
+Electronics,Returning,Delivery,4.1,9,1
+Beauty,New,Product Quality,3.4,7,0
+Electronics,Returning,Delivery,3.6,8,0
+Food & Beverage,Loyal,Customer Service,3.2,8,0
+Electronics,Loyal,Price,4.0,10,1
+Beauty,Loyal,Product Quality,4.2,9,1
+Home Goods,Returning,Delivery,4.3,9,1
+Home Goods,VIP,Customer Service,4.7,10,1
+Beauty,VIP,Customer Service,3.4,7,0
 Food & Beverage,Loyal,Price,4.4,10,1
-Home Goods,Loyal,Product Quality,4.2,10,1
-Electronics,Returning,Product Quality,3.6,7,0
+Electronics,Loyal,Website Experience,5.0,9,1
+Clothing,Returning,Price,3.2,8,0
+Food & Beverage,Returning,Delivery,3.7,7,0
+Clothing,Loyal,Product Quality,4.6,10,1
+Food & Beverage,Returning,Price,3.7,7,0
+Beauty,VIP,Customer Service,4.9,10,1
+Clothing,Returning,Delivery,4.4,9,1
+Beauty,Loyal,Customer Service,4.2,9,1
+Electronics,New,Product Quality,3.8,8,0
+Electronics,Loyal,Product Quality,5.0,10,1
+Home Goods,VIP,Price,4.0,8,0
+Food & Beverage,Returning,Website Experience,3.0,7,0
+Clothing,Returning,Product Quality,3.6,7,0
+Clothing,Loyal,Product Quality,4.0,7,0
+Electronics,VIP,Delivery,4.2,10,1
+Food & Beverage,Returning,Price,3.0,7,0
+Home Goods,Returning,Customer Service,4.0,9,1
+Clothing,New,Product Quality,3.1,7,0
+Electronics,VIP,Delivery,4.0,10,1
+Electronics,VIP,Customer Service,4.5,10,1
+Beauty,VIP,Delivery,4.4,10,1
+Beauty,Loyal,Website Experience,4.2,10,1
+Electronics,New,Price,2.4,0,0
+Home Goods,Returning,Website Experience,3.6,7,0
+Electronics,VIP,Delivery,4.8,9,1
+Beauty,VIP,Product Quality,3.9,8,0
+Electronics,VIP,Price,2.9,6,0
+Electronics,Loyal,Website Experience,5.0,9,1
+Home Goods,Loyal,Price,2.8,5,0
+Home Goods,Returning,Delivery,3.9,7,0
+Beauty,Returning,Customer Service,4.0,8,0
+Home Goods,Loyal,Delivery,4.1,10,1
+Home Goods,Returning,Delivery,3.3,7,0
+Home Goods,Returning,Delivery,3.5,8,0
+Beauty,Loyal,Customer Service,4.7,10,1
+Electronics,New,Price,2.4,1,0
+Home Goods,Returning,Price,3.0,8,0
+Clothing,New,Customer Service,3.9,7,0
+Clothing,Loyal,Website Experience,4.5,10,1
+Home Goods,Returning,Delivery,4.0,9,1
+Beauty,Returning,Product Quality,4.4,9,1
+Beauty,New,Customer Service,3.1,8,0
+Clothing,Loyal,Website Experience,4.6,10,1
+Home Goods,New,Website Experience,3.7,8,0
+Home Goods,New,Price,3.4,8,0
+Food & Beverage,VIP,Delivery,4.8,9,1
+Beauty,Loyal,Delivery,4.8,9,1
+Home Goods,Returning,Website Experience,3.1,8,0
+Home Goods,Loyal,Customer Service,3.7,7,0
+Clothing,New,Delivery,3.0,3,0
+Food & Beverage,New,Customer Service,3.2,8,0
+Electronics,Loyal,Website Experience,4.0,10,1
+Beauty,Loyal,Delivery,4.8,10,1
+Home Goods,New,Customer Service,4.3,9,1
+Beauty,New,Price,3.6,8,0
+Beauty,Returning,Customer Service,4.2,9,1
+Electronics,VIP,Price,4.4,9,1
+Food & Beverage,VIP,Product Quality,4.3,10,1
+Electronics,Returning,Customer Service,4.1,9,1
+Home Goods,New,Customer Service,4.6,9,1
+Beauty,Loyal,Product Quality,3.8,8,0
+Electronics,VIP,Product Quality,4.3,10,1
+Beauty,VIP,Website Experience,4.5,9,1
+Home Goods,Returning,Delivery,4.3,9,1
+Beauty,Returning,Delivery,3.0,8,0
+Food & Beverage,Loyal,Customer Service,3.7,8,0
+Food & Beverage,VIP,Customer Service,3.4,7,0
+Home Goods,Returning,Customer Service,4.8,10,1
+Electronics,VIP,Customer Service,3.6,8,0
+Beauty,New,Delivery,2.9,3,0
+Clothing,New,Customer Service,4.9,10,1
+Clothing,New,Delivery,3.3,8,0
+Electronics,VIP,Website Experience,3.7,8,0
+Home Goods,VIP,Website Experience,4.8,9,1
+Food & Beverage,Returning,Delivery,3.4,7,0
+Beauty,Loyal,Website Experience,4.5,9,1
+Home Goods,New,Customer Service,2.7,6,0
+Electronics,Loyal,Customer Service,4.7,10,1
+Electronics,VIP,Price,4.1,9,1
+Electronics,VIP,Website Experience,5.0,9,1
+Home Goods,New,Website Experience,2.7,2,0
+Electronics,Returning,Customer Service,3.9,7,0
+Food & Beverage,Loyal,Website Experience,4.2,9,1
+Electronics,Loyal,Website Experience,3.8,8,0
+Home Goods,Loyal,Product Quality,4.5,9,1
+Food & Beverage,VIP,Website Experience,3.7,8,0
+Beauty,VIP,Product Quality,4.3,9,1
+Home Goods,New,Delivery,2.9,5,0
+Beauty,Loyal,Delivery,4.7,10,1
+Clothing,VIP,Price,3.8,8,0
+Food & Beverage,Loyal,Website Experience,3.6,8,0
+Home Goods,Returning,Customer Service,4.0,9,1
+Clothing,VIP,Product Quality,4.7,9,1
+Electronics,Returning,Customer Service,4.0,9,1
+Home Goods,VIP,Price,3.9,8,0
+Beauty,New,Price,2.8,6,0
+Beauty,Loyal,Delivery,4.1,10,1
+Beauty,Loyal,Price,4.0,7,0
+Home Goods,Returning,Customer Service,2.6,6,0
+Clothing,VIP,Website Experience,3.7,7,0
+Electronics,New,Customer Service,4.0,9,1
+Food & Beverage,Loyal,Website Experience,4.0,10,1
+Beauty,New,Delivery,3.7,7,0
+Beauty,VIP,Website Experience,4.6,10,1
+Home Goods,Returning,Product Quality,3.7,7,0
+Home Goods,Returning,Delivery,4.6,9,1
+Beauty,Loyal,Product Quality,4.2,10,1
+Clothing,Loyal,Delivery,4.7,10,1
+Clothing,Loyal,Customer Service,4.5,9,1
+Electronics,Returning,Product Quality,3.7,7,0
+Food & Beverage,New,Price,3.6,7,0
+Home Goods,New,Website Experience,3.9,8,0
+Clothing,Loyal,Website Experience,3.6,8,0
+Beauty,New,Website Experience,3.2,8,0
+Home Goods,VIP,Price,3.6,7,0
+Beauty,Returning,Product Quality,3.8,8,0
+Beauty,Returning,Product Quality,3.5,7,0
+Home Goods,VIP,Price,3.8,7,0
+Electronics,VIP,Delivery,3.4,7,0
+Food & Beverage,VIP,Price,4.6,9,1
+Electronics,Loyal,Delivery,4.0,8,0
+Food & Beverage,VIP,Product Quality,5.0,10,1
+Food & Beverage,New,Price,4.0,7,0
+Electronics,Loyal,Product Quality,3.9,8,0
+Beauty,Loyal,Delivery,3.6,7,0
+Electronics,VIP,Price,3.8,8,0
+Electronics,Returning,Delivery,4.4,9,1
+Food & Beverage,Loyal,Price,4.0,10,1
+Electronics,Returning,Customer Service,3.2,7,0
+Home Goods,New,Price,2.4,6,0
+Electronics,Returning,Delivery,4.4,9,1
+Food & Beverage,New,Delivery,4.9,9,1
+Home Goods,VIP,Price,2.7,1,0
+Electronics,Loyal,Delivery,3.6,7,0
+Clothing,VIP,Customer Service,3.3,7,0
+Clothing,Loyal,Product Quality,4.9,9,1
+Electronics,New,Website Experience,3.5,7,0
+Beauty,VIP,Price,4.5,10,1
+Home Goods,VIP,Product Quality,3.7,7,0
+Home Goods,VIP,Website Experience,4.4,9,1
+Beauty,Returning,Customer Service,4.6,10,1
+Electronics,Returning,Price,2.5,1,0
+Electronics,New,Customer Service,3.3,7,0
+Beauty,VIP,Website Experience,4.3,10,1
+Food & Beverage,Returning,Website Experience,4.4,10,1
+Beauty,VIP,Customer Service,4.6,10,1
+Clothing,Loyal,Delivery,3.8,8,0
+Electronics,VIP,Price,3.5,8,0
+Beauty,New,Customer Service,4.2,9,1
+Electronics,Returning,Customer Service,4.6,9,1
+Home Goods,Returning,Delivery,4.2,9,1
+Beauty,Loyal,Delivery,4.0,10,1
+Home Goods,VIP,Delivery,5.0,10,1
+Beauty,New,Website Experience,3.2,7,0
+Food & Beverage,Loyal,Price,3.0,6,0
+Home Goods,Returning,Customer Service,4.4,9,1
+Food & Beverage,New,Customer Service,3.4,7,0
+Home Goods,Loyal,Delivery,4.3,10,1
+Electronics,New,Price,4.3,10,1
+Beauty,VIP,Website Experience,3.9,8,0
+Home Goods,VIP,Product Quality,4.3,9,1
+Home Goods,Loyal,Website Experience,4.9,10,1
+Electronics,Returning,Customer Service,4.1,10,1
+Electronics,New,Product Quality,2.8,0,0
+Electronics,New,Website Experience,4.5,9,1
+Clothing,New,Product Quality,2.8,5,0
+Electronics,Returning,Price,3.4,8,0
+Clothing,Returning,Price,3.3,8,0
+Clothing,Loyal,Price,3.6,7,0
+Beauty,Loyal,Product Quality,5.0,10,1
+Beauty,Returning,Product Quality,3.0,8,0
+Clothing,New,Price,2.5,5,0
+Home Goods,Returning,Price,3.3,8,0
+Home Goods,Returning,Price,2.3,0,0
+Clothing,VIP,Price,3.9,7,0
+Clothing,Returning,Customer Service,4.0,9,1
+Food & Beverage,Loyal,Delivery,4.7,10,1
+Clothing,VIP,Product Quality,3.6,7,0
+Home Goods,New,Price,3.7,7,0
+Beauty,New,Delivery,3.3,8,0
+Beauty,Loyal,Website Experience,4.7,10,1
+Beauty,Loyal,Website Experience,3.5,7,0
+Beauty,Returning,Price,2.6,5,0
+Home Goods,New,Customer Service,4.9,9,1
+Beauty,VIP,Delivery,4.4,9,1
+Home Goods,VIP,Customer Service,3.7,7,0
+Home Goods,VIP,Product Quality,4.4,10,1
+Electronics,VIP,Customer Service,4.0,8,0
+Clothing,VIP,Customer Service,3.5,8,0
+Home Goods,Returning,Delivery,4.0,10,1
+Home Goods,VIP,Price,3.1,8,0
+Clothing,Returning,Website Experience,4.2,9,1
+Home Goods,Loyal,Product Quality,4.7,9,1
+Home Goods,Loyal,Customer Service,4.1,9,1
+Electronics,VIP,Product Quality,4.2,9,1
+Beauty,Returning,Product Quality,2.8,4,0
+Clothing,Returning,Delivery,3.7,7,0
+Beauty,Returning,Product Quality,3.2,8,0
+Food & Beverage,Loyal,Delivery,4.4,10,1
+Electronics,New,Product Quality,3.5,8,0
+Beauty,Loyal,Website Experience,4.9,9,1
+Electronics,VIP,Customer Service,4.3,10,1
+Food & Beverage,New,Customer Service,2.9,2,0
+Food & Beverage,VIP,Product Quality,3.2,8,0
+Clothing,VIP,Price,2.8,0,0
+Beauty,New,Product Quality,2.8,2,0
+Home Goods,VIP,Delivery,3.6,8,0
+Clothing,VIP,Product Quality,4.8,9,1
+Clothing,Returning,Product Quality,2.9,3,0
+Electronics,New,Website Experience,3.7,7,0
+Beauty,New,Website Experience,4.0,10,1
+Home Goods,Loyal,Delivery,4.3,9,1
+Beauty,VIP,Website Experience,4.3,10,1
+Clothing,VIP,Price,3.8,8,0
+Home Goods,Returning,Customer Service,4.2,10,1
+Home Goods,Loyal,Delivery,4.0,8,0
+Home Goods,Returning,Price,4.1,9,1
+Home Goods,Loyal,Price,4.1,9,1
+Electronics,VIP,Delivery,3.9,8,0
+Clothing,VIP,Product Quality,4.5,9,1
+Food & Beverage,Loyal,Delivery,4.4,9,1
+Home Goods,Loyal,Customer Service,5.0,10,1
+Beauty,Loyal,Price,2.8,0,0
+Home Goods,VIP,Website Experience,3.7,7,0
+Home Goods,Loyal,Price,3.9,7,0
+Food & Beverage,VIP,Customer Service,4.9,10,1
+Clothing,Loyal,Website Experience,4.9,10,1
+Home Goods,New,Website Experience,5.0,9,1
+Beauty,VIP,Product Quality,3.5,7,0
+Beauty,Returning,Customer Service,2.9,3,0
+Electronics,Returning,Website Experience,3.6,8,0
+Beauty,Returning,Customer Service,3.3,7,0
+Beauty,Returning,Website Experience,3.7,8,0
+Food & Beverage,VIP,Product Quality,3.6,8,0
+Home Goods,Returning,Customer Service,4.5,10,1
+Clothing,VIP,Delivery,4.7,10,1
+Electronics,VIP,Price,4.3,10,1
+Home Goods,VIP,Website Experience,3.8,7,0
+Food & Beverage,Returning,Website Experience,4.0,10,1
+Beauty,Loyal,Price,3.7,8,0
+Home Goods,Returning,Website Experience,3.3,7,0
+Electronics,Loyal,Customer Service,4.1,10,1
+Home Goods,New,Price,3.8,7,0
+Food & Beverage,Loyal,Customer Service,4.5,9,1
+Electronics,Returning,Website Experience,4.1,9,1
+Electronics,Returning,Delivery,4.4,9,1
+Food & Beverage,Loyal,Website Experience,3.6,7,0
+Food & Beverage,VIP,Customer Service,4.9,10,1
+Beauty,Returning,Customer Service,3.3,7,0
+Beauty,New,Website Experience,3.4,8,0
+Beauty,Loyal,Website Experience,4.9,9,1
+Food & Beverage,Loyal,Delivery,4.8,9,1
+Beauty,Returning,Customer Service,3.6,8,0
+Clothing,VIP,Customer Service,3.5,8,0
+Clothing,Returning,Customer Service,3.9,8,0
+Beauty,New,Delivery,3.6,8,0
+Clothing,VIP,Website Experience,3.6,8,0
+Food & Beverage,Returning,Delivery,4.3,9,1
+Home Goods,Returning,Website Experience,4.2,9,1
+Beauty,New,Customer Service,2.9,1,0
+Beauty,New,Price,3.0,7,0
+Beauty,Loyal,Delivery,5.0,9,1
+Clothing,Loyal,Website Experience,4.9,10,1
+Electronics,Returning,Delivery,4.6,9,1
+Electronics,VIP,Delivery,4.5,9,1
+Beauty,Returning,Website Experience,3.3,8,0
+Electronics,Returning,Product Quality,4.2,10,1
+Clothing,VIP,Price,3.8,8,0
+Beauty,VIP,Product Quality,3.6,8,0
+Food & Beverage,Returning,Website Experience,4.1,10,1
+Beauty,Loyal,Price,3.3,7,0
+Clothing,Returning,Product Quality,3.9,8,0
+Beauty,New,Delivery,4.4,10,1
+Beauty,Returning,Website Experience,4.4,10,1
+Clothing,Loyal,Customer Service,4.2,10,1
+Beauty,VIP,Product Quality,4.1,9,1
+Food & Beverage,Loyal,Price,3.0,8,0
+Electronics,Returning,Product Quality,3.9,7,0
+Clothing,Returning,Product Quality,3.6,7,0
+Food & Beverage,VIP,Product Quality,4.7,9,1
+Clothing,New,Product Quality,5.0,9,1
+Clothing,Returning,Product Quality,3.5,8,0
+Electronics,New,Delivery,2.8,4,0
+Food & Beverage,New,Price,2.0,1,0
+Electronics,New,Website Experience,3.8,7,0
+Clothing,VIP,Website Experience,4.0,9,1
+Beauty,New,Product Quality,2.4,3,0
+Beauty,Loyal,Customer Service,5.0,10,1
+Beauty,Returning,Website Experience,3.4,7,0
+Electronics,New,Customer Service,2.9,0,0
+Electronics,New,Delivery,4.3,10,1
+Electronics,VIP,Price,4.6,9,1
+Food & Beverage,Loyal,Price,3.6,8,0

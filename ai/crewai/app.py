@@ -164,7 +164,7 @@ def generate_presentation(report_topic, crew_results):
 
     Args:
         report_topic (str): The main topic of the business report
-        crew_results (dict): Results from the crew's work
+        crew_results: Results from the crew's work (CrewAI output)
 
     Returns:
         str: Path to the generated PowerPoint file
@@ -177,12 +177,42 @@ def generate_presentation(report_topic, crew_results):
 
         # Create a new presentation
         prs = Presentation()
-
-        # Extract content from crew results
-        data_analysis = crew_results[0]
-        content = crew_results[1]
-        visual_design = crew_results[2]
-        quality_review = crew_results[3]
+        
+        # Debug the structure of crew_results
+        print(f"CrewAI Results Type: {type(crew_results)}")
+        
+        # Extract content from crew results - handle different possible formats
+        if isinstance(crew_results, list) and len(crew_results) >= 3:
+            # Original expected format
+            data_analysis = crew_results[0]
+            content = crew_results[1]
+            visual_design = crew_results[2]
+            quality_review = crew_results[3] if len(crew_results) > 3 else ""
+        elif hasattr(crew_results, 'values') and callable(getattr(crew_results, 'values', None)):
+            # Dictionary-like format
+            values = list(crew_results.values())
+            if len(values) >= 3:
+                data_analysis = values[0]
+                content = values[1]
+                visual_design = values[2]
+                quality_review = values[3] if len(values) > 3 else ""
+            else:
+                raise ValueError(f"Not enough values in crew_results: {len(values)} values found, need at least 3")
+        elif hasattr(crew_results, 'get_task_output'):
+            # Newer CrewAI format with task outputs
+            # Assuming tasks are in the same order as defined in create_report_tasks
+            data_analysis = crew_results.get_task_output(0) or "No data analysis available"
+            content = crew_results.get_task_output(1) or "No content available"
+            visual_design = crew_results.get_task_output(2) or "No visual design available"
+            quality_review = crew_results.get_task_output(3) or ""
+        else:
+            # Last resort - try to convert to string and use as content
+            print(f"Unknown crew_results format: {crew_results}")
+            content_str = str(crew_results)
+            data_analysis = content_str
+            content = content_str
+            visual_design = content_str
+            quality_review = ""
 
         # Title slide
         title_slide_layout = prs.slide_layouts[0]

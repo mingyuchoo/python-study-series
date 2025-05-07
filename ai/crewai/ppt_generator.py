@@ -241,16 +241,33 @@ class PPTGenerator:
         Returns:
             dict: Dictionary of section titles and their content
         """
-        # Define patterns for section headings
+        # Print the content for debugging
+        print(f"Content to parse: {content[:200]}...")
+        
+        # Define patterns for section headings (both English and Korean)
         section_patterns = [
-            r"Executive Summary[:\s]*(.*?)(?=\n\s*\n\s*[A-Z][\w\s]+[:\n]|$)",
-            r"Introduction[:\s]*(.*?)(?=\n\s*\n\s*[A-Z][\w\s]+[:\n]|$)",
-            r"Key Findings[:\s]*(.*?)(?=\n\s*\n\s*[A-Z][\w\s]+[:\n]|$)",
-            r"Strategic Recommendations[:\s]*(.*?)(?=\n\s*\n\s*[A-Z][\w\s]+[:\n]|$)",
-            r"Conclusion[:\s]*(.*?)(?=\n\s*\n\s*[A-Z][\w\s]+[:\n]|$)",
+            # English patterns
+            r"Executive Summary[:\s]*(.*?)(?=\n\s*\n\s*[A-Z가-힣][\w\s가-힣]+[:\n]|$)",
+            r"Introduction[:\s]*(.*?)(?=\n\s*\n\s*[A-Z가-힣][\w\s가-힣]+[:\n]|$)",
+            r"Key Findings[:\s]*(.*?)(?=\n\s*\n\s*[A-Z가-힣][\w\s가-힣]+[:\n]|$)",
+            r"Strategic Recommendations[:\s]*(.*?)(?=\n\s*\n\s*[A-Z가-힣][\w\s가-힣]+[:\n]|$)",
+            r"Conclusion[:\s]*(.*?)(?=\n\s*\n\s*[A-Z가-힣][\w\s가-힣]+[:\n]|$)",
+            # Korean patterns
+            r"임원 요약[:\s]*(.*?)(?=\n\s*\n\s*[A-Z가-힣][\w\s가-힣]+[:\n]|$)",
+            r"소개[:\s]*(.*?)(?=\n\s*\n\s*[A-Z가-힣][\w\s가-힣]+[:\n]|$)",
+            r"주요 발견[:\s]*(.*?)(?=\n\s*\n\s*[A-Z가-힣][\w\s가-힣]+[:\n]|$)",
+            r"전략적 권장 사항[:\s]*(.*?)(?=\n\s*\n\s*[A-Z가-힣][\w\s가-힣]+[:\n]|$)",
+            r"결론[:\s]*(.*?)(?=\n\s*\n\s*[A-Z가-힣][\w\s가-힣]+[:\n]|$)",
         ]
 
+        # Both English and Korean section titles
         section_titles = [
+            "Executive Summary",
+            "Introduction",
+            "Key Findings",
+            "Strategic Recommendations",
+            "Conclusion",
+            # Map Korean titles to English section names for consistency
             "Executive Summary",
             "Introduction",
             "Key Findings",
@@ -264,16 +281,67 @@ class PPTGenerator:
         for i, pattern in enumerate(section_patterns):
             match = re.search(pattern, content, re.DOTALL)
             if match:
-                sections[section_titles[i]] = match.group(1).strip()
-            else:
-                # Try a simpler pattern if the complex one fails
-                simple_pattern = f"{section_titles[i]}[:\s]*(.*?)(?=\n\s*[A-Z]|$)"
-                match = re.search(simple_pattern, content, re.DOTALL)
-                if match:
-                    sections[section_titles[i]] = match.group(1).strip()
-                else:
-                    sections[section_titles[i]] = ""
+                section_key = section_titles[i % 5]  # Use modulo to map to the 5 main sections
+                sections[section_key] = match.group(1).strip()
+                print(f"Found section {section_key} with content length: {len(sections[section_key])}")
 
+        # If no sections were found, try to extract content using headings
+        if not any(sections.values()):
+            print("No sections found with regex patterns, trying heading-based extraction")
+            # Split by common heading markers
+            lines = content.split('\n')
+            current_section = None
+            section_content = []
+            
+            for line in lines:
+                # Check if this line looks like a heading
+                if re.match(r'^#+\s+|^\d+\.\s+|^[A-Z가-힣][A-Z가-힣\s]+:$', line.strip()):
+                    # Save previous section if we were collecting one
+                    if current_section and section_content:
+                        sections[current_section] = '\n'.join(section_content)
+                        section_content = []
+                    
+                    # Determine which section this heading belongs to
+                    lower_line = line.lower()
+                    if any(term in lower_line for term in ['executive', 'summary', '요약', '개요']):
+                        current_section = "Executive Summary"
+                    elif any(term in lower_line for term in ['introduction', '소개', '서론']):
+                        current_section = "Introduction"
+                    elif any(term in lower_line for term in ['finding', 'analysis', '발견', '분석']):
+                        current_section = "Key Findings"
+                    elif any(term in lower_line for term in ['recommendation', 'strategy', '권장', '전략']):
+                        current_section = "Strategic Recommendations"
+                    elif any(term in lower_line for term in ['conclusion', 'summary', '결론', '요약']):
+                        current_section = "Conclusion"
+                    else:
+                        current_section = None
+                elif current_section:
+                    section_content.append(line)
+            
+            # Save the last section
+            if current_section and section_content:
+                sections[current_section] = '\n'.join(section_content)
+
+        # If still no sections found, create a default structure from the content
+        if not any(sections.values()):
+            print("Creating default sections from content")
+            content_parts = content.split('\n\n')
+            total_parts = len(content_parts)
+            
+            if total_parts >= 5:
+                sections["Executive Summary"] = content_parts[0]
+                sections["Introduction"] = content_parts[1]
+                sections["Key Findings"] = '\n\n'.join(content_parts[2:total_parts-2])
+                sections["Strategic Recommendations"] = content_parts[total_parts-2]
+                sections["Conclusion"] = content_parts[total_parts-1]
+            elif total_parts >= 3:
+                sections["Executive Summary"] = content_parts[0]
+                sections["Key Findings"] = '\n\n'.join(content_parts[1:total_parts-1])
+                sections["Conclusion"] = content_parts[total_parts-1]
+            else:
+                # Just put all content in Key Findings if we can't split it
+                sections["Key Findings"] = content
+        
         return sections
 
     def generate_from_agent_results(self, data_analysis, content, visual_design):
@@ -361,49 +429,95 @@ class PPTGenerator:
         Returns:
             list: List of chart information dictionaries
         """
-        # This is a simplified version - in a real implementation, you would parse the
-        # data analysis text to extract actual chart suggestions
-
-        # Sample chart data (in a real implementation, this would be extracted from the data analysis)
-        chart_suggestions = [
-            {
-                "type": "bar",
-                "title": "Quarterly Sales by Category",
-                "data": {
-                    "Electronics": 425000,
-                    "Clothing": 310000,
-                    "Home Goods": 275000,
-                    "Food & Beverage": 190000,
-                    "Beauty": 150000,
-                },
-                "x_label": "Product Category",
-                "y_label": "Sales ($)",
-            },
-            {
-                "type": "line",
-                "title": "Monthly Sales Trend",
-                "data": {
-                    "Jan": 120000,
-                    "Feb": 115000,
-                    "Mar": 130000,
-                    "Apr": 140000,
-                    "May": 135000,
-                    "Jun": 155000,
-                },
-                "x_label": "Month",
-                "y_label": "Sales ($)",
-            },
-            {
+        print(f"Extracting chart suggestions from data analysis: {data_analysis[:200]}...")
+        
+        chart_suggestions = []
+        
+        # Try to extract actual data from the analysis text
+        # Look for patterns that might indicate data points
+        
+        # Pattern 1: Look for percentage values (e.g., 45%, 20%, 18%)
+        percentage_matches = re.findall(r'(\d+)\s*%\s*(?:의|of)?\s*([^,.\n]+)', data_analysis)
+        if percentage_matches and len(percentage_matches) >= 3:
+            # Create a pie chart from percentages
+            percentage_data = {}
+            for match in percentage_matches[:5]:  # Take up to 5 data points
+                value = int(match[0])
+                label = match[1].strip()
+                percentage_data[label] = value
+            
+            chart_suggestions.append({
                 "type": "pie",
-                "title": "Sales Distribution by Region",
-                "data": {
-                    "North": 30,
-                    "South": 25,
-                    "East": 20,
-                    "West": 15,
-                    "Central": 10,
+                "title": "분포 분석",  # Distribution Analysis
+                "data": percentage_data
+            })
+        
+        # Pattern 2: Look for quarterly data
+        quarters = ['Q1', 'Q2', 'Q3', 'Q4', '1분기', '2분기', '3분기', '4분기']
+        quarter_data = {}
+        
+        for quarter in quarters:
+            # Look for patterns like "Q1: 120,000" or "1분기: 120,000"
+            matches = re.findall(f'{quarter}[^\d]+(\d[\d,.]+)', data_analysis)
+            if matches:
+                # Clean the number and convert to float
+                value_str = matches[0].replace(',', '')
+                try:
+                    quarter_data[quarter] = float(value_str)
+                except ValueError:
+                    pass
+        
+        if quarter_data and len(quarter_data) >= 2:
+            chart_suggestions.append({
+                "type": "bar",
+                "title": "분기별 실적",  # Quarterly Performance
+                "data": quarter_data,
+                "x_label": "분기",  # Quarter
+                "y_label": "매출 (원)"  # Sales (KRW)
+            })
+        
+        # If we couldn't extract real data, provide default charts
+        if not chart_suggestions:
+            print("Using default chart suggestions")
+            chart_suggestions = [
+                {
+                    "type": "bar",
+                    "title": "분기별 카테고리 매출",  # Quarterly Sales by Category
+                    "data": {
+                        "전자제품": 425000,  # Electronics
+                        "의류": 310000,  # Clothing
+                        "가정용품": 275000,  # Home Goods
+                        "식품 및 음료": 190000,  # Food & Beverage
+                        "뷰티": 150000,  # Beauty
+                    },
+                    "x_label": "제품 카테고리",  # Product Category
+                    "y_label": "매출 (원)",  # Sales (KRW)
                 },
-            },
-        ]
+                {
+                    "type": "line",
+                    "title": "월별 매출 추이",  # Monthly Sales Trend
+                    "data": {
+                        "1월": 120000,  # January
+                        "2월": 115000,  # February
+                        "3월": 130000,  # March
+                        "4월": 140000,  # April
+                        "5월": 135000,  # May
+                        "6월": 155000,  # June
+                    },
+                    "x_label": "월",  # Month
+                    "y_label": "매출 (원)",  # Sales (KRW)
+                },
+                {
+                    "type": "pie",
+                    "title": "지역별 매출 분포",  # Sales Distribution by Region
+                    "data": {
+                        "북부": 30,  # North
+                        "남부": 25,  # South
+                        "동부": 20,  # East
+                        "서부": 15,  # West
+                        "중부": 10,  # Central
+                    },
+                },
+            ]
 
         return chart_suggestions
