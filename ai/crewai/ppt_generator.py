@@ -6,6 +6,19 @@ import numpy as np
 import pandas as pd
 
 matplotlib.use("Agg")  # Use non-interactive backend
+# --- 한글 폰트 설정 시작 ---
+try:
+    matplotlib.rc('font', family='NanumGothic')  # 시스템에 설치된 경우
+except:
+    try:
+        matplotlib.rc('font', family='Malgun Gothic')  # Windows
+    except:
+        try:
+            matplotlib.rc('font', family='AppleGothic')  # macOS
+        except:
+            pass  # fallback
+matplotlib.rcParams['axes.unicode_minus'] = False
+# --- 한글 폰트 설정 끝 ---
 import re
 
 from pptx import Presentation
