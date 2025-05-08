@@ -20,7 +20,7 @@ class ProjectManager:
         os.makedirs(self.base_dir, exist_ok=True)
 
     def create_project_directory(self, project_name: str) -> str:
-        """Create a new project directory with a timestamp."""
+        """Create a new project directory with a timestamp and copy template files."""
         # Clean the project name for use as a directory name
         clean_name = self._clean_name(project_name)
 
@@ -34,10 +34,25 @@ class ProjectManager:
         # Create the directory
         os.makedirs(project_dir, exist_ok=True)
 
-        # Create subdirectories
-        os.makedirs(os.path.join(project_dir, "implementation"), exist_ok=True)
-        os.makedirs(os.path.join(project_dir, "tests"), exist_ok=True)
-        os.makedirs(os.path.join(project_dir, "deployment"), exist_ok=True)
+        # Copy template files from haskell_web_app template directory
+        current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        template_dir = os.path.join(current_dir, "templates", "haskell_web_app")
+        
+        if os.path.exists(template_dir):
+            # Copy all files and directories from the template
+            for item in os.listdir(template_dir):
+                source = os.path.join(template_dir, item)
+                destination = os.path.join(project_dir, item)
+                
+                if os.path.isdir(source):
+                    shutil.copytree(source, destination, dirs_exist_ok=True)
+                else:
+                    shutil.copy2(source, destination)
+        else:
+            # If template doesn't exist, create default directories
+            os.makedirs(os.path.join(project_dir, "implementation"), exist_ok=True)
+            os.makedirs(os.path.join(project_dir, "tests"), exist_ok=True)
+            os.makedirs(os.path.join(project_dir, "deployment"), exist_ok=True)
 
         return project_dir
 

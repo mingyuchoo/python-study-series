@@ -12,7 +12,11 @@ def create_deployer_tasks(
     deployment_dir = os.path.join(project_dir, "deployment")
     os.makedirs(deployment_dir, exist_ok=True)
 
-    deployment_report = os.path.join(project_dir, "deployment_report.md")
+    # Create docs directory for markdown files
+    docs_dir = os.path.join(project_dir, "docs")
+    os.makedirs(docs_dir, exist_ok=True)
+
+    deployment_report = os.path.join(docs_dir, "deployment_report.md")
 
     return [
         Task(

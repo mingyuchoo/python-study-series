@@ -9,7 +9,11 @@ def create_designer_tasks(
 ) -> List[Task]:
     """Creates tasks for the system architect agent."""
 
-    architecture_file = os.path.join(project_dir, "architecture_design.md")
+    # Create docs directory for markdown files
+    docs_dir = os.path.join(project_dir, "docs")
+    os.makedirs(docs_dir, exist_ok=True)
+
+    architecture_file = os.path.join(docs_dir, "architecture_design.md")
 
     return [
         Task(

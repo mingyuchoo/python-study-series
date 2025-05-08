@@ -12,7 +12,11 @@ def create_tester_tasks(
     testing_dir = os.path.join(project_dir, "tests")
     os.makedirs(testing_dir, exist_ok=True)
 
-    testing_report = os.path.join(project_dir, "testing_report.md")
+    # Create docs directory for markdown files
+    docs_dir = os.path.join(project_dir, "docs")
+    os.makedirs(docs_dir, exist_ok=True)
+
+    testing_report = os.path.join(docs_dir, "testing_report.md")
 
     return [
         Task(

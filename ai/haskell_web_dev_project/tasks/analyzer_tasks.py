@@ -9,7 +9,11 @@ def create_analyzer_tasks(
 ) -> List[Task]:
     """Creates tasks for the requirements analyzer agent."""
 
-    requirements_file = os.path.join(project_dir, "requirements_analysis.md")
+    # Create docs directory for markdown files
+    docs_dir = os.path.join(project_dir, "docs")
+    os.makedirs(docs_dir, exist_ok=True)
+
+    requirements_file = os.path.join(docs_dir, "requirements_analysis.md")
 
     return [
         Task(
