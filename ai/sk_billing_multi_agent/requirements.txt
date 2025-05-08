@@ -1,0 +1,4 @@
+semantic-kernel==1.29.0
+python-dotenv==1.0.0
+black==25.1.0
+isort==5.13.0
