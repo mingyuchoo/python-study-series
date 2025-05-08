@@ -9,6 +9,11 @@ This is a template for a web application written in Haskell using the Scotty web
 
 ## Getting Started
 
+```bash
+install_deps.sh
+setup.sh
+```
+
 ### Using Cabal
 
 ```bash
