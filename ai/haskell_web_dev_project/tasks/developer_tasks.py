@@ -11,7 +11,7 @@ def create_developer_tasks(
 
     implementation_dir = os.path.join(project_dir, "implementation")
     os.makedirs(implementation_dir, exist_ok=True)
-    
+
     # Create docs directory for markdown files
     docs_dir = os.path.join(project_dir, "docs")
     os.makedirs(docs_dir, exist_ok=True)

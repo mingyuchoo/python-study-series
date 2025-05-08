@@ -9,7 +9,7 @@ def create_tester_tasks(
 ) -> List[Task]:
     """Creates tasks for the QA engineer agent."""
 
-    testing_dir = os.path.join(project_dir, "tests")
+    testing_dir = os.path.join(project_dir, "test")
     os.makedirs(testing_dir, exist_ok=True)
 
     # Create docs directory for markdown files

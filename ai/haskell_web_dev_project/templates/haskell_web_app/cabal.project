@@ -9,7 +9,7 @@ constraints:
   scotty == 0.12.*,
   wai-middleware-static == 0.9.*,
   wai-extra == 3.1.*,
-  aeson == 1.5.*,
+  aeson == 2.2.*,
   text == 1.2.*,
   hspec == 2.7.*,
   hspec-wai == 0.11.*,

@@ -10,9 +10,8 @@ class ProjectManager:
     def __init__(self, base_dir: str = None):
         """Initialize the project manager with a base directory."""
         if base_dir is None:
-            # Use the parent directory of the current file as the base directory
-            current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-            self.base_dir = os.path.join(current_dir, "projects")
+            # Use relative path from current working directory
+            self.base_dir = "projects"
         else:
             self.base_dir = base_dir
 
@@ -37,21 +36,19 @@ class ProjectManager:
         # Copy template files from haskell_web_app template directory
         current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         template_dir = os.path.join(current_dir, "templates", "haskell_web_app")
-        
+
         if os.path.exists(template_dir):
             # Copy all files and directories from the template
             for item in os.listdir(template_dir):
                 source = os.path.join(template_dir, item)
                 destination = os.path.join(project_dir, item)
-                
+
                 if os.path.isdir(source):
                     shutil.copytree(source, destination, dirs_exist_ok=True)
                 else:
                     shutil.copy2(source, destination)
         else:
             # If template doesn't exist, create default directories
-            os.makedirs(os.path.join(project_dir, "implementation"), exist_ok=True)
-            os.makedirs(os.path.join(project_dir, "tests"), exist_ok=True)
             os.makedirs(os.path.join(project_dir, "deployment"), exist_ok=True)
 
         return project_dir
