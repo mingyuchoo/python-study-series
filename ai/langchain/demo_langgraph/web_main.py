@@ -1,6 +1,38 @@
+import sqlite3
+from contextlib import closing
+
 import streamlit as st
 
 from cli_main import ResearchState, graph
+
+DB_PATH = "reports.db"
+
+
+def init_db():
+    with closing(sqlite3.connect(DB_PATH)) as conn:
+        with conn:
+            conn.execute(
+                """
+                CREATE TABLE IF NOT EXISTS reports (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    topic TEXT NOT NULL,
+                    report TEXT NOT NULL,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+                """
+            )
+
+
+def save_report_to_db(topic, report):
+    with closing(sqlite3.connect(DB_PATH)) as conn:
+        with conn:
+            conn.execute("INSERT INTO reports (topic, report) VALUES (?, ?)", (topic, report))
+
+
+def load_reports_from_db():
+    with closing(sqlite3.connect(DB_PATH)) as conn:
+        cur = conn.execute("SELECT topic, report, created_at FROM reports ORDER BY created_at DESC")
+        return cur.fetchall()
 
 
 def input_topic_form():
@@ -23,6 +55,7 @@ def get_agent_names():
 def render_research_topic(value):
     st.write(f"**키워드:** {value.get('keywords', [])}")
 
+
 def render_collect_data(value):
     st.write(f"**자료 {len(value.get('collected_data', []))}건 수집**")
     collected_data = value.get("collected_data", [])
@@ -32,9 +65,8 @@ def render_collect_data(value):
         text = content
         if source:
             text += f"\n\n출처: {source}"
-        st.text_area(
-            f"자료 {i+1}", value=text, key=f"collected_data_{i}_collect_data", height=120, disabled=True
-        )
+        st.text_area(f"자료 {i+1}", value=text, key=f"collected_data_{i}_collect_data", height=120, disabled=True)
+
 
 def render_write_draft(value):
     st.write(f"**초안 일부:** {value.get('draft', '')[:120]} ...")
@@ -46,6 +78,7 @@ def render_write_draft(value):
         disabled=True,
     )
 
+
 def render_review_draft(value):
     st.write(f"**피드백 요약:** {value.get('feedback', '')[:120]} ...")
     st.text_area(
@@ -56,6 +89,7 @@ def render_review_draft(value):
         disabled=True,
     )
 
+
 def render_finalize_report(value):
     st.write(f"**최종 보고서 일부:** {value.get('final_report', '')[:120]} ...")
     st.text_area(
@@ -65,6 +99,7 @@ def render_finalize_report(value):
         height=300,
         disabled=True,
     )
+
 
 def run_workflow(topic):
     state: ResearchState = {
@@ -97,27 +132,24 @@ def run_workflow(topic):
 
 
 def show_history():
-    if st.session_state.get("history"):
+    reports = load_reports_from_db()
+    if reports:
         st.header("이전 보고서 기록")
-        for idx, item in enumerate(reversed(st.session_state["history"])):
-            with st.expander(f"{item['topic']} (최종 보고서)"):
-                st.write(item["report"])
+        for idx, (topic, report, created_at) in enumerate(reports):
+            with st.expander(f"{topic} (최종 보고서, {created_at})"):
+                st.write(report)
 
 
 def main():
     st.set_page_config(page_title="연구 보고서 자동화 시스템", layout="wide")
     st.title("연구 보고서 자동화 시스템")
-    if "history" not in st.session_state:
-        st.session_state["history"] = []
+    init_db()
     topic, submitted = input_topic_form()
     if submitted and topic:
         latest_state = run_workflow(topic)
-        st.session_state["history"].append(
-            {"topic": topic, "report": latest_state.get("final_report", "(최종 보고서가 생성되지 않았습니다.)")}
-        )
-        st.success(
-            "\n=== 최종 보고서 ===\n\n" + latest_state.get("final_report", "(최종 보고서가 생성되지 않았습니다.)")
-        )
+        final_report = latest_state.get("final_report", "(최종 보고서가 생성되지 않았습니다.)")
+        save_report_to_db(topic, final_report)
+        st.success("\n=== 최종 보고서 ===\n\n" + final_report)
     show_history()
 
 

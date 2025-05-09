@@ -19,4 +19,4 @@ cli:
 	python cli_main.py
 
 web:
-	streamlit run web_main.py --loglevel debug
+	streamlit run web_main.py --logger.level debug
