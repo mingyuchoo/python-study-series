@@ -43,36 +43,30 @@ def run_workflow(topic):
                     elif node == "write_draft":
                         st.write(f"**초안 일부:** {value.get('draft', '')[:120]} ...")
                         st.text_area(
-                            "초안 전체 내용 (수정 가능)",
+                            "초안 전체 내용",
                             value=value.get("draft", ""),
                             key=f"draft_edit_{node}",
                             height=200,
+                            disabled=True
                         )
-                        if st.button("초안 저장", key=f"save_draft_{node}"):
-                            value["draft"] = st.session_state[f"draft_edit_{node}"]
-                            st.success("편집된 초안이 저장되었습니다.")
                     elif node == "review_draft":
                         st.write(f"**피드백 요약:** {value.get('feedback', '')[:120]} ...")
                         st.text_area(
-                            "피드백 전체 내용 (수정 가능)",
+                            "피드백 전체 내용",
                             value=value.get("feedback", ""),
                             key=f"feedback_edit_{node}",
                             height=200,
+                            disabled=True
                         )
-                        if st.button("피드백 저장", key=f"save_feedback_{node}"):
-                            value["feedback"] = st.session_state[f"feedback_edit_{node}"]
-                            st.success("편집된 피드백이 저장되었습니다.")
                     elif node == "finalize_report":
                         st.write(f"**최종 보고서 일부:** {value.get('final_report', '')[:120]} ...")
                         st.text_area(
-                            "최종 보고서 전체 내용 (수정 가능)",
+                            "최종 보고서 전체 내용",
                             value=value.get("final_report", ""),
                             key=f"final_report_edit_{node}",
                             height=300,
+                            disabled=True
                         )
-                        if st.button("최종 보고서 저장", key=f"save_final_report_{node}"):
-                            value["final_report"] = st.session_state[f"final_report_edit_{node}"]
-                            st.success("편집된 최종 보고서가 저장되었습니다.")
                 latest_state.update(value)
     return latest_state
 
