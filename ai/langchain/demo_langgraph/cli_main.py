@@ -17,7 +17,7 @@ os.environ["AZURE_API_VERSION"] = os.environ["AZURE_OPENAI_API_VERSION"]
 os.environ["AZURE_API_MODEL"] = os.environ["AZURE_OPENAI_CHAT_DEPLOYMENT_NAME"]
 
 # LLM 및 검색 도구 초기화
-tavily_search_tool = TavilySearchResults(max_results=3)
+tavily_search_tool = TavilySearchResults(max_results=5)
 llm = AzureChatOpenAI(api_version=os.environ["AZURE_API_VERSION"], model=os.environ["AZURE_API_MODEL"])
 
 # 상태 정의: 워크플로우에서 공유되는 데이터
