@@ -20,6 +20,52 @@ def get_agent_names():
     }
 
 
+def render_research_topic(value):
+    st.write(f"**키워드:** {value.get('keywords', [])}")
+
+def render_collect_data(value):
+    st.write(f"**자료 {len(value.get('collected_data', []))}건 수집**")
+    collected_data = value.get("collected_data", [])
+    for i, item in enumerate(collected_data):
+        content = item.get("content", str(item))
+        source = item.get("source") or item.get("url")
+        text = content
+        if source:
+            text += f"\n\n출처: {source}"
+        st.text_area(
+            f"자료 {i+1}", value=text, key=f"collected_data_{i}_collect_data", height=120, disabled=True
+        )
+
+def render_write_draft(value):
+    st.write(f"**초안 일부:** {value.get('draft', '')[:120]} ...")
+    st.text_area(
+        "초안 전체 내용",
+        value=value.get("draft", ""),
+        key="draft_edit_write_draft",
+        height=200,
+        disabled=True,
+    )
+
+def render_review_draft(value):
+    st.write(f"**피드백 요약:** {value.get('feedback', '')[:120]} ...")
+    st.text_area(
+        "피드백 전체 내용",
+        value=value.get("feedback", ""),
+        key="feedback_edit_review_draft",
+        height=200,
+        disabled=True,
+    )
+
+def render_finalize_report(value):
+    st.write(f"**최종 보고서 일부:** {value.get('final_report', '')[:120]} ...")
+    st.text_area(
+        "최종 보고서 전체 내용",
+        value=value.get("final_report", ""),
+        key="final_report_edit_finalize_report",
+        height=300,
+        disabled=True,
+    )
+
 def run_workflow(topic):
     state: ResearchState = {
         "topic": topic,
@@ -32,41 +78,20 @@ def run_workflow(topic):
     agent_names = get_agent_names()
     latest_state = dict(state)
     st.info(f"[시작] '{topic}'에 대한 연구 보고서 작성 진행 중...")
+    render_map = {
+        "research_topic": render_research_topic,
+        "collect_data": render_collect_data,
+        "write_draft": render_write_draft,
+        "review_draft": render_review_draft,
+        "finalize_report": render_finalize_report,
+    }
     for event in graph.stream(state):
         for node, value in event.items():
             if node in agent_names:
                 with st.expander(f"{agent_names[node]} 결과 보기", expanded=True):
-                    if node == "research_topic":
-                        st.write(f"**키워드:** {value.get('keywords', [])}")
-                    elif node == "collect_data":
-                        st.write(f"**자료 {len(value.get('collected_data', []))}건 수집**")
-                    elif node == "write_draft":
-                        st.write(f"**초안 일부:** {value.get('draft', '')[:120]} ...")
-                        st.text_area(
-                            "초안 전체 내용",
-                            value=value.get("draft", ""),
-                            key=f"draft_edit_{node}",
-                            height=200,
-                            disabled=True
-                        )
-                    elif node == "review_draft":
-                        st.write(f"**피드백 요약:** {value.get('feedback', '')[:120]} ...")
-                        st.text_area(
-                            "피드백 전체 내용",
-                            value=value.get("feedback", ""),
-                            key=f"feedback_edit_{node}",
-                            height=200,
-                            disabled=True
-                        )
-                    elif node == "finalize_report":
-                        st.write(f"**최종 보고서 일부:** {value.get('final_report', '')[:120]} ...")
-                        st.text_area(
-                            "최종 보고서 전체 내용",
-                            value=value.get("final_report", ""),
-                            key=f"final_report_edit_{node}",
-                            height=300,
-                            disabled=True
-                        )
+                    render_func = render_map.get(node)
+                    if render_func:
+                        render_func(value)
                 latest_state.update(value)
     return latest_state
 
