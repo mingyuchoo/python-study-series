@@ -138,6 +138,9 @@ def show_history():
         for idx, (topic, report, created_at) in enumerate(reports):
             with st.expander(f"{topic} (최종 보고서, {created_at})"):
                 st.write(report)
+        st.markdown("---")
+        if st.button("새 연구 시작"):
+            st.rerun()
 
 
 def main():
