@@ -1,15 +1,21 @@
+import os
 from functools import partial
 from typing import Annotated, Callable, List, TypedDict
 
 from dotenv import load_dotenv
-from langchain_openai import AzureChatOpenAI
 from langchain_community.tools.tavily_search import TavilySearchResults
+from langchain_openai import AzureChatOpenAI
 from langgraph.graph import StateGraph
 from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode, tools_condition
 
 # 환경 변수 로드
 load_dotenv()
+
+os.environ["AZURE_API_KEY"] = os.environ["AZURE_OPENAI_API_KEY"]
+os.environ["AZURE_API_BASE"] = os.environ["AZURE_OPENAI_ENDPOINT"]
+os.environ["AZURE_API_VERSION"] = os.environ["AZURE_OPENAI_API_VERSION"]
+os.environ["AZURE_API_MODEL"] = os.environ["AZURE_OPENAI_CHAT_DEPLOYMENT_NAME"]
 
 
 # 타입 정의
@@ -24,21 +30,21 @@ def create_tavily_search_tool(max_results: int = 2) -> TavilySearchResults:
 
 # 순수 함수: ChatBedrock 모델 생성
 def create_chat_azure_openai() -> AzureChatOpenAI:
-    return AzureChatOpenAI()  # Uses Azure config from environment variables
+    return AzureChatOpenAI(api_version=os.environ["AZURE_API_VERSION"], model=os.environ["AZURE_API_MODEL"])
 
 
 # 순수 함수: 도구와 모델 바인딩
-def bind_tools_to_model(model: AzureChatOpenAI, tools: List[Callable]) -> Callable:
+def bind_tools_to_model(model: AzureChatOpenAI, tools: list[Callable[..., object]]) -> Callable[..., object]:
     return model.bind_tools(tools)
 
 
 # 순수 함수: 챗봇 응답 생성
-def generate_chatbot_response(llm_with_tools: Callable, state: State) -> dict:
+def generate_chatbot_response(llm_with_tools: Callable[..., object], state: State) -> dict[str, list[object]]:
     return {"messages": [llm_with_tools.invoke(state["messages"])]}
 
 
 # 순수 함수: 그래프 생성
-def create_graph(tool_node: ToolNode, chatbot_func: Callable) -> StateGraph:
+def create_graph(tool_node: ToolNode, chatbot_func: Callable[[State], dict[str, list[object]]]) -> StateGraph:
     graph_builder = StateGraph(State)
     graph_builder.add_node("chatbot", chatbot_func)
     graph_builder.add_node("tools", tool_node)
@@ -56,7 +62,7 @@ def stream_graph_updates(graph: StateGraph, user_input: str) -> None:
 
 
 # 메인 함수
-def main():
+def main() -> None:
     # 도구 및 모델 초기화
     tavily_search_tool = create_tavily_search_tool()
     llm = create_chat_azure_openai()

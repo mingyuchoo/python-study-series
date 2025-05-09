@@ -16,4 +16,4 @@ format:
 	isort .
 
 run:
-	python src/imperative_main.py
+	python main.py
