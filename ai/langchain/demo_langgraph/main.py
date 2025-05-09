@@ -105,106 +105,119 @@ workflow.set_entry_point("research_topic")
 graph = workflow.compile()
 
 
+def get_user_topic() -> str:
+    try:
+        return input("연구할 주제를 입력하세요: ").strip()
+    except KeyboardInterrupt:
+        print("\nCtrl+C 입력으로 시스템을 종료합니다.")
+        return ""
+
+
+def print_agent_step(node: str, value: dict, agent_names: dict) -> None:
+    print(f"{agent_names[node]} 작업 중...")
+    if node == "research_topic":
+        print(f"  → 키워드: {value.get('keywords', [])}")
+    elif node == "collect_data":
+        print(f"  → 자료 {len(value.get('collected_data', []))}건 수집")
+    elif node == "write_draft":
+        print(f"  → 초안 일부: {value.get('draft', '')[:120]} ...")
+        print("\n[초안 전체 내용]\n" + value.get("draft", ""))
+    elif node == "review_draft":
+        print(f"  → 피드백 요약: {value.get('feedback', '')[:120]} ...")
+        print("\n[피드백 전체 내용]\n" + value.get("feedback", ""))
+    elif node == "finalize_report":
+        print(f"  → 최종 보고서 일부: {value.get('final_report', '')[:120]} ...")
+        print("\n[최종 보고서 전체 내용]\n" + value.get("final_report", ""))
+
+
+def human_edit_step(node: str, value: dict) -> dict:
+    if node == "write_draft":
+        user_action = input("초안을 수정하려면 'edit', 승인하려면 Enter를 누르세요: ").strip().lower()
+        if user_action == "edit":
+            print("에디터를 종료하려면 빈 줄에서 Enter를 두 번 누르세요.")
+            print("--- 초안 편집 시작 ---")
+            edited_lines = []
+            while True:
+                line = input()
+                if line == "":
+                    if edited_lines and edited_lines[-1] == "":
+                        break
+                edited_lines.append(line)
+            edited_draft = "\n".join([l for l in edited_lines if l != ""])
+            value["draft"] = edited_draft
+            print("--- 편집된 초안이 저장되었습니다. ---\n")
+    elif node == "review_draft":
+        user_action = input("피드백을 수정하려면 'edit', 승인하려면 Enter를 누르세요: ").strip().lower()
+        if user_action == "edit":
+            print("에디터를 종료하려면 빈 줄에서 Enter를 두 번 누르세요.")
+            print("--- 피드백 편집 시작 ---")
+            edited_lines = []
+            while True:
+                line = input()
+                if line == "":
+                    if edited_lines and edited_lines[-1] == "":
+                        break
+                edited_lines.append(line)
+            edited_feedback = "\n".join([l for l in edited_lines if l != ""])
+            value["feedback"] = edited_feedback
+            print("--- 편집된 피드백이 저장되었습니다. ---\n")
+    elif node == "finalize_report":
+        user_action = input("최종 보고서를 수정하려면 'edit', 승인하려면 Enter를 누르세요: ").strip().lower()
+        if user_action == "edit":
+            print("에디터를 종료하려면 빈 줄에서 Enter를 두 번 누르세요.")
+            print("--- 최종 보고서 편집 시작 ---")
+            edited_lines = []
+            while True:
+                line = input()
+                if line == "":
+                    if edited_lines and edited_lines[-1] == "":
+                        break
+                edited_lines.append(line)
+            edited_report = "\n".join([l for l in edited_lines if l != ""])
+            value["final_report"] = edited_report
+            print("--- 편집된 최종 보고서가 저장되었습니다. ---\n")
+    return value
+
+
+def run_workflow_for_topic(topic: str, graph, agent_names: dict) -> None:
+    state: ResearchState = {
+        "topic": topic,
+        "keywords": [],
+        "collected_data": [],
+        "draft": "",
+        "feedback": "",
+        "final_report": "",
+    }
+    print(f"\n[시작] '{topic}'에 대한 연구 보고서 작성 진행 중...\n")
+    latest_state = dict(state)
+    for event in graph.stream(state):
+        for node, value in event.items():
+            if node in agent_names:
+                print_agent_step(node, value, agent_names)
+                value = human_edit_step(node, value)
+                latest_state.update(value)
+    print("\n=== 최종 보고서 ===")
+    print(latest_state.get("final_report", "(최종 보고서가 생성되지 않았습니다.)"))
+    print("\n============================================\n")
+
+
 def main() -> None:
     print("연구 보고서 자동화 시스템에 오신 것을 환영합니다.")
     print("종료하려면 'quit' 또는 'exit'를 입력하세요.\n")
+    agent_names = {
+        "research_topic": "[주제 조사 에이전트]",
+        "collect_data": "[자료 수집 에이전트]",
+        "write_draft": "[초안 작성 에이전트]",
+        "review_draft": "[검토 에이전트]",
+        "finalize_report": "[최종 작성 에이전트]",
+    }
     try:
         while True:
-            try:
-                topic = input("연구할 주제를 입력하세요: ").strip()
-            except KeyboardInterrupt:
-                print("\nCtrl+C 입력으로 시스템을 종료합니다.")
-                break
-            if topic.lower() in ["quit", "exit"]:
+            topic = get_user_topic()
+            if not topic or topic.lower() in ["quit", "exit"]:
                 print("시스템을 종료합니다.")
                 break
-            state: ResearchState = {
-                "topic": topic,
-                "keywords": [],
-                "collected_data": [],
-                "draft": "",
-                "feedback": "",
-                "final_report": "",
-            }
-            print(f"\n[시작] '{topic}'에 대한 연구 보고서 작성 진행 중...\n")
-            agent_names = {
-                "research_topic": "[주제 조사 에이전트]",
-                "collect_data": "[자료 수집 에이전트]",
-                "write_draft": "[초안 작성 에이전트]",
-                "review_draft": "[검토 에이전트]",
-                "finalize_report": "[최종 작성 에이전트]",
-            }
-            # 최신 상태를 누적하여 저장
-            latest_state = dict(state)
-            for event in graph.stream(state):
-                for node, value in event.items():
-                    if node in agent_names:
-                        print(f"{agent_names[node]} 작업 중...")
-                        # 각 단계별 주요 결과 요약 출력
-                        if node == "research_topic":
-                            print(f"  → 키워드: {value.get('keywords', [])}")
-                        elif node == "collect_data":
-                            print(f"  → 자료 {len(value.get('collected_data', []))}건 수집")
-                        elif node == "write_draft":
-                            print(f"  → 초안 일부: {value.get('draft', '')[:120]} ...")
-                            print("\n[초안 전체 내용]\n" + value.get('draft', ''))
-                            # Human-in-the-loop: 초안 검토 및 수정
-                            user_action = input("초안을 수정하려면 'edit', 승인하려면 Enter를 누르세요: ").strip().lower()
-                            if user_action == "edit":
-                                print("에디터를 종료하려면 빈 줄에서 Enter를 두 번 누르세요.")
-                                print("--- 초안 편집 시작 ---")
-                                edited_lines = []
-                                while True:
-                                    line = input()
-                                    if line == "":
-                                        if edited_lines and edited_lines[-1] == "":
-                                            break
-                                    edited_lines.append(line)
-                                # 빈 줄 2회 입력 시 종료
-                                edited_draft = "\n".join([l for l in edited_lines if l != ""])
-                                value['draft'] = edited_draft
-                                print("--- 편집된 초안이 저장되었습니다. ---\n")
-                        elif node == "review_draft":
-                            print(f"  → 피드백 요약: {value.get('feedback', '')[:120]} ...")
-                            print("\n[피드백 전체 내용]\n" + value.get('feedback', ''))
-                            # Human-in-the-loop: 피드백 검토 및 수정
-                            user_action = input("피드백을 수정하려면 'edit', 승인하려면 Enter를 누르세요: ").strip().lower()
-                            if user_action == "edit":
-                                print("에디터를 종료하려면 빈 줄에서 Enter를 두 번 누르세요.")
-                                print("--- 피드백 편집 시작 ---")
-                                edited_lines = []
-                                while True:
-                                    line = input()
-                                    if line == "":
-                                        if edited_lines and edited_lines[-1] == "":
-                                            break
-                                    edited_lines.append(line)
-                                edited_feedback = "\n".join([l for l in edited_lines if l != ""])
-                                value['feedback'] = edited_feedback
-                                print("--- 편집된 피드백이 저장되었습니다. ---\n")
-                        elif node == "finalize_report":
-                            print(f"  → 최종 보고서 일부: {value.get('final_report', '')[:120]} ...")
-                            print("\n[최종 보고서 전체 내용]\n" + value.get('final_report', ''))
-                            # Human-in-the-loop: 최종 보고서 검토 및 수정
-                            user_action = input("최종 보고서를 수정하려면 'edit', 승인하려면 Enter를 누르세요: ").strip().lower()
-                            if user_action == "edit":
-                                print("에디터를 종료하려면 빈 줄에서 Enter를 두 번 누르세요.")
-                                print("--- 최종 보고서 편집 시작 ---")
-                                edited_lines = []
-                                while True:
-                                    line = input()
-                                    if line == "":
-                                        if edited_lines and edited_lines[-1] == "":
-                                            break
-                                    edited_lines.append(line)
-                                edited_report = "\n".join([l for l in edited_lines if l != ""])
-                                value['final_report'] = edited_report
-                                print("--- 편집된 최종 보고서가 저장되었습니다. ---\n")
-                        # 최신 상태 누적
-                        latest_state.update(value)
-            print("\n=== 최종 보고서 ===")
-            print(latest_state.get("final_report", "(최종 보고서가 생성되지 않았습니다.)"))
-            print("\n============================================\n")
+            run_workflow_for_topic(topic, graph, agent_names)
     except KeyboardInterrupt:
         print("\nCtrl+C 입력으로 시스템을 종료합니다.")
 
