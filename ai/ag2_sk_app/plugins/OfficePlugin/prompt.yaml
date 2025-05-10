@@ -1,0 +1,17 @@
+name: GenerateReport
+description: Generate a formatted report based on user input
+input:
+  description: The content or request for the report
+  default_value: "Generate a basic status report"
+prompt: |
+  You are an expert in creating professional reports. Based on the following request, generate a well-structured report:
+  
+  User Request: {{input}}
+  
+  Format the report with the following structure:
+  1. Title
+  2. Executive Summary
+  3. Key Points
+  4. Conclusion
+  
+  Return the report in markdown format.

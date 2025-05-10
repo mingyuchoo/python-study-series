@@ -1,0 +1,9 @@
+[
+  {
+    "model": "gpt-4o-mini",
+    "api_key": "<AZURE_API_KEY>",
+    "base_url": "<AZURE_API_BASE>",
+    "api_type": "azure",
+    "api_version": "2025-01-01-preview"
+  }
+]

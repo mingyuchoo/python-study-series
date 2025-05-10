@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "type": "completion",
+  "description": "Office automation tools for report generation and document creation",
+  "completion": {
+    "maxTokens": 2000,
+    "temperature": 0.7,
+    "topP": 0.9,
+    "presencePenalty": 0,
+    "frequencyPenalty": 0
+  },
+  "input": {
+    "parameters": [
+      {
+        "name": "input",
+        "description": "The content or request for the report",
+        "defaultValue": "Generate a basic status report"
+      }
+    ]
+  },
+  "default_backends": []
+}

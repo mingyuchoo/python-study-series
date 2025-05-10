@@ -1,0 +1,2 @@
+autogen==0.9.1.post0
+semantic-kernel==1.29.0
