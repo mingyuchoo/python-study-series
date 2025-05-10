@@ -43,7 +43,7 @@ To get started with the Rust Web Development Multi-Agent System:
 1. Install the required dependencies:
 
    ```bash
-   pip install -r requirements.txt
+   uv pip install -r requirements.txt
    ```
 
 2. Run the Streamlit application:

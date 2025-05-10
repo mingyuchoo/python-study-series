@@ -9,7 +9,7 @@ clean:
 	rm -rf projects __pycache__ */__pycache__
 
 install:
-	pip install -r requirements.txt
+	uv pip install -r requirements.txt
 
 format:
 	black .

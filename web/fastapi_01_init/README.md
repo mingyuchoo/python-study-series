@@ -3,16 +3,16 @@
 ## How to install `fastapi`
 
 ```bash
-pip install fastapi
-pip install "uvicorn[standard]"
-pip install mypy
+uv pip install fastapi
+uv pip install "uvicorn[standard]"
+uv pip install mypy
 ```
 
 ### How to install using `requirements.txt`
 
 ```bash
 cd docs
-pip install -r requirements.txt
+uv pip install -r requirements.txt
 ```
 
 ### How to generate `requirements.txt`

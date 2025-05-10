@@ -22,7 +22,7 @@ This application uses CrewAI to implement a multi-agent collaboration system foc
 ## Installation
 
 ```bash
-pip install -r requirements.txt
+uv pip install -r requirements.txt
 ```
 
 ## Usage

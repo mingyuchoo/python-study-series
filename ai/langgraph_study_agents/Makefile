@@ -9,7 +9,7 @@ clean:
 	rm -rf my_reports uploads __pycache__
 
 install:
-	pip install -r requirements.txt
+	uv pip install -r requirements.txt
 
 format:
 	black .

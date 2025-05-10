@@ -21,7 +21,7 @@
               eval "$(direnv hook bash)"
               python -m venv $HOME/.venv
               source $PWD/venv/bin/activate
-              python -m pip install \
+              uv pip install \
                      --requirement requirements.txt \
                      --trusted-host pypi.org \
                      --trusted-host files.pythonhosted.org

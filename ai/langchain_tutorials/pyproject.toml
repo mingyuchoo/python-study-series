@@ -1,0 +1,21 @@
+[project]
+authors = [{ name = "mingyuchoo", email = "mingyuchoo@gmail.com" }]
+dependencies = [
+  "langchain-aws>=0.2.6",
+  "langchain-community>=0.3.4",
+  "langchain-core>=0.3.15",
+  "langchain-experimental>=0.3.2",
+  "langchain>=0.3.6",
+  "langgraph>=0.2.43",
+  "langserve[all]>=0.3.0",
+]
+description = "Default template for PDM package"
+license = { text = "BSD 3-Clause" }
+name = "langchain_tutorials"
+readme = "README.md"
+requires-python = "==3.12.*"
+version = "0.1.0"
+
+
+[tool.pdm]
+distribution = false

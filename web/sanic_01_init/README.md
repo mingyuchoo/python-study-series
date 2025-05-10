@@ -5,8 +5,8 @@
 ```bash
 $ python -m venv $HOME/.venv
 $ source $HOME/.venv/bin/activate # add to .bashrc
-$ pip install --upgrade pip setuptools
-$ pip install poetry
+$ uv pip install --upgrade pip setuptools
+$ uv pip install poetry
 ```
 
 ## How to create a project

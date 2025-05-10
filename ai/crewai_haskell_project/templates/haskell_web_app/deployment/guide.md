@@ -48,7 +48,7 @@ This guide provides instructions for deploying the Haskell web application to va
 
 1. Install the EB CLI:
    ```bash
-   pip install awsebcli
+   uv pip install awsebcli
    ```
 
 2. Initialize EB application:

@@ -20,7 +20,7 @@ This project is a command-line chatbot application that leverages Azure OpenAI a
 
 Install dependencies with:
 ```bash
-pip install -r requirements.txt
+uv pip install -r requirements.txt
 ```
 
 ## Setup
