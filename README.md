@@ -18,35 +18,17 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 #cargo install --git https://github.com/astral-sh/uv uv
 ```
 
-#### Create a project
+#### Install Python globally
 
 ```bash
-uv init {project_name}
-cd {project_name}
-```
+# install python
+uv python install 3.11 3.12 3.13
 
+# make .venv 
+uv venv --python 3.13
+uv python pin 3.13
 
-#### Install multiple Python versions
-
-```bash
-uv python install 3.10 3.11 3.12
-```
-
-#### Create venv with a specific Python version
-
-```bash
-uv venv --python 3.12.0
-```
-
-#### Use a specific Python version in the current directory
-
-```bash
-uv python pin 3.11
-```
-  
-#### Add package globally
-
-```bash
+# install packages
 uv pip install {package_name}
 uv pip install behave
 uv pip install coverage
@@ -62,15 +44,24 @@ uv pip install pandas
 uv pip install streamlit
 ```
 
-#### Add packages current project
+#### Install Python locally
 
 ```bash
+# make a project
+mkdir {project_name}
+cd {project_name}
+uv init {project_name} --python 3.13
+
+# make .venv
+uv sync
+
+# install packages
 uv add {package_name}
-uv run {pacage_name} check
-```
-#### Run a script
+uv add --dev {package_name_for_develop}
+uv remove {package_name}
 
-```bash
+# build and run
+uv build
 uv run {script_name}.py
 ```
 
@@ -78,6 +69,8 @@ uv run {script_name}.py
 
 ```bash
 uv pip install .
+# or
+uv add -r requirements.txt
 ```
 
 ## Jupyter Notebook
