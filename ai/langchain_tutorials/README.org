@@ -3,20 +3,20 @@
 - Install [[Python3.12][https://www.python.org/downloads/]]
 - Install [[PDM package manager][https://pdm-project.org/en/latest/]]
 ** How to install packages
-#+begin_src shell
+#+BEGIN_SRC shell
   pdm cache clear
   pdm install
-#+end_src
+#+END_SRC
 ** How can I run
 You can run `script.py` for LangChain Basic Concepts.
-#+begin_src shell
+#+BEGIN_SRC shell
   pdm run python script.py
-#+end_src
+#+END_SRC
 You can run a server as shown below.
-#+begin_src shell
+#+BEGIN_SRC shell
   pdm run python serve.py
-#+end_src
+#+END_SRC
 You can verify the server's result using the client provided below.
-#+begin_src shell
+#+BEGIN_SRC shell
   pdm run python client.py
-#+end_src
+#+END_SRC

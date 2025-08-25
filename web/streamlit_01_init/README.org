@@ -1,24 +1,24 @@
 * StreamLit 01 Init
 ** How to create a project
-#+begin_src shell
+#+BEGIN_SRC shell
   uv init  streamlit_01_init
   cd streamlit_01_init
   uv venv --python 3.12
   source .venv/bin/activate
   uv add streamlit pandas matplotlib
   touch streamlit_config.toml
-#+end_src
+#+END_SRC
 ** Define streamlit configuration locally
 #+name: .streamlit/config.toml
-#+begin_src toml
+#+BEGIN_SRC toml
   [server]
   runOnSave = true
-#+end_src
+#+END_SRC
 ** Run your application
-#+begin_src shell
+#+BEGIN_SRC shell
   uv run streamlit run hello.py
-#+end_src
+#+END_SRC
 ** Export your dependencies
-#+begin_src shell
+#+BEGIN_SRC shell
   uv export > requirements.txt
-#+end_src
+#+END_SRC
