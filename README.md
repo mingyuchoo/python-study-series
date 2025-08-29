@@ -37,8 +37,7 @@ uv pip install notebook
 uv pip install pylint
 uv pip install pyright
 uv pip install python-lsp-server
-uv pip install jupyter
-uv pip install notebook
+uv pip install jupyterlab
 uv pip install numpy
 uv pip install pandas
 uv pip install streamlit
@@ -73,21 +72,21 @@ uv pip install .
 uv add -r requirements.txt
 ```
 
-## Jupyter Notebook
+## Jupyter Lab
 
-### How to install Jupyter Notebook
+### How to install Jupyter Lab
 
 ```bash
 cd
 uv python install 3.13
 uv venv --python 3.13
-uv pip install notebook
+uv pip install jupyterlab
 ```
 
-### How to run Jupyter Notebook
+### How to run Jupyter Lab
 
 ```bash
-jupyter notebook
+jupyter lab 
 ```
 
 ## References
