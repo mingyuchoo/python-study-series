@@ -1,7 +1,8 @@
 import os
+from typing import Any, Dict, List, Optional
+
 import requests
 import streamlit as st
-from typing import Optional, Dict, Any, List
 
 # -----------------------------
 # 기본 설정
@@ -38,6 +39,7 @@ if "session_history_loaded" not in st.session_state:
 # 유틸 함수 (API 호출)
 # -----------------------------
 
+
 def api_get(path: str, params: Optional[Dict[str, Any]] = None):
     url = f"{st.session_state.backend_base_url.rstrip('/')}{path}"
     try:
@@ -59,9 +61,11 @@ def api_post(path: str, json: Optional[Dict[str, Any]] = None):
         st.error(f"요청 실패: POST {url} - {e}")
         return None
 
+
 # -----------------------------
 # 도우미 함수
 # -----------------------------
+
 
 def ensure_questions_loaded():
     """질문 목록이 없으면 백엔드에서 불러와 초기 draft를 구성"""
@@ -71,7 +75,10 @@ def ensure_questions_loaded():
             st.session_state.questions = resp.get("questions", [])
             for q in st.session_state.questions:
                 qid = q.get("question_id")
-                st.session_state.answers_draft.setdefault(qid, {"answer_text": None, "answer_value": None})
+                st.session_state.answers_draft.setdefault(
+                    qid, {"answer_text": None, "answer_value": None}
+                )
+
 
 def apply_session_answers_to_draft(session_id: str):
     """세션의 답변을 불러와 `answers_draft`에 반영"""
@@ -95,6 +102,7 @@ def apply_session_answers_to_draft(session_id: str):
             }
     st.success("선택한 세션의 답변 이력을 로드했습니다.")
 
+
 def maintain_session_history(new_session_id: Optional[str]):
     """세션 이력을 최신순으로 유지하고 중복 제거"""
     if not new_session_id:
@@ -107,6 +115,7 @@ def maintain_session_history(new_session_id: Optional[str]):
     # 길이 제한 (최근 20개)
     st.session_state.session_history = hist[:20]
 
+
 def load_session_history_from_backend(limit: int = 20):
     """백엔드로부터 최근 세션 이력을 가져와 session_history를 갱신"""
     resp = api_get("/sessions/recent", params={"limit": limit})
@@ -117,6 +126,7 @@ def load_session_history_from_backend(limit: int = 20):
             return True
     return False
 
+
 # -----------------------------
 # 사이드바
 # -----------------------------
@@ -125,7 +135,7 @@ with st.sidebar:
     st.session_state.backend_base_url = st.text_input(
         "백엔드 URL",
         value=st.session_state.backend_base_url,
-        help="FastAPI 서버 주소 (예: http://127.0.0.1:8000)"
+        help="FastAPI 서버 주소 (예: http://127.0.0.1:8000)",
     )
     st.caption("환경변수 BACKEND_BASE_URL 로도 설정 가능합니다.")
 
@@ -136,14 +146,18 @@ with st.sidebar:
         data = api_post("/sessions/create", json=payload)
         if data and data.get("success"):
             session = data.get("data")
-            st.session_state.session_id = session.get("session_id") if isinstance(session, dict) else session
+            st.session_state.session_id = (
+                session.get("session_id") if isinstance(session, dict) else session
+            )
             st.success(f"세션 생성 완료: {st.session_state.session_id}")
             # 세션 이력 업데이트
             maintain_session_history(st.session_state.session_id)
         else:
             st.error("세션 생성에 실패했습니다.")
 
-    st.text_input("현재 세션 ID", value=st.session_state.session_id or "", key="session_id_input")
+    st.text_input(
+        "현재 세션 ID", value=st.session_state.session_id or "", key="session_id_input"
+    )
     if st.button("세션 ID 적용"):
         st.session_state.session_id = st.session_state.session_id_input.strip() or None
         if st.session_state.session_id:
@@ -173,9 +187,15 @@ with st.sidebar:
                 st.session_state._last_session_history_selected = None
                 st.session_state.loaded_from_history = False
                 load_session_history_from_backend()
-                st.session_state.session_hist_msg = ("success", "서버의 세션 이력을 모두 삭제했습니다.")
+                st.session_state.session_hist_msg = (
+                    "success",
+                    "서버의 세션 이력을 모두 삭제했습니다.",
+                )
             else:
-                st.session_state.session_hist_msg = ("error", "세션 이력 삭제에 실패했습니다.")
+                st.session_state.session_hist_msg = (
+                    "error",
+                    "세션 이력 삭제에 실패했습니다.",
+                )
     # 메시지를 컬럼 바깥(사이드바 전체 너비)에서 표시
     msg = st.session_state.get("session_hist_msg")
     if msg:
@@ -194,7 +214,7 @@ with st.sidebar:
             options=st.session_state.session_history,
             index=0,
             key="session_history_radio",
-            help="과거 세션을 선택하면 해당 세션의 답변 이력이 적용됩니다."
+            help="과거 세션을 선택하면 해당 세션의 답변 이력이 적용됩니다.",
         )
         # 선택 변경 시 자동 적용
         prev = st.session_state.get("_last_session_history_selected")
@@ -213,12 +233,14 @@ st.title("✈️ 해외여행 상담 AI")
 st.write("백엔드의 질문/답변/추천/검색 API를 활용한 상담형 프론트엔드")
 
 # 탭 구성: 질문+답변, 추천, 검색, 세션답변
-tab_qna, tab_session, tab_reco, tab_search = st.tabs([
-    "질문 · 답변",
-    "세션 답변 보기",
-    "추천 받기",
-    "상품 검색",
-])
+tab_qna, tab_session, tab_reco, tab_search = st.tabs(
+    [
+        "질문 · 답변",
+        "세션 답변 보기",
+        "추천 받기",
+        "상품 검색",
+    ]
+)
 
 # -----------------------------
 # 탭: 질문 · 답변 (통합)
@@ -236,10 +258,14 @@ with tab_qna:
             # 초깃값 준비
             for q in st.session_state.questions:
                 qid = q.get("question_id")
-                st.session_state.answers_draft.setdefault(qid, {"answer_text": None, "answer_value": None})
+                st.session_state.answers_draft.setdefault(
+                    qid, {"answer_text": None, "answer_value": None}
+                )
             # 2) 로드된 결과 메시지
             st.success(f"{len(st.session_state.questions)}개 질문 로드")
-    if st.session_state.get("loaded_from_history", False) and st.session_state.get("session_id"):
+    if st.session_state.get("loaded_from_history", False) and st.session_state.get(
+        "session_id"
+    ):
         st.caption(f"현재 세션 ID: {st.session_state.session_id}")
 
     # 3) 질문 목록 나열
@@ -247,14 +273,20 @@ with tab_qna:
         for q in st.session_state.questions:
             qid = q.get("question_id")
             qtext = q.get("question_text")
-            opts = sorted(q.get("options", []), key=lambda x: x.get("option_order", 0)) if q.get("options") else []
+            opts = (
+                sorted(q.get("options", []), key=lambda x: x.get("option_order", 0))
+                if q.get("options")
+                else []
+            )
 
             with st.expander(f"Q{qid}. {qtext}", expanded=True):
                 if opts:
                     # 선택지 기반 답변: 텍스트/값 동시 설정
                     labels = [f"{o.get('option_text')}" for o in opts]
                     # 현재 선택된 값 찾기
-                    current_value = st.session_state.answers_draft.get(qid, {}).get("answer_value")
+                    current_value = st.session_state.answers_draft.get(qid, {}).get(
+                        "answer_value"
+                    )
                     index_default = 0
                     if current_value is not None:
                         for i, o in enumerate(opts):
@@ -269,22 +301,50 @@ with tab_qna:
                         horizontal=False,
                     )
                     # 선택한 옵션으로 draft 업데이트
-                    sel_opt = next((o for o in opts if o.get("option_text") == selected_label), None)
+                    sel_opt = next(
+                        (o for o in opts if o.get("option_text") == selected_label),
+                        None,
+                    )
                     if sel_opt:
                         st.session_state.answers_draft[qid] = {
                             "answer_text": sel_opt.get("option_text"),
-                            "answer_value": str(sel_opt.get("option_value")) if sel_opt.get("option_value") is not None else None,
+                            "answer_value": (
+                                str(sel_opt.get("option_value"))
+                                if sel_opt.get("option_value") is not None
+                                else None
+                            ),
                         }
                 else:
                     # 자유 입력형 질문
-                    at = st.text_input("답변 텍스트", value=(st.session_state.answers_draft.get(qid, {}).get("answer_text") or ""), key=f"q_{qid}_text")
-                    av = st.text_input("답변 값(선택)", value=(st.session_state.answers_draft.get(qid, {}).get("answer_value") or ""), key=f"q_{qid}_val")
+                    at = st.text_input(
+                        "답변 텍스트",
+                        value=(
+                            st.session_state.answers_draft.get(qid, {}).get(
+                                "answer_text"
+                            )
+                            or ""
+                        ),
+                        key=f"q_{qid}_text",
+                    )
+                    av = st.text_input(
+                        "답변 값(선택)",
+                        value=(
+                            st.session_state.answers_draft.get(qid, {}).get(
+                                "answer_value"
+                            )
+                            or ""
+                        ),
+                        key=f"q_{qid}_val",
+                    )
                     st.session_state.answers_draft[qid] = {
                         "answer_text": at or None,
                         "answer_value": av or None,
                     }
 
-                if st.button("이 질문 답변 제출", key=f"submit_q_{qid}") and st.session_state.session_id:
+                if (
+                    st.button("이 질문 답변 제출", key=f"submit_q_{qid}")
+                    and st.session_state.session_id
+                ):
                     draft = st.session_state.answers_draft.get(qid) or {}
                     payload = {
                         "session_id": st.session_state.session_id,
@@ -356,21 +416,33 @@ with tab_reco:
             resp = api_post("/recommendations/", json=payload)
             if resp:
                 # RecommendationResponse 구조 예상
-                recos = resp.get("recommendations") or resp.get("data", {}).get("recommendations")
-                total = resp.get("total_count") or resp.get("data", {}).get("total_count")
+                recos = resp.get("recommendations") or resp.get("data", {}).get(
+                    "recommendations"
+                )
+                total = resp.get("total_count") or resp.get("data", {}).get(
+                    "total_count"
+                )
                 if recos is None:
                     # 일부 구현에서 APIResponse로 감쌀 수 있으므로 방어적 처리
-                    recos = resp.get("data") if isinstance(resp.get("data"), list) else []
+                    recos = (
+                        resp.get("data") if isinstance(resp.get("data"), list) else []
+                    )
                 st.write(f"총 {total if total is not None else len(recos)}건")
                 if recos:
                     for p in recos:
-                        with st.expander(f"[{p.get('package_id')}] {p.get('package_name')}"):
+                        with st.expander(
+                            f"[{p.get('package_id')}] {p.get('package_name')}"
+                        ):
                             cols = st.columns(3)
                             with cols[0]:
-                                st.write(f"국가/도시: {p.get('country')} / {p.get('city')}")
+                                st.write(
+                                    f"국가/도시: {p.get('country')} / {p.get('city')}"
+                                )
                                 st.write(f"기간(일): {p.get('duration_days')}")
                             with cols[1]:
-                                st.write(f"가격대: {p.get('min_price')} ~ {p.get('max_price')}")
+                                st.write(
+                                    f"가격대: {p.get('min_price')} ~ {p.get('max_price')}"
+                                )
                                 st.write(f"유형: {p.get('package_type')}")
                             with cols[2]:
                                 st.write(f"유사도: {p.get('similarity_score')}")
@@ -396,8 +468,12 @@ with tab_search:
             f_city = st.text_input("도시", key="f_city")
             f_type = st.text_input("상품 유형", key="f_type")
         with col2:
-            f_min_price = st.number_input("최소 가격", min_value=0, step=1, key="f_min_price")
-            f_max_price = st.number_input("최대 가격", min_value=0, step=1, key="f_max_price")
+            f_min_price = st.number_input(
+                "최소 가격", min_value=0, step=1, key="f_min_price"
+            )
+            f_max_price = st.number_input(
+                "최대 가격", min_value=0, step=1, key="f_max_price"
+            )
             f_days = st.number_input("여행 일수", min_value=0, step=1, key="f_days")
 
     filters: Dict[str, Any] = {}
@@ -429,13 +505,17 @@ with tab_search:
                 pkgs: List[Dict[str, Any]] = data.get("packages", [])
                 st.write(f"총 {data.get('total_count', len(pkgs))}건")
                 for p in pkgs:
-                    with st.expander(f"[{p.get('package_id')}] {p.get('package_name')}"):
+                    with st.expander(
+                        f"[{p.get('package_id')}] {p.get('package_name')}"
+                    ):
                         cols = st.columns(3)
                         with cols[0]:
                             st.write(f"국가/도시: {p.get('country')} / {p.get('city')}")
                             st.write(f"기간(일): {p.get('duration_days')}")
                         with cols[1]:
-                            st.write(f"가격대: {p.get('min_price')} ~ {p.get('max_price')}")
+                            st.write(
+                                f"가격대: {p.get('min_price')} ~ {p.get('max_price')}"
+                            )
                             st.write(f"유형: {p.get('package_type')}")
                         with cols[2]:
                             st.write(f"유사도: {p.get('similarity_score')}")

@@ -1,9 +1,9 @@
-from typing import List, Dict, Any, Optional
-import os
-import sqlite3
-import itertools
 import difflib
+import itertools
+import os
 import re
+import sqlite3
+from typing import Any, Dict, List, Optional
 
 import chromadb
 from chromadb.utils import embedding_functions
@@ -25,18 +25,26 @@ class TravelVectorStore:
         try:
             self.client = chromadb.PersistentClient(path=self.vector_store_path)
             # 한국어 친화 임베딩 모델
-            self.embedding_fn = embedding_functions.SentenceTransformerEmbeddingFunction(
-                model_name="jhgan/ko-sroberta-multitask"
+            self.embedding_fn = (
+                embedding_functions.SentenceTransformerEmbeddingFunction(
+                    model_name="jhgan/ko-sroberta-multitask"
+                )
             )
             # 컬렉션들 준비
             self.questions_collection = self.client.get_or_create_collection(
-                name="travel_questions", embedding_function=self.embedding_fn, metadata={"hnsw:space": "cosine"}
+                name="travel_questions",
+                embedding_function=self.embedding_fn,
+                metadata={"hnsw:space": "cosine"},
             )
             self.packages_collection = self.client.get_or_create_collection(
-                name="travel_packages", embedding_function=self.embedding_fn, metadata={"hnsw:space": "cosine"}
+                name="travel_packages",
+                embedding_function=self.embedding_fn,
+                metadata={"hnsw:space": "cosine"},
             )
             self.destinations_collection = self.client.get_or_create_collection(
-                name="destinations", embedding_function=self.embedding_fn, metadata={"hnsw:space": "cosine"}
+                name="destinations",
+                embedding_function=self.embedding_fn,
+                metadata={"hnsw:space": "cosine"},
             )
         except Exception as e:
             print(f"[VectorStore] Chroma 초기화 실패: {e}")
@@ -52,10 +60,20 @@ class TravelVectorStore:
         """
         try:
             if not os.path.exists(self.sqlite_db_path):
-                print(f"[VectorStore] SQLite 파일이 존재하지 않습니다: {self.sqlite_db_path}")
+                print(
+                    f"[VectorStore] SQLite 파일이 존재하지 않습니다: {self.sqlite_db_path}"
+                )
                 return
-            if not all([self.questions_collection, self.packages_collection, self.destinations_collection]):
-                print("[VectorStore] Chroma 컬렉션이 초기화되지 않아 적재를 생략합니다.")
+            if not all(
+                [
+                    self.questions_collection,
+                    self.packages_collection,
+                    self.destinations_collection,
+                ]
+            ):
+                print(
+                    "[VectorStore] Chroma 컬렉션이 초기화되지 않아 적재를 생략합니다."
+                )
                 return
 
             self._load_questions_to_vector()
@@ -91,22 +109,26 @@ class TravelVectorStore:
                     return
 
                 ids, documents, metadatas = [], [], []
-                for (qid, qtext, qtype, required, category, options) in rows:
+                for qid, qtext, qtype, required, category, options in rows:
                     doc = f"{category} {qtext}"
                     if options:
                         doc += f" 선택지: {options}"
                     documents.append(doc)
-                    metadatas.append({
-                        "question_id": qid,
-                        "question_text": qtext,
-                        "question_type": qtype,
-                        "is_required": bool(required),
-                        "category": category,
-                        "options": options or "",
-                    })
+                    metadatas.append(
+                        {
+                            "question_id": qid,
+                            "question_text": qtext,
+                            "question_type": qtype,
+                            "is_required": bool(required),
+                            "category": category,
+                            "options": options or "",
+                        }
+                    )
                     ids.append(f"q_{qid}")
 
-                self.questions_collection.upsert(ids=ids, documents=documents, metadatas=metadatas)
+                self.questions_collection.upsert(
+                    ids=ids, documents=documents, metadatas=metadatas
+                )
                 print(f"[VectorStore] 질문 {len(ids)}개 업서트")
         except Exception as e:
             print(f"[VectorStore] 질문 적재 오류: {e}")
@@ -134,24 +156,28 @@ class TravelVectorStore:
                     return
 
                 ids, documents, metadatas = [], [], []
-                for (did, country, region, city, popular, visa, desc) in rows:
+                for did, country, region, city, popular, visa, desc in rows:
                     pieces = [str(country or ""), str(region or ""), str(city or "")]
                     if desc:
                         pieces.append(str(desc))
                     doc = " ".join([p for p in pieces if p])
                     documents.append(doc)
-                    metadatas.append({
-                        "destination_id": did,
-                        "country_name": country,
-                        "region_name": region or "",
-                        "city_name": city or "",
-                        "is_popular": bool(popular),
-                        "visa_required": bool(visa),
-                        "description": desc or "",
-                    })
+                    metadatas.append(
+                        {
+                            "destination_id": did,
+                            "country_name": country,
+                            "region_name": region or "",
+                            "city_name": city or "",
+                            "is_popular": bool(popular),
+                            "visa_required": bool(visa),
+                            "description": desc or "",
+                        }
+                    )
                     ids.append(f"d_{did}")
 
-                self.destinations_collection.upsert(ids=ids, documents=documents, metadatas=metadatas)
+                self.destinations_collection.upsert(
+                    ids=ids, documents=documents, metadatas=metadatas
+                )
                 print(f"[VectorStore] 목적지 {len(ids)}개 업서트")
         except Exception as e:
             print(f"[VectorStore] 목적지 적재 오류: {e}")
@@ -189,7 +215,21 @@ class TravelVectorStore:
                     return
 
                 ids, documents, metadatas = [], [], []
-                for (pid, name, duration, min_price, max_price, ptype, season, desc, highlights, inclusions, country, city, itinerary) in rows:
+                for (
+                    pid,
+                    name,
+                    duration,
+                    min_price,
+                    max_price,
+                    ptype,
+                    season,
+                    desc,
+                    highlights,
+                    inclusions,
+                    country,
+                    city,
+                    itinerary,
+                ) in rows:
                     text_parts = [name, country or "", city or "", desc or ""]
                     if highlights:
                         text_parts.append(f"특징: {highlights}")
@@ -197,28 +237,34 @@ class TravelVectorStore:
                         text_parts.append(f"일정: {itinerary}")
                     doc = " ".join([p for p in text_parts if p])
                     documents.append(doc)
-                    metadatas.append({
-                        "package_id": pid,
-                        "package_name": name,
-                        "duration_days": int(duration or 0),
-                        "min_price": int(min_price or 0),
-                        "max_price": int(max_price or 0),
-                        "package_type": ptype or "",
-                        "season": season or "",
-                        "country": country or "",
-                        "city": city or "",
-                        "description": desc or "",
-                        "highlights": highlights or "",
-                        "inclusions": inclusions or "",
-                    })
+                    metadatas.append(
+                        {
+                            "package_id": pid,
+                            "package_name": name,
+                            "duration_days": int(duration or 0),
+                            "min_price": int(min_price or 0),
+                            "max_price": int(max_price or 0),
+                            "package_type": ptype or "",
+                            "season": season or "",
+                            "country": country or "",
+                            "city": city or "",
+                            "description": desc or "",
+                            "highlights": highlights or "",
+                            "inclusions": inclusions or "",
+                        }
+                    )
                     ids.append(f"p_{pid}")
 
-                self.packages_collection.upsert(ids=ids, documents=documents, metadatas=metadatas)
+                self.packages_collection.upsert(
+                    ids=ids, documents=documents, metadatas=metadatas
+                )
                 print(f"[VectorStore] 여행 상품 {len(ids)}개 업서트")
         except Exception as e:
             print(f"[VectorStore] 여행 상품 적재 오류: {e}")
 
-    def get_personalized_recommendations(self, user_answers: Dict[int, str]) -> List[Dict[str, Any]]:
+    def get_personalized_recommendations(
+        self, user_answers: Dict[int, str]
+    ) -> List[Dict[str, Any]]:
         """
         사용자 답변을 하나의 쿼리 텍스트로 합성하여 컬렉션에서 유사도 검색을 수행.
         RecommendationService가 기대하는 키를 포함하는 딕셔너리 리스트를 반환.
@@ -230,20 +276,26 @@ class TravelVectorStore:
             return []
 
         # 1) 쿼리 합성 + 사용자 선호 추출
-        query_text = " \n ".join([f"Q{qid}: {ans}" for qid, ans in sorted(user_answers.items())])
+        query_text = " \n ".join(
+            [f"Q{qid}: {ans}" for qid, ans in sorted(user_answers.items())]
+        )
         prefs = self._convert_answers_to_preferences(user_answers)
         dest_keyword = prefs.get("destination")
 
         try:
             # 2) 넉넉히 검색 후 필터링 적용
-            result = self.packages_collection.query(query_texts=[query_text], n_results=50)
+            result = self.packages_collection.query(
+                query_texts=[query_text], n_results=50
+            )
             ids = result.get("ids", [[]])[0]
             metas = result.get("metadatas", [[]])[0]
             distances = result.get("distances", [[]])
             distances = distances[0] if distances else [None] * len(ids)
 
             candidates: List[Dict[str, Any]] = []
-            for pid, meta, dist in itertools.zip_longest(ids, metas, distances, fillvalue=None):
+            for pid, meta, dist in itertools.zip_longest(
+                ids, metas, distances, fillvalue=None
+            ):
                 if not meta:
                     continue
                 # cosine distance -> similarity (1 - distance)
@@ -262,7 +314,9 @@ class TravelVectorStore:
                     "final_score": sim,
                 }
                 # 7) 규칙 기반 가산점 포함 최종 점수 계산
-                item["final_score"] = self._calculate_recommendation_score(item, user_answers)
+                item["final_score"] = self._calculate_recommendation_score(
+                    item, user_answers
+                )
                 candidates.append(item)
 
             # 8) 최종 점수 기준 내림차순 정렬
@@ -272,7 +326,9 @@ class TravelVectorStore:
             print(f"[VectorStore] 추천 질의 중 오류: {e}")
             return []
 
-    def search_travel_packages(self, user_preferences: Dict[str, Any], limit: int = 10) -> List[Dict[str, Any]]:
+    def search_travel_packages(
+        self, user_preferences: Dict[str, Any], limit: int = 10
+    ) -> List[Dict[str, Any]]:
         """
         사용자의 선호도(목적지, 관심사 등)를 텍스트로 합성해 컬렉션에서 검색합니다.
         라우터 `recommendations.search_packages()`가 기대하는 딕셔너리 리스트 포맷을 유지합니다.
@@ -298,14 +354,18 @@ class TravelVectorStore:
         query_text = " \n ".join(parts) if parts else "travel package recommendations"
 
         try:
-            result = self.packages_collection.query(query_texts=[query_text], n_results=limit)
+            result = self.packages_collection.query(
+                query_texts=[query_text], n_results=limit
+            )
             ids = result.get("ids", [[]])[0]
             metas = result.get("metadatas", [[]])[0]
             distances = result.get("distances", [[]])
             distances = distances[0] if distances else [None] * len(ids)
 
             items: List[Dict[str, Any]] = []
-            for pid, meta, dist in itertools.zip_longest(ids, metas, distances, fillvalue=None):
+            for pid, meta, dist in itertools.zip_longest(
+                ids, metas, distances, fillvalue=None
+            ):
                 if not meta:
                     continue
                 sim = (1.0 - float(dist)) if isinstance(dist, (int, float)) else None
@@ -325,17 +385,19 @@ class TravelVectorStore:
                     continue
 
                 # 키워드 기반 연관성 필터 (오타 허용 퍼지 매칭 포함)
-                keyword = destination or (interests[0] if isinstance(interests, list) and interests else None)
+                keyword = destination or (
+                    interests[0] if isinstance(interests, list) and interests else None
+                )
                 if keyword and not self._is_relevant(candidate["metadata"], keyword):
                     continue
 
                 # 후처리 필터 (예산/기간)
-                if (
-                    self._matches_budget(candidate["metadata"], user_preferences.get("budget"))
-                    and self._matches_duration(
-                        candidate["metadata"],
-                        user_preferences.get("duration") or user_preferences.get("duration_days"),
-                    )
+                if self._matches_budget(
+                    candidate["metadata"], user_preferences.get("budget")
+                ) and self._matches_duration(
+                    candidate["metadata"],
+                    user_preferences.get("duration")
+                    or user_preferences.get("duration_days"),
                 ):
                     items.append(candidate)
 
@@ -344,12 +406,16 @@ class TravelVectorStore:
             print(f"[VectorStore] 검색 질의 중 오류: {e}")
             return []
 
-    def search_relevant_questions(self, user_query: str, limit: int = 5) -> List[Dict[str, Any]]:
+    def search_relevant_questions(
+        self, user_query: str, limit: int = 5
+    ) -> List[Dict[str, Any]]:
         """사용자 자연어 쿼리와 유사한 질문 검색"""
         if self.questions_collection is None:
             return []
         try:
-            result = self.questions_collection.query(query_texts=[user_query], n_results=limit)
+            result = self.questions_collection.query(
+                query_texts=[user_query], n_results=limit
+            )
             docs = result.get("documents", [[]])[0]
             metas = result.get("metadatas", [[]])[0]
             dists = result.get("distances", [[]])
@@ -358,19 +424,25 @@ class TravelVectorStore:
             for i, doc in enumerate(docs):
                 meta = metas[i]
                 dist = dists[i]
-                out.append({
-                    "question_id": meta.get("question_id"),
-                    "question_text": meta.get("question_text"),
-                    "category": meta.get("category"),
-                    "similarity_score": 1 - float(dist) if isinstance(dist, (int, float)) else None,
-                    "metadata": meta,
-                })
+                out.append(
+                    {
+                        "question_id": meta.get("question_id"),
+                        "question_text": meta.get("question_text"),
+                        "category": meta.get("category"),
+                        "similarity_score": (
+                            1 - float(dist) if isinstance(dist, (int, float)) else None
+                        ),
+                        "metadata": meta,
+                    }
+                )
             return out
         except Exception as e:
             print(f"[VectorStore] 질문 검색 오류: {e}")
             return []
 
-    def _matches_budget(self, package_metadata: Dict[str, Any], budget_range: Optional[str]) -> bool:
+    def _matches_budget(
+        self, package_metadata: Dict[str, Any], budget_range: Optional[str]
+    ) -> bool:
         if not budget_range:
             return True
         min_price = int(package_metadata.get("min_price", 0))
@@ -387,7 +459,9 @@ class TravelVectorStore:
             return not (max_price < bmin or min_price > bmax)
         return True
 
-    def _matches_duration(self, package_metadata: Dict[str, Any], duration_range: Optional[str]) -> bool:
+    def _matches_duration(
+        self, package_metadata: Dict[str, Any], duration_range: Optional[str]
+    ) -> bool:
         if not duration_range:
             return True
         pdays = int(package_metadata.get("duration_days", 0))
@@ -412,7 +486,7 @@ class TravelVectorStore:
         k = self._normalize(keyword)
         if not t or not k:
             return False
-        
+
         # 우선 직접 서브스트링 매칭
         if k in t:
             return True
@@ -435,14 +509,23 @@ class TravelVectorStore:
         blob = " ".join(str(f or "") for f in fields)
         return self._fuzzy_contains(blob, keyword, threshold=0.5)
 
-    def _convert_answers_to_preferences(self, user_answers: Dict[int, str]) -> Dict[str, Any]:
+    def _convert_answers_to_preferences(
+        self, user_answers: Dict[int, str]
+    ) -> Dict[str, Any]:
         prefs: Dict[str, Any] = {}
         mapping = {
             1: ("destination", {"japan": "일본", "thailand": "태국", "china": "중국"}),
             3: ("duration", None),
             6: ("budget", None),
             9: ("interests", None),
-            11: ("travel_style", {"semi_free": "반자유여행", "free": "자유여행", "package": "패키지여행"}),
+            11: (
+                "travel_style",
+                {
+                    "semi_free": "반자유여행",
+                    "free": "자유여행",
+                    "package": "패키지여행",
+                },
+            ),
         }
         for qid, (key, m) in mapping.items():
             if qid in user_answers:
@@ -450,15 +533,21 @@ class TravelVectorStore:
                 prefs[key] = m.get(val, val) if m else val
         return prefs
 
-    def _calculate_recommendation_score(self, package: Dict[str, Any], user_answers: Dict[int, str]) -> float:
+    def _calculate_recommendation_score(
+        self, package: Dict[str, Any], user_answers: Dict[int, str]
+    ) -> float:
         score = float(package.get("similarity_score", 0.5)) * 100.0
         # 목적지 가산점
         if user_answers.get(1) == "japan" and package.get("country") == "일본":
             score += 20
         # 기간/예산 매칭
-        if 3 in user_answers and self._matches_duration(package["metadata"], user_answers[3]):
+        if 3 in user_answers and self._matches_duration(
+            package["metadata"], user_answers[3]
+        ):
             score += 15
-        if 6 in user_answers and self._matches_budget(package["metadata"], user_answers[6]):
+        if 6 in user_answers and self._matches_budget(
+            package["metadata"], user_answers[6]
+        ):
             score += 15
         # 여행 스타일 매칭
         if 11 in user_answers:
@@ -466,7 +555,12 @@ class TravelVectorStore:
                 score += 10
         return min(score, 100.0)
 
-    def save_user_session(self, session_id: str, user_answers: Dict[int, str], recommendations: List[Dict[str, Any]]) -> None:
+    def save_user_session(
+        self,
+        session_id: str,
+        user_answers: Dict[int, str],
+        recommendations: List[Dict[str, Any]],
+    ) -> None:
         """세션 완료 처리 및 추천 결과를 DB에 저장"""
         try:
             with sqlite3.connect(self.sqlite_db_path) as conn:
@@ -495,6 +589,8 @@ class TravelVectorStore:
                         ),
                     )
                 conn.commit()
-            print(f"[VectorStore] 세션 저장 완료 (session_id={session_id}, answers={len(user_answers)}, recs={len(recommendations)})")
+            print(
+                f"[VectorStore] 세션 저장 완료 (session_id={session_id}, answers={len(user_answers)}, recs={len(recommendations)})"
+            )
         except Exception as e:
             print(f"[VectorStore] 세션 저장 중 오류: {e}")

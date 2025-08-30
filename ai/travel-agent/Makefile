@@ -9,8 +9,9 @@ clean:
 	rm -rf my_reports uploads __pycache__
 
 install:
-	uv pip install -r requirements.txt
+	uv venv --python 3.12
 	.\.venv\Scripts\activate.ps1
+	uv pip install -r requirements.txt
 
 format:
 	black .

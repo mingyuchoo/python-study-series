@@ -1,14 +1,16 @@
 import sqlite3
 from contextlib import contextmanager
-from backend.config import settings
 from typing import List
+
+from backend.config import settings
+
 
 class DatabaseManager:
     """SQLite 데이터베이스 관리"""
-    
+
     def __init__(self, db_path: str = None):
         self.db_path = db_path or settings.sqlite_db_path
-    
+
     @contextmanager
     def get_connection(self):
         """데이터베이스 연결 컨텍스트 매니저"""
@@ -18,7 +20,7 @@ class DatabaseManager:
             yield conn
         finally:
             conn.close()
-    
+
     def execute_query(self, query: str, params: tuple = None) -> List[dict]:
         """쿼리 실행"""
         with self.get_connection() as conn:
@@ -28,7 +30,7 @@ class DatabaseManager:
             else:
                 cursor.execute(query)
             return [dict(row) for row in cursor.fetchall()]
-    
+
     def execute_insert(self, query: str, params: tuple = None) -> int:
         """INSERT 쿼리 실행"""
         with self.get_connection() as conn:
@@ -39,5 +41,6 @@ class DatabaseManager:
                 cursor.execute(query)
             conn.commit()
             return cursor.lastrowid
+
 
 db_manager = DatabaseManager()
