@@ -11,6 +11,7 @@ clean:
 install:
 	uv pip install -r requirements.txt
 	.\.venv\Scripts\activate.ps1
+
 format:
 	black .
 	isort .
