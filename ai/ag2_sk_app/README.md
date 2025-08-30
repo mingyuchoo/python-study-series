@@ -5,6 +5,7 @@ This application demonstrates how to integrate AutoGen agents with Semantic Kern
 ## Setup
 
 1. Install dependencies:
+
    ```bash
    pip install -r requirements.txt
    ```

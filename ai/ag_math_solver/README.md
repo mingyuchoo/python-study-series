@@ -12,6 +12,7 @@
 ## 에이전트 구성
 
 ### 수학 문제 해결 에이전트
+
 - **Math_Analyzer**: 수학 문제 분석 및 해결 방법 제안
 - **Equation_Formulator**: 문제를 수학적 방정식으로 변환
 - **Solution_Calculator**: 방정식을 풀고 계산
@@ -19,6 +20,7 @@
 - **Explanation_Generator**: 해답을 이해하기 쉽게 설명
 
 ### 보조 에이전트
+
 - **Example_Creator**: 수학 개념의 실생활 예시 생성
 - **Internet_Searcher**: 인터넷에서 관련 정보 검색
 - **User_Proxy**: 사용자를 대신하여 코드 실행 및 대화 관리
@@ -34,12 +36,14 @@
 ## 설치 및 실행
 
 1. 필요한 패키지 설치:
+
    ```bash
    uv pip install -r requirements.txt
    ```
 
 2. 환경 변수 설정:
    `.env` 파일에 다음 API 키를 설정합니다:
+
    ```
    # Azure OpenAI API Configuration
    AZURE_API_KEY=your_azure_api_key
@@ -52,13 +56,14 @@
    ```
 
 3. 애플리케이션 실행:
+
    ```bash
    streamlit run app.py
    ```
 
 ## 사용 방법
 
-1. 웹 브라우저에서 애플리케이션에 접속합니다 (기본 URL: http://localhost:8501).
+1. 웹 브라우저에서 애플리케이션에 접속합니다 (기본 URL: <http://localhost:8501>).
 2. '문제 해결' 탭에서 수학 문제를 입력합니다.
 3. 필요한 경우 인터넷 검색 옵션을 활성화합니다.
 4. '문제 해결하기' 버튼을 클릭하여 에이전트들이 문제를 해결하도록 합니다.

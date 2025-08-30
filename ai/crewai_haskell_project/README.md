@@ -1,9 +1,11 @@
 # Haskell Web Development Multi-Agent System
 
 ## Overview
+
 This application uses CrewAI to implement a multi-agent collaboration system focused on developing Haskell web applications. Multiple agents with specialized roles work together to analyze requirements, design, implement, test, and deploy web applications written in Haskell.
 
 ## Features
+
 - Web-based interface built with Streamlit
 - Multiple AI agents with specialized roles:
   - Requirements Analyzer: Analyzes project requirements
@@ -71,7 +73,9 @@ haskell_web_dev_project/
 7. All results are displayed in the Streamlit UI
 
 ## Configuration
+
 The application uses environment variables for configuration. See the `.env` file for details.
 
 ## License
+
 MIT

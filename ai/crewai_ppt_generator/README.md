@@ -37,9 +37,9 @@ OPENAI_API_KEY=your_api_key_here
 python web_app.py
 ```
 
-웹 브라우저에서 http://localhost:8000 으로 접속하면 사용자 친화적인 인터페이스를 통해 보고서를 생성할 수 있습니다.
+웹 브라우저에서 <http://localhost:8000> 으로 접속하면 사용자 친화적인 인터페이스를 통해 보고서를 생성할 수 있습니다.
 
-#### 웹 인터페이스 기능:
+#### 웹 인터페이스 기능
 
 - 직관적인 폼을 통한 보고서 주제 입력
 - 드래그 앤 드롭으로 데이터 파일 업로드
@@ -55,7 +55,7 @@ python web_app.py
 python cli.py --topic "분기별 영업 실적" --output "my_reports"
 ```
 
-#### 옵션:
+#### 옵션
 
 - `--topic`, `-t`: 보고서 주제 (필수)
 - `--data`, `-d`: 분석할 데이터 소스 파일 경로 (선택 사항)
@@ -87,15 +87,18 @@ print(f"보고서가 생성되었습니다: {output_file}")
 ## 프로젝트 구조
 
 ### 코어 파일
+
 - `app.py`: CrewAI 멀티에이전트 시스템 코어
 - `data_generator.py`: 샘플 데이터 생성 도구
 - `ppt_generator.py`: PowerPoint 프레젠테이션 생성 도구
 
 ### 인터페이스
+
 - `cli.py`: 명령줄 인터페이스
 - `web_app.py`: FastAPI 기반 웹 애플리케이션
 
 ### 웹 애플리케이션 파일
+
 - `templates/`: HTML 템플릿 파일들 (base.html, index.html, status.html, error.html)
 - `static/`: 정적 파일들 (CSS, JavaScript, 이미지 등)
 - `uploads/`: 사용자가 업로드한 데이터 파일 저장 디렉토리

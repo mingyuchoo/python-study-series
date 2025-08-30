@@ -18,5 +18,4 @@ pdm run start
 
 ## References
 
-- https://langchain-ai.github.io/langgraph/#example
-
+- <https://langchain-ai.github.io/langgraph/#example>
