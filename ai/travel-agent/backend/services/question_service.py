@@ -22,9 +22,12 @@ class QuestionService:
             q.question_type,
             q.is_required,
             qc.category_name
-        FROM questions q
-        JOIN question_categories qc ON q.category_id = qc.category_id
-        ORDER BY q.question_order
+        FROM
+            questions q
+        JOIN
+            question_categories qc ON q.category_id = qc.category_id
+        ORDER BY
+            q.question_order
         """
         questions_data = db_manager.execute_query(question_query)
 
@@ -36,8 +39,11 @@ class QuestionService:
             qo.option_text,
             qo.option_value,
             qo.option_order
-        FROM question_options qo
-        ORDER BY qo.question_id, qo.option_order
+        FROM
+            question_options qo
+        ORDER BY
+            qo.question_id,
+            qo.option_order
         """
         options_data = db_manager.execute_query(options_query)
 

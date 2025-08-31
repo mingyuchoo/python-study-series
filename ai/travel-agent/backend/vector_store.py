@@ -100,11 +100,16 @@ class TravelVectorStore:
                         q.is_required,
                         qc.category_name,
                         GROUP_CONCAT(qo.option_text, ' | ') as options
-                    FROM questions q
-                    JOIN question_categories qc ON q.category_id = qc.category_id
-                    LEFT JOIN question_options qo ON q.question_id = qo.question_id
-                    GROUP BY q.question_id
-                    ORDER BY q.question_order
+                    FROM
+                        questions q
+                    JOIN
+                        question_categories qc ON q.category_id = qc.category_id
+                    LEFT JOIN
+                        question_options qo ON q.question_id = qo.question_id
+                    GROUP BY
+                        q.question_id
+                    ORDER BY
+                        q.question_order
                     """
                 )
                 rows = cur.fetchall()
@@ -155,7 +160,8 @@ class TravelVectorStore:
                         is_popular,
                         visa_required,
                         description
-                    FROM destinations
+                    FROM
+                        destinations
                     """
                 )
                 rows = cur.fetchall()
@@ -200,7 +206,7 @@ class TravelVectorStore:
                 cur = conn.cursor()
                 cur.execute(
                     """
-                    SELECT 
+                    SELECT
                         tp.package_id,
                         tp.package_name,
                         tp.duration_days,
@@ -214,11 +220,16 @@ class TravelVectorStore:
                         d.country_name,
                         d.city_name,
                         GROUP_CONCAT(pi.day_title || ': ' || pi.activities, ' | ') as itinerary
-                    FROM travel_packages tp
-                    JOIN destinations d ON tp.destination_id = d.destination_id
-                    LEFT JOIN package_itinerary pi ON tp.package_id = pi.package_id
-                    WHERE tp.is_active = 1
-                    GROUP BY tp.package_id
+                    FROM
+                        travel_packages tp
+                    JOIN
+                        destinations d ON tp.destination_id = d.destination_id
+                    LEFT JOIN
+                        package_itinerary pi ON tp.package_id = pi.package_id
+                    WHERE
+                        tp.is_active = 1
+                    GROUP BY
+                        tp.package_id
                     """
                 )
                 rows = cur.fetchall()
@@ -418,9 +429,7 @@ class TravelVectorStore:
             print(f"[VectorStore] 검색 질의 중 오류: {e}")
             return []
 
-    def search_relevant_questions(
-        self, user_query: str, limit: int = 5
-    ) -> List[Dict[str, Any]]:
+    def search_relevant_questions(self, user_query: str, limit: int = 5) -> List[Dict[str, Any]]:
         """
         사용자 자연어 쿼리와 유사한 질문 검색
         """
@@ -443,9 +452,7 @@ class TravelVectorStore:
                         "question_id": meta.get("question_id"),
                         "question_text": meta.get("question_text"),
                         "category": meta.get("category"),
-                        "similarity_score": (
-                            1 - float(dist) if isinstance(dist, (int, float)) else None
-                        ),
+                        "similarity_score": (1 - float(dist) if isinstance(dist, (int, float)) else None),
                         "metadata": meta,
                     }
                 )
@@ -454,9 +461,7 @@ class TravelVectorStore:
             print(f"[VectorStore] 질문 검색 오류: {e}")
             return []
 
-    def _matches_budget(
-        self, package_metadata: Dict[str, Any], budget_range: Optional[str]
-    ) -> bool:
+    def _matches_budget(self, package_metadata: Dict[str, Any], budget_range: Optional[str]) -> bool:
         """
         예산 범위에 맞는지 확인
         """
@@ -476,9 +481,7 @@ class TravelVectorStore:
             return not (max_price < bmin or min_price > bmax)
         return True
 
-    def _matches_duration(
-        self, package_metadata: Dict[str, Any], duration_range: Optional[str]
-    ) -> bool:
+    def _matches_duration(self, package_metadata: Dict[str, Any], duration_range: Optional[str]) -> bool:
         """
         여행 일수 범위에 맞는지 확인
         """
@@ -536,9 +539,7 @@ class TravelVectorStore:
         blob = " ".join(str(f or "") for f in fields)
         return self._fuzzy_contains(blob, keyword, threshold=0.5)
 
-    def _convert_answers_to_preferences(
-        self, user_answers: Dict[int, str]
-    ) -> Dict[str, Any]:
+    def _convert_answers_to_preferences(self, user_answers: Dict[int, str]) -> Dict[str, Any]:
         """
         사용자의 답변을 선호도로 변환
         """
@@ -563,9 +564,7 @@ class TravelVectorStore:
                 prefs[key] = m.get(val, val) if m else val
         return prefs
 
-    def _calculate_recommendation_score(
-        self, package: Dict[str, Any], user_answers: Dict[int, str]
-    ) -> float:
+    def _calculate_recommendation_score(self, package: Dict[str, Any], user_answers: Dict[int, str]) -> float:
         """
         추천 점수 계산
         """
@@ -588,12 +587,7 @@ class TravelVectorStore:
                 score += 10
         return min(score, 100.0)
 
-    def save_user_session(
-        self,
-        session_id: str,
-        user_answers: Dict[int, str],
-        recommendations: List[Dict[str, Any]],
-    ) -> None:
+    def save_user_session(self, session_id: str, user_answers: Dict[int, str], recommendations: List[Dict[str, Any]]) -> None:
         """
         세션 완료 처리 및 추천 결과를 DB에 저장
         """
@@ -603,9 +597,12 @@ class TravelVectorStore:
                 # 세션 완료 처리
                 cur.execute(
                     """
-                    UPDATE user_sessions 
-                    SET completed = 1 
-                    WHERE session_id = ?
+                    UPDATE
+                        user_sessions 
+                    SET
+                        completed = 1 
+                    WHERE
+                        session_id = ?
                     """,
                     (session_id,),
                 )
@@ -613,8 +610,10 @@ class TravelVectorStore:
                 for rec in recommendations:
                     cur.execute(
                         """
-                        INSERT INTO recommendations (session_id, package_id, score, reason)
-                        VALUES (?, ?, ?, ?)
+                        INSERT INTO
+                            recommendations (session_id, package_id, score, reason)
+                        VALUES
+                            (?, ?, ?, ?)
                         """,
                         (
                             session_id,

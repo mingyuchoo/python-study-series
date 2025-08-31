@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     """
     애플리케이션 설정
     """
-
+    
     # 기본 설정
     app_name: str = "Travel AI Consultation API"
     app_version: str = "1.0.0"

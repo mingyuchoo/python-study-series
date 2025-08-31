@@ -29,8 +29,10 @@ class RecommendationService:
         session_id = f"session_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{str(uuid.uuid4())[:8]}"
 
         query = """
-        INSERT INTO user_sessions (session_id, user_ip, user_agent)
-        VALUES (?, ?, ?)
+        INSERT INTO 
+            user_sessions (session_id, user_ip, user_agent)
+        VALUES
+            (?, ?, ?)
         """
         db_manager.execute_insert(query, (session_id, user_ip, user_agent))
 
@@ -50,8 +52,14 @@ class RecommendationService:
         """
         # 기존 답변 확인
         check_query = """
-        SELECT answer_id FROM user_answers 
-        WHERE session_id = ? AND question_id = ?
+        SELECT
+            answer_id
+        FROM
+            user_answers 
+        WHERE
+            session_id = ?
+        AND
+            question_id = ?
         """
         existing = db_manager.execute_query(check_query, (session_id, question_id))
 
@@ -59,8 +67,14 @@ class RecommendationService:
             # 기존 답변 업데이트
             query = """
             UPDATE user_answers 
-            SET answer_text = ?, answer_value = ?, answered_date = CURRENT_TIMESTAMP
-            WHERE session_id = ? AND question_id = ?
+            SET
+                answer_text = ?,
+                answer_value = ?,
+                answered_date = CURRENT_TIMESTAMP
+            WHERE
+                session_id = ?
+            AND
+                question_id = ?
             """
             db_manager.execute_insert(
                 query, (answer_text, answer_value, session_id, question_id)
@@ -68,8 +82,10 @@ class RecommendationService:
         else:
             # 새 답변 삽입
             query = """
-            INSERT INTO user_answers (session_id, question_id, answer_text, answer_value)
-            VALUES (?, ?, ?, ?)
+            INSERT INTO
+                user_answers (session_id, question_id, answer_text, answer_value)
+            VALUES
+                (?, ?, ?, ?)
             """
             db_manager.execute_insert(
                 query, (session_id, question_id, answer_text, answer_value)
@@ -82,9 +98,14 @@ class RecommendationService:
         사용자 답변 조회
         """
         query = """
-        SELECT question_id, answer_value, answer_text
-        FROM user_answers
-        WHERE session_id = ?
+        SELECT
+            question_id,
+            answer_value,
+            answer_text
+        FROM
+            user_answers
+        WHERE
+            session_id = ?
         """
         answers_data = db_manager.execute_query(query, (session_id,))
 
@@ -101,9 +122,13 @@ class RecommendationService:
         최근 생성된 세션 ID 목록 조회
         """
         query = """
-        SELECT session_id
-        FROM user_sessions
-        ORDER BY datetime(created_date) DESC, session_id DESC
+        SELECT
+            session_id
+        FROM
+            user_sessions
+        ORDER BY
+            datetime(created_date) DESC,
+            session_id DESC
         LIMIT ?
         """
         rows = db_manager.execute_query(query, (limit,))
