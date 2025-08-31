@@ -1,0 +1,19 @@
+[tool.black]
+line-length = 160
+target-version = ['py312']  # 사용하는 Python 버전에 맞게 조정
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
