@@ -1,9 +1,11 @@
 from fastapi import APIRouter, HTTPException
 
 from backend.models.request_models import RecommendationRequest, SearchRequest
-from backend.models.response_models import (APIResponse,
-                                            RecommendationResponse,
-                                            TravelPackage)
+from backend.models.response_models import (
+    APIResponse,
+    RecommendationResponse,
+    TravelPackage,
+)
 from backend.services.recommendation_service import recommendation_service
 
 router = APIRouter(prefix="/recommendations", tags=["Recommendations"])

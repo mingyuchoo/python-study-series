@@ -34,6 +34,9 @@ if "loaded_from_history" not in st.session_state:
 if "session_history_loaded" not in st.session_state:
     # 앱 시작 후 백엔드에서 세션 이력을 1회 자동 로딩했는지 여부
     st.session_state.session_history_loaded = False
+if "session_applied" not in st.session_state:
+    # 사용자가 "세션 ID 적용" 버튼으로 현재 세션을 명시적으로 적용했는지 여부
+    st.session_state.session_applied = False
 
 # -----------------------------
 # 유틸 함수 (API 호출)
@@ -152,6 +155,8 @@ with st.sidebar:
             st.success(f"세션 생성 완료: {st.session_state.session_id}")
             # 세션 이력 업데이트
             maintain_session_history(st.session_state.session_id)
+            # 생성만으로는 적용되지 않음
+            st.session_state.session_applied = False
         else:
             st.error("세션 생성에 실패했습니다.")
 
@@ -165,6 +170,11 @@ with st.sidebar:
             apply_session_answers_to_draft(st.session_state.session_id)
             # 수동 적용 시에는 히스토리 로딩 상태로 보지 않음
             st.session_state.loaded_from_history = False
+            # 명시적 적용 완료
+            st.session_state.session_applied = True
+        else:
+            # 유효하지 않은 입력 적용 시 비활성화 유지
+            st.session_state.session_applied = False
 
     # 세션 이력 UI
     st.markdown("---")
@@ -223,6 +233,8 @@ with st.sidebar:
             apply_session_answers_to_draft(selected_hist)
             st.session_state._last_session_history_selected = selected_hist
             st.session_state.loaded_from_history = True
+            # 히스토리 선택은 자동 적용이므로 버튼 활성화 조건을 만족하지 않음
+            st.session_state.session_applied = False
     else:
         st.caption("세션 이력이 없습니다. 세션을 생성하거나 ID를 적용해 보세요.")
 
@@ -250,7 +262,10 @@ with tab_qna:
     if not st.session_state.session_id:
         st.warning("먼저 사이드바에서 세션을 생성하거나 세션 ID를 입력하세요.")
     # 1) "질문 불러오기" 버튼
-    disable_load = bool(st.session_state.get("loaded_from_history", False))
+    disable_load = not (
+        bool(st.session_state.get("session_applied", False))
+        and bool(st.session_state.get("session_id"))
+    )
     if st.button("질문 불러오기", type="primary", disabled=disable_load):
         resp = api_get("/questions/")
         if resp:
