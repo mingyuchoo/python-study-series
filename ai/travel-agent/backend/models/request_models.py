@@ -36,3 +36,12 @@ class SearchRequest(BaseModel):
     query: str = Field(..., description="검색 쿼리", min_length=1)
     limit: Optional[int] = Field(10, description="검색 결과 개수", ge=1, le=50)
     filters: Optional[Dict[str, Any]] = Field(None, description="검색 필터")
+
+
+class AskAIRequest(BaseModel):
+    """
+    질문-선택값으로 AI에게 물어보기 (스트리밍)
+    """
+    session_id: str = Field(..., description="세션 ID")
+    selected_text: Optional[str] = Field(None, description="질문에서 사용자가 선택한 항목의 표시 텍스트")
+    selected_value: Optional[str] = Field(None, description="질문에서 사용자가 선택한 항목의 값")

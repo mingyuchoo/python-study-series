@@ -461,6 +461,88 @@ class TravelVectorStore:
             print(f"[VectorStore] 질문 검색 오류: {e}")
             return []
 
+    def build_qna_context(self, question_id: int, selected_text: Optional[str] = None, selected_value: Optional[str] = None, max_chunks: int = 8) -> str:
+        """
+        질문 본문과 선택한 값/텍스트를 기반으로 RAG 컨텍스트를 조합합니다.
+        - 관련 질문 설명
+        - 관련 목적지/여행상품의 요약 스니펫 상위 N개
+        """
+        parts: List[str] = []
+        try:
+            # 1) 질문 메타 조회
+            q_meta = None
+            if self.questions_collection is not None:
+                try:
+                    res = self.questions_collection.get(ids=[f"q_{question_id}"])
+                    if res and res.get("metadatas") and res["metadatas"][0]:
+                        q_meta = res["metadatas"][0]
+                except Exception:
+                    q_meta = None
+
+            if q_meta:
+                parts.append("[질문]")
+                parts.append(f"카테고리: {q_meta.get('category','')}")
+                parts.append(f"본문: {q_meta.get('question_text','')}")
+                if q_meta.get("options"):
+                    parts.append(f"선택지: {q_meta.get('options')}")
+
+            if selected_text or selected_value:
+                parts.append("[사용자 선택]")
+                if selected_text:
+                    parts.append(f"표시 텍스트: {selected_text}")
+                if selected_value:
+                    parts.append(f"내부 값: {selected_value}")
+
+            # 2) 선택/질문을 합친 쿼리로 관련 상품/목적지 검색
+            query_terms = []
+            if q_meta and q_meta.get("question_text"):
+                query_terms.append(str(q_meta.get("question_text")))
+            if selected_text:
+                query_terms.append(str(selected_text))
+            if selected_value:
+                query_terms.append(str(selected_value))
+            query_text = " \n ".join([t for t in query_terms if t]) or "여행 관련 질문"
+
+            # 목적지/상품에서 상위 스니펫 수집
+            snippets: List[str] = []
+            try:
+                if self.destinations_collection is not None:
+                    r = self.destinations_collection.query(query_texts=[query_text], n_results=max_chunks // 2 or 1)
+                    metas = r.get("metadatas", [[]])[0]
+                    for m in metas:
+                        country = m.get("country_name", "")
+                        city = m.get("city_name", "")
+                        desc = m.get("description", "")
+                        snippet = " ".join([s for s in [country, city, desc] if s])
+                        if snippet:
+                            snippets.append(f"- 목적지: {snippet}")
+            except Exception:
+                pass
+
+            try:
+                if self.packages_collection is not None:
+                    r = self.packages_collection.query(query_texts=[query_text], n_results=max_chunks)
+                    metas = r.get("metadatas", [[]])[0]
+                    for m in metas[: max(0, max_chunks - len(snippets))]:
+                        name = m.get("package_name", "")
+                        country = m.get("country", "")
+                        city = m.get("city", "")
+                        highlights = m.get("highlights", "")
+                        desc = m.get("description", "")
+                        snippet = " ".join([s for s in [name, country, city, highlights, desc] if s])
+                        if snippet:
+                            snippets.append(f"- 상품: {snippet}")
+            except Exception:
+                pass
+
+            if snippets:
+                parts.append("[관련 컨텍스트 발췌]")
+                parts.extend(snippets[:max_chunks])
+        except Exception as e:
+            parts.append(f"[컨텍스트 생성 오류] {e}")
+
+        return "\n".join(parts)
+
     def _matches_budget(self, package_metadata: Dict[str, Any], budget_range: Optional[str]) -> bool:
         """
         예산 범위에 맞는지 확인

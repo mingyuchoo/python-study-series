@@ -20,6 +20,12 @@ class Settings(BaseSettings):
     # API 설정
     api_prefix: str = "/api/v1"
 
+    # Azure OpenAI 설정 (.env의 키를 그대로 사용)
+    AZURE_OPENAI_API_KEY: str | None = None
+    AZURE_OPENAI_ENDPOINT: str | None = None
+    AZURE_OPENAI_CHAT_DEPLOYMENT_NAME: str | None = None
+    AZURE_OPENAI_API_VERSION: str | None = None
+
     # CORS 설정
     # Any로 먼저 수신하여 env 소스의 사전 JSON 파싱을 우회하고, validator에서 리스트로 변환
     allowed_origins: Any = ["*"]

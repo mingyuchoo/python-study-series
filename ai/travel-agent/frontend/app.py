@@ -57,6 +57,28 @@ def api_get(path: str, params: Optional[Dict[str, Any]] = None):
         return None
 
 
+def api_post_sse(path: str, json: Optional[Dict[str, Any]] = None):
+    """
+    SSE(EventSource) 스트림을 POST로 구독합니다. 'data: ' 라인이 도착할 때마다 yield.
+    """
+    url = f"{st.session_state.backend_base_url.rstrip('/')}{path}"
+    try:
+        with requests.post(url, json=json, timeout=300, stream=True) as res:
+            res.raise_for_status()
+            buffer = ""
+            for raw in res.iter_lines(decode_unicode=True):
+                if raw is None:
+                    continue
+                line = raw.strip()
+                if not line:
+                    continue
+                if line.startswith("data: "):
+                    payload = line[len("data: ") :]
+                    yield payload
+    except requests.RequestException as e:
+        yield f"[ERROR] 요청 실패: {e}"
+
+
 def api_post(path: str, json: Optional[Dict[str, Any]] = None):
     """
     POST 요청을 수행합니다.
@@ -144,6 +166,23 @@ def load_session_history_from_backend(limit: int = 20):
     return False
 
 
+def reset_all_question_inputs():
+    """
+    모든 질문 입력 위젯 상태와 draft 답변을 초기화합니다.
+    - 라디오/텍스트 인풋의 Streamlit 키 제거
+    - answers_draft 값을 None으로 재설정
+    """
+    # 현재 로드된 질문 기준으로 위젯 키 및 draft 초기화
+    for q in st.session_state.get("questions", []) or []:
+        qid = q.get("question_id")
+        # 위젯 키 제거 (존재 시)
+        for key in (f"q_{qid}_radio", f"q_{qid}_text", f"q_{qid}_val"):
+            if key in st.session_state:
+                del st.session_state[key]
+        # draft 초기화
+        st.session_state.answers_draft[qid] = {"answer_text": None, "answer_value": None}
+
+
 # -----------------------------
 # 사이드바
 # -----------------------------
@@ -157,41 +196,7 @@ with st.sidebar:
     st.caption("환경변수 BACKEND_BASE_URL 로도 설정 가능합니다.")
 
     st.markdown("---")
-    st.subheader("세션")
-    if st.button("새 상담 세션 생성", type="primary"):
-        payload = {}  # 서버가 Request에서 IP/UA를 추출하므로 본문은 선택사항
-        data = api_post("/sessions/create", json=payload)
-        if data and data.get("success"):
-            session = data.get("data")
-            st.session_state.session_id = (
-                session.get("session_id") if isinstance(session, dict) else session
-            )
-            st.success(f"세션 생성 완료: {st.session_state.session_id}")
-            # 세션 이력 업데이트
-            maintain_session_history(st.session_state.session_id)
-            # 생성만으로는 적용되지 않음
-            st.session_state.session_applied = False
-        else:
-            st.error("세션 생성에 실패했습니다.")
-
-    st.text_input(
-        "현재 세션 ID", value=st.session_state.session_id or "", key="session_id_input"
-    )
-    if st.button("세션 ID 적용"):
-        st.session_state.session_id = st.session_state.session_id_input.strip() or None
-        if st.session_state.session_id:
-            maintain_session_history(st.session_state.session_id)
-            apply_session_answers_to_draft(st.session_state.session_id)
-            # 수동 적용 시에는 히스토리 로딩 상태로 보지 않음
-            st.session_state.loaded_from_history = False
-            # 명시적 적용 완료
-            st.session_state.session_applied = True
-        else:
-            # 유효하지 않은 입력 적용 시 비활성화 유지
-            st.session_state.session_applied = False
-
-    # 세션 이력 UI
-    st.markdown("---")
+    # 세션 이력 UI (상단으로 이동)
     # 최초 1회 자동 로드
     if not st.session_state.session_history_loaded:
         load_session_history_from_backend()
@@ -233,17 +238,20 @@ with st.sidebar:
         # 일회성 표시 후 제거
         del st.session_state["session_hist_msg"]
     if st.session_state.session_history:
-        selected_hist = st.radio(
+        selected_hist = st.selectbox(
             "최근 세션 선택",
             options=st.session_state.session_history,
             index=0,
-            key="session_history_radio",
+            key="session_history_select",
             help="과거 세션을 선택하면 해당 세션의 답변 이력이 적용됩니다.",
         )
         # 선택 변경 시 자동 적용
         prev = st.session_state.get("_last_session_history_selected")
         if selected_hist and selected_hist != prev:
             st.session_state.session_id = selected_hist
+            # 질문 위젯 및 draft 상태를 먼저 초기화한 뒤,
+            # 선택된 세션의 답변을 draft에 반영하여 Q&A에 즉시 표시되도록 함
+            reset_all_question_inputs()
             apply_session_answers_to_draft(selected_hist)
             st.session_state._last_session_history_selected = selected_hist
             st.session_state.loaded_from_history = True
@@ -251,6 +259,41 @@ with st.sidebar:
             st.session_state.session_applied = False
     else:
         st.caption("세션 이력이 없습니다. 세션을 생성하거나 ID를 적용해 보세요.")
+
+    st.markdown("---")
+    st.subheader("세션")
+    if st.button("새 상담 세션 생성", type="primary"):
+        payload = {}  # 서버가 Request에서 IP/UA를 추출하므로 본문은 선택사항
+        data = api_post("/sessions/create", json=payload)
+        if data and data.get("success"):
+            session = data.get("data")
+            st.session_state.session_id = (
+                session.get("session_id") if isinstance(session, dict) else session
+            )
+            st.success(f"세션 생성 완료: {st.session_state.session_id}")
+            # 세션 이력 업데이트
+            maintain_session_history(st.session_state.session_id)
+            # 생성만으로는 적용되지 않음
+            st.session_state.session_applied = False
+        else:
+            st.error("세션 생성에 실패했습니다.")
+
+    st.text_input(
+        "현재 세션 ID", value=st.session_state.session_id or "", key="session_id_input"
+    )
+    if st.button("세션 ID 적용"):
+        st.session_state.session_id = st.session_state.session_id_input.strip() or None
+        if st.session_state.session_id:
+            maintain_session_history(st.session_state.session_id)
+            # 기존 선택 및 텍스트 모두 초기화 (세션 적용 시 클리어)
+            reset_all_question_inputs()
+            # 수동 적용 시에는 히스토리 로딩 상태로 보지 않음
+            st.session_state.loaded_from_history = False
+            # 명시적 적용 완료
+            st.session_state.session_applied = True
+        else:
+            # 유효하지 않은 입력 적용 시 비활성화 유지
+            st.session_state.session_applied = False
 
 # -----------------------------
 # 메인 UI
@@ -284,12 +327,13 @@ with tab_qna:
         resp = api_get("/questions/")
         if resp:
             st.session_state.questions = resp.get("questions", [])
-            # 초깃값 준비
+            # 질문을 새로 불러온 뒤, 선택 및 텍스트를 모두 초기화
+            # (위젯 키 제거 및 draft None 재설정)
+            reset_all_question_inputs()
+            # 안전하게 None으로 덮어쓰기 (신규 질문 포함)
             for q in st.session_state.questions:
                 qid = q.get("question_id")
-                st.session_state.answers_draft.setdefault(
-                    qid, {"answer_text": None, "answer_value": None}
-                )
+                st.session_state.answers_draft[qid] = {"answer_text": None, "answer_value": None}
             # 2) 로드된 결과 메시지
             st.success(f"{len(st.session_state.questions)}개 질문 로드")
     if st.session_state.get("loaded_from_history", False) and st.session_state.get(
@@ -369,6 +413,26 @@ with tab_qna:
                         "answer_text": at or None,
                         "answer_value": av or None,
                     }
+
+                # 물어보기 (스트리밍)
+                ask_cols = st.columns([1, 6])
+                with ask_cols[0]:
+                    ask_clicked = st.button("물어보기", key=f"ask_q_{qid}")
+                with ask_cols[1]:
+                    holder = st.empty()
+                if ask_clicked and st.session_state.session_id:
+                    draft = st.session_state.answers_draft.get(qid) or {}
+                    payload = {
+                        "session_id": st.session_state.session_id,
+                        "selected_text": draft.get("answer_text"),
+                        "selected_value": draft.get("answer_value"),
+                    }
+                    acc = ""
+                    for chunk in api_post_sse(f"/questions/{qid}/ask", json=payload):
+                        if chunk == "[DONE]":
+                            break
+                        acc += chunk
+                        holder.markdown(acc)
 
                 if (
                     st.button("이 질문 답변 제출", key=f"submit_q_{qid}")
