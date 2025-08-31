@@ -1,11 +1,13 @@
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, List, Optional
 
 from pydantic import BaseModel
 
 
 class QuestionOption(BaseModel):
-    """질문 선택지"""
+    """
+    질문 선택지
+    """
 
     option_id: int
     option_text: str
@@ -14,7 +16,9 @@ class QuestionOption(BaseModel):
 
 
 class Question(BaseModel):
-    """질문"""
+    """
+    질문
+    """
 
     question_id: int
     question_text: str
@@ -25,14 +29,18 @@ class Question(BaseModel):
 
 
 class QuestionsResponse(BaseModel):
-    """질문 목록 응답"""
+    """
+    질문 목록 응답
+    """
 
     questions: List[Question]
     total_count: int
 
 
 class SessionResponse(BaseModel):
-    """세션 응답"""
+    """
+    세션 응답
+    """
 
     session_id: str
     created_date: datetime
@@ -40,7 +48,9 @@ class SessionResponse(BaseModel):
 
 
 class TravelPackage(BaseModel):
-    """여행 상품"""
+    """
+    여행 상품
+    """
 
     package_id: int
     package_name: str
@@ -57,7 +67,9 @@ class TravelPackage(BaseModel):
 
 
 class RecommendationResponse(BaseModel):
-    """추천 응답"""
+    """
+    추천 응답
+    """
 
     session_id: str
     recommendations: List[TravelPackage]
@@ -65,7 +77,9 @@ class RecommendationResponse(BaseModel):
 
 
 class APIResponse(BaseModel):
-    """공통 API 응답"""
+    """
+    공통 API 응답
+    """
 
     success: bool
     message: str

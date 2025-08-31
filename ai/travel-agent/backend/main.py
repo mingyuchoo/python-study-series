@@ -14,7 +14,9 @@ vector_store = None
 
 @asynccontextmanager
 async def lifespan(backend: FastAPI):
-    """앱 생명주기 관리"""
+    """
+    앱 생명주기 관리
+    """
     global vector_store
 
     # 시작 시 Vector Store 초기화
@@ -61,7 +63,9 @@ backend.include_router(recommendations.router, prefix=settings.api_prefix)
 
 @backend.get("/")
 async def root():
-    """루트 엔드포인트"""
+    """
+    루트 엔드포인트
+    """
     return {
         "message": "Travel AI Consultation API",
         "version": settings.app_version,
@@ -71,7 +75,9 @@ async def root():
 
 @backend.get("/health")
 async def health_check():
-    """헬스체크 엔드포인트"""
+    """
+    헬스체크 엔드포인트
+    """
     return {"status": "healthy", "timestamp": "2024-01-01T00:00:00Z"}
 
 

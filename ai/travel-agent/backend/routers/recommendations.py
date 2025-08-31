@@ -13,7 +13,9 @@ router = APIRouter(prefix="/recommendations", tags=["Recommendations"])
 
 @router.post("/", response_model=RecommendationResponse)
 async def get_recommendations(rec_request: RecommendationRequest):
-    """개인화된 여행 상품 추천"""
+    """
+    개인화된 여행 상품 추천
+    """
     try:
         recommendations = recommendation_service.get_recommendations(
             rec_request.session_id, rec_request.limit
@@ -30,7 +32,9 @@ async def get_recommendations(rec_request: RecommendationRequest):
 
 @router.post("/search")
 async def search_packages(search_request: SearchRequest):
-    """여행 상품 검색"""
+    """
+    여행 상품 검색
+    """
     try:
         # 검색 로직 구현
         user_preferences = {

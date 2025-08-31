@@ -84,6 +84,10 @@ class TravelVectorStore:
             print(f"[VectorStore] 적재 중 경고: {e}")
 
     def _load_questions_to_vector(self) -> None:
+        """
+        SQLite의 질문 테이블을 Chroma에 업서트합니다.
+        테이블이 없을 경우 안전하게 스킵합니다.
+        """
         try:
             with sqlite3.connect(self.sqlite_db_path) as conn:
                 cur = conn.cursor()
@@ -134,6 +138,10 @@ class TravelVectorStore:
             print(f"[VectorStore] 질문 적재 오류: {e}")
 
     def _load_destinations_to_vector(self) -> None:
+        """
+        SQLite의 목적지 테이블을 Chroma에 업서트합니다.
+        테이블이 없을 경우 안전하게 스킵합니다.
+        """
         try:
             with sqlite3.connect(self.sqlite_db_path) as conn:
                 cur = conn.cursor()
@@ -183,6 +191,10 @@ class TravelVectorStore:
             print(f"[VectorStore] 목적지 적재 오류: {e}")
 
     def _load_packages_to_vector(self) -> None:
+        """
+        SQLite의 여행상품 테이블을 Chroma에 업서트합니다.
+        테이블이 없을 경우 안전하게 스킵합니다.
+        """
         try:
             with sqlite3.connect(self.sqlite_db_path) as conn:
                 cur = conn.cursor()
@@ -409,7 +421,9 @@ class TravelVectorStore:
     def search_relevant_questions(
         self, user_query: str, limit: int = 5
     ) -> List[Dict[str, Any]]:
-        """사용자 자연어 쿼리와 유사한 질문 검색"""
+        """
+        사용자 자연어 쿼리와 유사한 질문 검색
+        """
         if self.questions_collection is None:
             return []
         try:
@@ -443,6 +457,9 @@ class TravelVectorStore:
     def _matches_budget(
         self, package_metadata: Dict[str, Any], budget_range: Optional[str]
     ) -> bool:
+        """
+        예산 범위에 맞는지 확인
+        """
         if not budget_range:
             return True
         min_price = int(package_metadata.get("min_price", 0))
@@ -462,6 +479,9 @@ class TravelVectorStore:
     def _matches_duration(
         self, package_metadata: Dict[str, Any], duration_range: Optional[str]
     ) -> bool:
+        """
+        여행 일수 범위에 맞는지 확인
+        """
         if not duration_range:
             return True
         pdays = int(package_metadata.get("duration_days", 0))
@@ -478,10 +498,15 @@ class TravelVectorStore:
         return True
 
     def _normalize(self, s: Optional[str]) -> str:
+        """
+        문자열을 정규화합니다.
+        """
         return str(s or "").strip().lower()
 
     def _fuzzy_contains(self, text: str, keyword: str, threshold: float = 0.80) -> bool:
-        """토큰 단위로 퍼지 매칭 수행. 한국어/영문/숫자 기준으로 토큰화."""
+        """
+        토큰 단위로 퍼지 매칭 수행. 한국어/영문/숫자 기준으로 토큰화.
+        """
         t = self._normalize(text)
         k = self._normalize(keyword)
         if not t or not k:
@@ -498,7 +523,9 @@ class TravelVectorStore:
         return False
 
     def _is_relevant(self, meta: Dict[str, Any], keyword: str) -> bool:
-        """국가/도시/상품명/설명/하이라이트 필드에 대해 서브스트링 또는 퍼지 매칭으로 연관성 판단"""
+        """
+        국가/도시/상품명/설명/하이라이트 필드에 대해 서브스트링 또는 퍼지 매칭으로 연관성 판단
+        """
         fields = [
             meta.get("country", ""),
             meta.get("city", ""),
@@ -512,6 +539,9 @@ class TravelVectorStore:
     def _convert_answers_to_preferences(
         self, user_answers: Dict[int, str]
     ) -> Dict[str, Any]:
+        """
+        사용자의 답변을 선호도로 변환
+        """
         prefs: Dict[str, Any] = {}
         mapping = {
             1: ("destination", {"japan": "일본", "thailand": "태국", "china": "중국"}),
@@ -536,6 +566,9 @@ class TravelVectorStore:
     def _calculate_recommendation_score(
         self, package: Dict[str, Any], user_answers: Dict[int, str]
     ) -> float:
+        """
+        추천 점수 계산
+        """
         score = float(package.get("similarity_score", 0.5)) * 100.0
         # 목적지 가산점
         if user_answers.get(1) == "japan" and package.get("country") == "일본":
@@ -561,7 +594,9 @@ class TravelVectorStore:
         user_answers: Dict[int, str],
         recommendations: List[Dict[str, Any]],
     ) -> None:
-        """세션 완료 처리 및 추천 결과를 DB에 저장"""
+        """
+        세션 완료 처리 및 추천 결과를 DB에 저장
+        """
         try:
             with sqlite3.connect(self.sqlite_db_path) as conn:
                 cur = conn.cursor()

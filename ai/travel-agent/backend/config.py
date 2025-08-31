@@ -1,9 +1,12 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import field_validator
-from typing import List, Any
+from typing import Any
+
 
 class Settings(BaseSettings):
-    """애플리케이션 설정"""
+    """
+    애플리케이션 설정
+    """
 
     # 기본 설정
     app_name: str = "Travel AI Consultation API"
@@ -25,7 +28,9 @@ class Settings(BaseSettings):
     allowed_headers: Any = ["*"]
 
     # 리스트형 환경변수 파서: CSV("a,b") 또는 JSON(["a","b"]) 또는 단일따옴표 JSON(['a','b']) 허용
-    @field_validator("allowed_origins", "allowed_methods", "allowed_headers", mode="before")
+    @field_validator(
+        "allowed_origins", "allowed_methods", "allowed_headers", mode="before"
+    )
     @classmethod
     def _parse_list_from_env(cls, v: Any):
         if v is None:
@@ -38,9 +43,12 @@ class Settings(BaseSettings):
             if not s:
                 return None
             # JSON 시도 (단일따옴표를 이중따옴표로 보정)
-            if (s.startswith("[") and s.endswith("]")) or (s.startswith("\"") and s.endswith("\"")):
+            if (s.startswith("[") and s.endswith("]")) or (
+                s.startswith('"') and s.endswith('"')
+            ):
                 try:
                     import json
+
                     try:
                         return json.loads(s)
                     except json.JSONDecodeError:

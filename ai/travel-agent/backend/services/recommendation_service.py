@@ -9,7 +9,9 @@ from backend.vector_store import TravelVectorStore
 
 
 class RecommendationService:
-    """추천 관련 비즈니스 로직"""
+    """
+    추천 관련 비즈니스 로직
+    """
 
     def __init__(self):
         self.vector_store = TravelVectorStore(
@@ -21,7 +23,9 @@ class RecommendationService:
     def create_session(
         self, user_ip: str = None, user_agent: str = None
     ) -> SessionResponse:
-        """새 세션 생성"""
+        """
+        새 세션 생성
+        """
         session_id = f"session_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{str(uuid.uuid4())[:8]}"
 
         query = """
@@ -41,7 +45,9 @@ class RecommendationService:
         answer_text: str = None,
         answer_value: str = None,
     ) -> bool:
-        """답변 저장"""
+        """
+        답변 저장
+        """
         # 기존 답변 확인
         check_query = """
         SELECT answer_id FROM user_answers 
@@ -72,7 +78,9 @@ class RecommendationService:
         return True
 
     def get_user_answers(self, session_id: str) -> Dict[int, str]:
-        """사용자 답변 조회"""
+        """
+        사용자 답변 조회
+        """
         query = """
         SELECT question_id, answer_value, answer_text
         FROM user_answers
@@ -89,7 +97,9 @@ class RecommendationService:
         return answers
 
     def get_recent_sessions(self, limit: int = 20) -> List[str]:
-        """최근 생성된 세션 ID 목록 조회"""
+        """
+        최근 생성된 세션 ID 목록 조회
+        """
         query = """
         SELECT session_id
         FROM user_sessions
@@ -100,7 +110,9 @@ class RecommendationService:
         return [row["session_id"] for row in rows]
 
     def delete_all_sessions(self) -> bool:
-        """모든 세션 기록을 삭제 (추천, 답변, 세션)"""
+        """
+        모든 세션 기록을 삭제 (추천, 답변, 세션)
+        """
         # 주의: 외래키 CASCADE가 없으므로 수동 삭제 순서 유지
         db_manager.execute_insert("DELETE FROM recommendations")
         db_manager.execute_insert("DELETE FROM user_answers")
@@ -110,7 +122,9 @@ class RecommendationService:
     def get_recommendations(
         self, session_id: str, limit: int = 5
     ) -> List[TravelPackage]:
-        """개인화된 추천 생성"""
+        """
+        개인화된 추천 생성
+        """
         # 사용자 답변 조회
         user_answers = self.get_user_answers(session_id)
 

@@ -1,18 +1,21 @@
-from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from pydantic import BaseModel, Field
 
 
 class SessionCreateRequest(BaseModel):
-    """세션 생성 요청"""
+    """
+    세션 생성 요청
+    """
 
     user_ip: Optional[str] = None
     user_agent: Optional[str] = None
 
 
 class AnswerRequest(BaseModel):
-    """답변 제출 요청"""
+    """
+    답변 제출 요청
+    """
 
     session_id: str = Field(..., description="세션 ID")
     question_id: int = Field(..., description="질문 ID")
@@ -21,14 +24,18 @@ class AnswerRequest(BaseModel):
 
 
 class RecommendationRequest(BaseModel):
-    """추천 요청"""
+    """
+    추천 요청
+    """
 
     session_id: str = Field(..., description="세션 ID")
     limit: Optional[int] = Field(5, description="추천 결과 개수", ge=1, le=20)
 
 
 class SearchRequest(BaseModel):
-    """검색 요청"""
+    """
+    검색 요청
+    """
 
     query: str = Field(..., description="검색 쿼리", min_length=1)
     limit: Optional[int] = Field(10, description="검색 결과 개수", ge=1, le=50)

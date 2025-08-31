@@ -8,7 +8,9 @@ router = APIRouter(prefix="/questions", tags=["Questions"])
 
 @router.get("/", response_model=QuestionsResponse)
 async def get_questions():
-    """모든 질문 조회"""
+    """
+    모든 질문 조회
+    """
     try:
         questions = question_service.get_all_questions()
         return QuestionsResponse(questions=questions, total_count=len(questions))
@@ -18,7 +20,9 @@ async def get_questions():
 
 @router.get("/{question_id}")
 async def get_question(question_id: int):
-    """특정 질문 조회"""
+    """
+    특정 질문 조회
+    """
     try:
         question = question_service.get_question_by_id(question_id)
         if not question:

@@ -5,11 +5,15 @@ from backend.models.response_models import Question, QuestionOption
 
 
 class QuestionService:
-    """질문 관련 비즈니스 로직"""
+    """
+    질문 관련 비즈니스 로직
+    """
 
     @staticmethod
     def get_all_questions() -> List[Question]:
-        """모든 질문 조회"""
+        """
+        모든 질문 조회
+        """
         # 질문 조회
         question_query = """
         SELECT 
@@ -58,7 +62,9 @@ class QuestionService:
 
     @staticmethod
     def get_question_by_id(question_id: int) -> Question:
-        """특정 질문 조회"""
+        """
+        특정 질문 조회
+        """
         questions = QuestionService.get_all_questions()
         for question in questions:
             if question.question_id == question_id:

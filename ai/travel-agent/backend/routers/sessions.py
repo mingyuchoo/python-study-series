@@ -11,7 +11,9 @@ router = APIRouter(prefix="/sessions", tags=["Sessions"])
 async def create_session(
     request: Request, session_request: SessionCreateRequest = None
 ):
-    """새 세션 생성"""
+    """
+    새 세션 생성
+    """
     try:
         # 클라이언트 정보 추출
         user_ip = request.client.host
@@ -29,7 +31,9 @@ async def create_session(
 
 @router.post("/answer")
 async def submit_answer(answer_request: AnswerRequest):
-    """답변 제출"""
+    """
+    답변 제출
+    """
     try:
         success = recommendation_service.save_answer(
             answer_request.session_id,
@@ -50,7 +54,9 @@ async def submit_answer(answer_request: AnswerRequest):
 
 @router.get("/{session_id}/answers")
 async def get_session_answers(session_id: str):
-    """세션의 답변들 조회"""
+    """
+    세션의 답변들 조회
+    """
     try:
         answers = recommendation_service.get_user_answers(session_id)
         return APIResponse(success=True, message="Success", data=answers)
@@ -60,7 +66,9 @@ async def get_session_answers(session_id: str):
 
 @router.get("/recent")
 async def get_recent_sessions(limit: int = 20):
-    """최근 세션 ID 목록 조회"""
+    """
+    최근 세션 ID 목록 조회
+    """
     try:
         sessions = recommendation_service.get_recent_sessions(limit=limit)
         return APIResponse(success=True, message="Success", data=sessions)
@@ -70,7 +78,9 @@ async def get_recent_sessions(limit: int = 20):
 
 @router.post("/clear")
 async def clear_all_sessions():
-    """모든 세션 기록 삭제 (recommendations, user_answers, user_sessions)"""
+    """
+    모든 세션 기록 삭제 (recommendations, user_answers, user_sessions)
+    """
     try:
         recommendation_service.delete_all_sessions()
         return APIResponse(success=True, message="All sessions cleared", data=True)

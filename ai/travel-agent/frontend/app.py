@@ -44,6 +44,9 @@ if "session_applied" not in st.session_state:
 
 
 def api_get(path: str, params: Optional[Dict[str, Any]] = None):
+    """
+    GET 요청을 수행합니다.
+    """
     url = f"{st.session_state.backend_base_url.rstrip('/')}{path}"
     try:
         res = requests.get(url, params=params, timeout=30)
@@ -55,6 +58,9 @@ def api_get(path: str, params: Optional[Dict[str, Any]] = None):
 
 
 def api_post(path: str, json: Optional[Dict[str, Any]] = None):
+    """
+    POST 요청을 수행합니다.
+    """
     url = f"{st.session_state.backend_base_url.rstrip('/')}{path}"
     try:
         res = requests.post(url, json=json, timeout=60)
@@ -71,7 +77,9 @@ def api_post(path: str, json: Optional[Dict[str, Any]] = None):
 
 
 def ensure_questions_loaded():
-    """질문 목록이 없으면 백엔드에서 불러와 초기 draft를 구성"""
+    """
+    질문 목록이 없으면 백엔드에서 불러와 초기 draft를 구성
+    """
     if not st.session_state.questions:
         resp = api_get("/questions/")
         if resp:
@@ -84,7 +92,9 @@ def ensure_questions_loaded():
 
 
 def apply_session_answers_to_draft(session_id: str):
-    """세션의 답변을 불러와 `answers_draft`에 반영"""
+    """
+    세션의 답변을 불러와 `answers_draft`에 반영
+    """
     if not session_id:
         return
     data = api_get(f"/sessions/{session_id}/answers")
@@ -107,7 +117,9 @@ def apply_session_answers_to_draft(session_id: str):
 
 
 def maintain_session_history(new_session_id: Optional[str]):
-    """세션 이력을 최신순으로 유지하고 중복 제거"""
+    """
+    세션 이력을 최신순으로 유지하고 중복 제거
+    """
     if not new_session_id:
         return
     hist = st.session_state.session_history
@@ -120,7 +132,9 @@ def maintain_session_history(new_session_id: Optional[str]):
 
 
 def load_session_history_from_backend(limit: int = 20):
-    """백엔드로부터 최근 세션 이력을 가져와 session_history를 갱신"""
+    """
+    백엔드로부터 최근 세션 이력을 가져와 session_history를 갱신
+    """
     resp = api_get("/sessions/recent", params={"limit": limit})
     if resp and resp.get("success"):
         sessions = resp.get("data") or []
