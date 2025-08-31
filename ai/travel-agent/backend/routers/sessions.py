@@ -1,8 +1,10 @@
 from fastapi import APIRouter, HTTPException, Request
+from sse_starlette.sse import EventSourceResponse
 
-from backend.models.request_models import AnswerRequest, SessionCreateRequest
+from backend.models.request_models import AnswerRequest, SessionCreateRequest, SessionSummaryRequest
 from backend.models.response_models import APIResponse
 from backend.services.recommendation_service import recommendation_service
+from backend.services.ai_service import ai_service
 
 router = APIRouter(prefix="/sessions", tags=["Sessions"])
 
@@ -25,6 +27,26 @@ async def create_session(
 
         session = recommendation_service.create_session(user_ip, user_agent)
         return APIResponse(success=True, message="Session created", data=session)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/{session_id}/summary-recommend")
+async def stream_session_summary_and_recommend(session_id: str, body: SessionSummaryRequest):
+    """
+    세션 답변 요약 및 후보 상품 기반 추천을 SSE로 스트리밍 반환
+    - 첫 이벤트로 answers_json을 전송
+    - 이후 LLM 응답을 스트리밍
+    """
+    try:
+        vstore = recommendation_service.vector_store
+
+        def event_generator():
+            yield from ai_service.stream_summary_and_recommend(
+                vector_store=vstore, session_id=session_id, limit=body.limit or 5
+            )
+
+        return EventSourceResponse(event_generator())
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

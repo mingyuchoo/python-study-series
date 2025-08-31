@@ -45,3 +45,11 @@ class AskAIRequest(BaseModel):
     session_id: str = Field(..., description="세션 ID")
     selected_text: Optional[str] = Field(None, description="질문에서 사용자가 선택한 항목의 표시 텍스트")
     selected_value: Optional[str] = Field(None, description="질문에서 사용자가 선택한 항목의 값")
+
+
+class SessionSummaryRequest(BaseModel):
+    """
+    세션 요약 및 추천 스트리밍 요청
+    """
+    session_id: str = Field(..., description="세션 ID")
+    limit: Optional[int] = Field(5, description="추천 결과 개수", ge=1, le=20)

@@ -68,7 +68,6 @@ def api_post_sse(path: str, json: Optional[Dict[str, Any]] = None):
     try:
         with requests.post(url, json=json, timeout=300, stream=True) as res:
             res.raise_for_status()
-            buffer = ""
             for raw in res.iter_lines(decode_unicode=True):
                 if raw is None:
                     continue
@@ -317,6 +316,21 @@ tab_qna, tab_session, tab_reco, tab_search = st.tabs(
     ]
 )
 
+# 탭 헤더에서 "세션 답변 보기"와 "추천 받기" 사이에 시각적 구분선 추가
+st.markdown(
+    """
+    <style>
+    /* 두 번째 탭(세션 답변 보기) 버튼의 우측에 경계선 추가 */
+    .stTabs [data-baseweb="tab-list"] button:nth-child(2) {
+        border-right: 1px solid var(--secondary-background-color);
+        margin-right: 16px; /* 경계선과 다음 탭 사이 여백 */
+        padding-right: 16px; /* 시각적 간격 보정 */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 # -----------------------------
 # 탭: 질문 · 답변 (통합)
 # -----------------------------
@@ -423,7 +437,7 @@ with tab_qna:
                         }
 
                 with right_col:
-                    st.markdown("#### 물어보기")
+                    st.markdown("#### AI에게 물어보기")
                     ask_clicked = st.button("물어보기", key=f"ask_q_{qid}")
                     holder = st.empty()
                     # 이전 LLM 응답 표시 (있다면)
@@ -641,12 +655,62 @@ with tab_session:
     if not st.session_state.session_id:
         st.info("세션 ID가 필요합니다.")
     else:
+        # 1) 원본 JSON 먼저 표시
         data = api_get(f"/sessions/{st.session_state.session_id}/answers")
         if data and data.get("success"):
             answers = data.get("data", [])
             if answers:
-                st.json(answers)
+                st.markdown("#### 세션의 답변 내역 (JSON)")
+                with st.expander("세션 답변 JSON 보기", expanded=False):
+                    st.json(answers)
             else:
                 st.info("저장된 답변이 없습니다.")
         else:
             st.error("세션 답변 조회 실패")
+
+        # 2) 요약/추천 스트리밍
+        st.markdown("---")
+        st.markdown("#### 요약 정리 및 추천 (SSE)")
+        limit = st.slider("추천 개수", min_value=1, max_value=20, value=5, key="session_sum_limit")
+        col_a, col_b = st.columns([1, 3])
+        with col_a:
+            run = st.button("요약+추천(스트리밍)", type="primary", key="btn_stream_summary")
+        # JSON 매핑은 접힌 상태의 expander 내부에 출력
+        mapping_expander = st.expander("질문별 매핑 JSON", expanded=False)
+        holder_json = mapping_expander.empty()
+        # 텍스트 스트림은 현대적인 채팅 카드로 출력
+        chat_container = st.container()
+        chat_placeholder = None
+
+        if run:
+            import json as _json
+            acc = ""
+            path = f"/sessions/{st.session_state.session_id}/summary-recommend"
+            payload = {"session_id": st.session_state.session_id, "limit": int(limit)}
+            # 채팅 메시지 컨테이너 생성 (assistant style)
+            with chat_container:
+                with st.chat_message("assistant"):
+                    chat_placeholder = st.empty()
+            for chunk in api_post_sse(path, json=payload):
+                if not chunk:
+                    continue
+                if chunk == "[DONE]":
+                    break
+                if chunk.startswith("[ERROR]"):
+                    if chat_placeholder is not None:
+                        chat_placeholder.error(chunk)
+                    break
+                # answers_json 선행 표시 처리
+                if chunk.startswith("{"):
+                    try:
+                        obj = _json.loads(chunk)
+                        if isinstance(obj, dict) and obj.get("type") == "answers_json":
+                            holder_json.json(obj.get("data"))
+                            continue
+                    except Exception:
+                        # JSON이 아니면 스트림 텍스트로 처리
+                        pass
+                acc += chunk
+                if chat_placeholder is not None:
+                    # HTML 렌더링 (LLM이 HTML을 반환하는 경우를 지원)
+                    chat_placeholder.markdown(acc, unsafe_allow_html=True)
