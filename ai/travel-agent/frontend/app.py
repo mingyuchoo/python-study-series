@@ -25,6 +25,9 @@ if "answers" not in st.session_state:
 if "answers_draft" not in st.session_state:
     # {question_id: {"answer_text": str|None, "answer_value": str|None}}
     st.session_state.answers_draft = {}
+if "ask_responses" not in st.session_state:
+    # {question_id: str} - 물어보기 LLM 응답 텍스트 저장
+    st.session_state.ask_responses = {}
 if "session_history" not in st.session_state:
     # 최근 사용된 세션 ID 목록 (최신순)
     st.session_state.session_history = []
@@ -181,6 +184,9 @@ def reset_all_question_inputs():
                 del st.session_state[key]
         # draft 초기화
         st.session_state.answers_draft[qid] = {"answer_text": None, "answer_value": None}
+        # 물어보기 응답 초기화 (존재 시 제거)
+        if "ask_responses" in st.session_state and qid in st.session_state.ask_responses:
+            del st.session_state.ask_responses[qid]
 
 
 # -----------------------------
@@ -353,87 +359,95 @@ with tab_qna:
             )
 
             with st.expander(f"Q{qid}. {qtext}", expanded=True):
-                if opts:
-                    # 선택지 기반 답변: 텍스트/값 동시 설정
-                    labels = [f"{o.get('option_text')}" for o in opts]
-                    # 현재 선택된 값 찾기
-                    current_value = st.session_state.answers_draft.get(qid, {}).get(
-                        "answer_value"
-                    )
-                    index_default = 0
-                    if current_value is not None:
-                        for i, o in enumerate(opts):
-                            if str(o.get("option_value")) == str(current_value):
-                                index_default = i
-                                break
-                    selected_label = st.radio(
-                        label="선택지",
-                        options=labels,
-                        index=index_default if labels else 0,
-                        key=f"q_{qid}_radio",
-                        horizontal=False,
-                    )
-                    # 선택한 옵션으로 draft 업데이트
-                    sel_opt = next(
-                        (o for o in opts if o.get("option_text") == selected_label),
-                        None,
-                    )
-                    if sel_opt:
-                        st.session_state.answers_draft[qid] = {
-                            "answer_text": sel_opt.get("option_text"),
-                            "answer_value": (
-                                str(sel_opt.get("option_value"))
-                                if sel_opt.get("option_value") is not None
-                                else None
+                left_col, right_col = st.columns([3, 2])
+                with left_col:
+                    if opts:
+                        # 선택지 기반 답변: 텍스트/값 동시 설정
+                        labels = [f"{o.get('option_text')}" for o in opts]
+                        # 현재 선택된 값 찾기
+                        current_value = st.session_state.answers_draft.get(qid, {}).get(
+                            "answer_value"
+                        )
+                        index_default = 0
+                        if current_value is not None:
+                            for i, o in enumerate(opts):
+                                if str(o.get("option_value")) == str(current_value):
+                                    index_default = i
+                                    break
+                        selected_label = st.radio(
+                            label="선택지",
+                            options=labels,
+                            index=index_default if labels else 0,
+                            key=f"q_{qid}_radio",
+                            horizontal=False,
+                        )
+                        # 선택한 옵션으로 draft 업데이트
+                        sel_opt = next(
+                            (o for o in opts if o.get("option_text") == selected_label),
+                            None,
+                        )
+                        if sel_opt:
+                            st.session_state.answers_draft[qid] = {
+                                "answer_text": sel_opt.get("option_text"),
+                                "answer_value": (
+                                    str(sel_opt.get("option_value"))
+                                    if sel_opt.get("option_value") is not None
+                                    else None
+                                ),
+                            }
+                    else:
+                        # 자유 입력형 질문
+                        at = st.text_input(
+                            "답변 텍스트",
+                            value=(
+                                st.session_state.answers_draft.get(qid, {}).get(
+                                    "answer_text"
+                                )
+                                or ""
                             ),
+                            key=f"q_{qid}_text",
+                        )
+                        av = st.text_input(
+                            "답변 값(선택)",
+                            value=(
+                                st.session_state.answers_draft.get(qid, {}).get(
+                                    "answer_value"
+                                )
+                                or ""
+                            ),
+                            key=f"q_{qid}_val",
+                        )
+                        st.session_state.answers_draft[qid] = {
+                            "answer_text": at or None,
+                            "answer_value": av or None,
                         }
-                else:
-                    # 자유 입력형 질문
-                    at = st.text_input(
-                        "답변 텍스트",
-                        value=(
-                            st.session_state.answers_draft.get(qid, {}).get(
-                                "answer_text"
-                            )
-                            or ""
-                        ),
-                        key=f"q_{qid}_text",
-                    )
-                    av = st.text_input(
-                        "답변 값(선택)",
-                        value=(
-                            st.session_state.answers_draft.get(qid, {}).get(
-                                "answer_value"
-                            )
-                            or ""
-                        ),
-                        key=f"q_{qid}_val",
-                    )
-                    st.session_state.answers_draft[qid] = {
-                        "answer_text": at or None,
-                        "answer_value": av or None,
-                    }
 
-                # 물어보기 (스트리밍)
-                ask_cols = st.columns([1, 6])
-                with ask_cols[0]:
+                with right_col:
+                    st.markdown("#### 물어보기")
                     ask_clicked = st.button("물어보기", key=f"ask_q_{qid}")
-                with ask_cols[1]:
                     holder = st.empty()
-                if ask_clicked and st.session_state.session_id:
-                    draft = st.session_state.answers_draft.get(qid) or {}
-                    payload = {
-                        "session_id": st.session_state.session_id,
-                        "selected_text": draft.get("answer_text"),
-                        "selected_value": draft.get("answer_value"),
-                    }
-                    acc = ""
-                    for chunk in api_post_sse(f"/questions/{qid}/ask", json=payload):
-                        if chunk == "[DONE]":
-                            break
-                        acc += chunk
-                        holder.markdown(acc)
+                    # 이전 LLM 응답 표시 (있다면)
+                    prev = st.session_state.get("ask_responses", {}).get(qid, "")
+                    if prev:
+                        holder.markdown(prev)
+                    if ask_clicked and st.session_state.session_id:
+                        draft = st.session_state.answers_draft.get(qid) or {}
+                        payload = {
+                            "session_id": st.session_state.session_id,
+                            "selected_text": draft.get("answer_text"),
+                            "selected_value": draft.get("answer_value"),
+                        }
+                        acc = ""
+                        # 스트리밍 동안 상태에 누적 저장하여 재실행 후에도 유지
+                        st.session_state.ask_responses[qid] = ""
+                        for chunk in api_post_sse(f"/questions/{qid}/ask", json=payload):
+                            if chunk == "[DONE]":
+                                break
+                            acc += chunk
+                            holder.markdown(acc)
+                            st.session_state.ask_responses[qid] = acc
 
+                # 질문별 답변 저장 버튼
                 if (
                     st.button("이 질문 답변 제출", key=f"submit_q_{qid}")
                     and st.session_state.session_id
