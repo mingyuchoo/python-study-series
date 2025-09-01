@@ -1,0 +1,103 @@
+[analysis_settings]
+# 전체 분석 활성화/비활성화
+enabled = true
+
+[syntax_errors]
+# 구문 오류 검사 설정
+enabled = true
+# 과도 탐지 방지 설정
+max_errors_per_paragraph = 3
+ignore_short_paragraphs = true
+min_paragraph_length = 10
+# 특정 오류 유형 비활성화
+check_punctuation = true
+check_punctuation_capitalization = false  # 문장 시작 시 대문자 사용 권장 비활성화
+check_brackets = true
+check_quotes = true
+# 예외 처리할 패턴들
+ignore_patterns = [
+    "\\d+\\.",  # 숫자 목록 (1. 2. 3.)
+    "\\w+\\:",  # 제목 형식 (제목:)
+    "\\([^)]*\\)",  # 괄호 안의 내용
+]
+
+[spelling_errors]
+# 맞춤법 검사 설정
+enabled = true
+# 한국어 맞춤법 검사
+korean_enabled = true
+korean_max_errors_per_paragraph = 5
+korean_max_text_length = 500  # 한 번에 검사할 최대 텍스트 길이
+korean_min_korean_chars = 10   # 최소 한국어 글자 수 (이하는 검사 안함)
+korean_api_delay = 0.2        # API 호출 간 대기 시간 (초)
+korean_max_consecutive_errors = 20  # 연속 오류 허용 횟수
+# 영어 맞춤법 검사
+english_enabled = true
+english_max_errors_per_paragraph = 3
+english_min_word_length = 3
+# 띄어쓰기 검사
+spacing_enabled = true
+spacing_max_errors_per_paragraph = 2
+spacing_min_text_length = 10  # 최소 텍스트 길이
+# 예외 단어 목록
+ignore_words = [
+    "API", "URL", "HTTP", "JSON", "XML",
+    "GitHub", "Microsoft", "Google",
+    "COVID-19", "AI", "ML", "IoT"
+]
+# 전문 용어 사전 (오타로 판단하지 않을 단어들)
+technical_terms = [
+    "FastAPI", "Streamlit", "PyKoSpacing",
+    "docx", "mammoth", "uvicorn"
+]
+# 한국어 검사 제외 패턴 (정규식)
+korean_skip_patterns = [
+    "^[a-zA-Z0-9\\s\\.,!?]+$",  # 영어/숫자만 포함된 텍스트
+    "^\\d+[\\.,]?\\d*$",        # 숫자만 포함된 텍스트
+    "^[\\s\\.,!?\\-_()\\[\\]{}]+$"  # 특수문자만 포함된 텍스트
+]
+
+[style_consistency]
+# 스타일 일관성 검사 설정
+enabled = true
+# 제목 구조 검사
+heading_structure_enabled = true
+max_heading_level_skip = 1
+allow_empty_headings = false
+# 폰트 일관성 검사
+font_consistency_enabled = true
+max_different_fonts = 3
+max_different_font_sizes = 5
+# 과도 탐지 방지
+min_font_usage_threshold = 2  # 2회 이상 사용된 폰트만 체크
+
+[document_structure]
+# 문서 구조 분석 설정
+enabled = true
+# 빈 문단 비율 임계값
+max_empty_paragraph_ratio = 0.4  # 40% 이상이면 경고
+min_paragraphs_for_analysis = 5  # 최소 문단 수
+# 이미지/표 분석
+analyze_images = true
+analyze_tables = true
+# 과도 탐지 방지
+ignore_single_line_paragraphs = true
+
+[error_handling]
+# 전역 오류 처리 설정
+continue_on_error = true
+log_errors = true
+max_analysis_time_seconds = 30
+# 각 분석 단계별 타임아웃
+syntax_timeout = 10
+spelling_timeout = 15
+style_timeout = 10
+structure_timeout = 5
+
+[recommendations]
+# 추천사항 생성 설정
+enabled = true
+max_recommendations = 10
+priority_order = ["syntax_errors", "spelling_errors", "style_consistency", "document_structure"]
+# 심각도별 메시지 커스터마이징
+severity_thresholds = { critical = 10, warning = 5, info = 1 }

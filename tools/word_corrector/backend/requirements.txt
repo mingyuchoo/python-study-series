@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+python-multipart
+python-docx
+mammoth
+pyspellchecker
+requests
+toml
+git+https://github.com/ssut/py-hanspell.git
+git+https://github.com/haven-jeon/PyKoSpacing.git
