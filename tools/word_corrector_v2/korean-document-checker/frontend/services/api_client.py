@@ -220,6 +220,7 @@ class APIClient:
             url = f"{self.base_url}/api/check/{file_id}"
             
             data = {
+                "file_id": file_id,
                 "check_types": check_types
             }
             

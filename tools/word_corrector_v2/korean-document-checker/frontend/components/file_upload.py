@@ -260,10 +260,15 @@ class FileUploadComponent:
             st.button("🔍 문서 검사 시작", disabled=True, help="먼저 파일을 업로드해주세요")
             return False
         
+        # 검사 시작 버튼을 더 눈에 띄게 표시
+        st.markdown("### 📋 문서 검사")
+        st.info("업로드된 문서에 대해 종합적인 품질 검사를 시작할 준비가 되었습니다.")
+        
         return st.button(
             "🔍 문서 검사 시작",
             type="primary",
-            help="업로드된 문서에 대해 종합적인 품질 검사를 시작합니다"
+            help="업로드된 문서에 대해 종합적인 품질 검사를 시작합니다",
+            use_container_width=True
         )
 
 def render_file_upload_component(api_client: APIClient) -> Tuple[Optional[str], Optional[str]]:
@@ -314,7 +319,9 @@ def render_file_upload_component(api_client: APIClient) -> Tuple[Optional[str], 
     
     # 이미 업로드된 파일이 있는 경우 검사 버튼만 표시
     elif st.session_state.get('uploaded_file_id'):
-        st.info(f"업로드된 파일: {st.session_state.get('uploaded_filename', 'Unknown')}")
+        st.success(f"✅ 업로드 완료: {st.session_state.get('uploaded_filename', 'Unknown')}")
+        
+        st.divider()
         
         col1, col2 = st.columns([3, 1])
         

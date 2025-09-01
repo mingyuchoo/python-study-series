@@ -222,7 +222,12 @@ def main():
             # 현재 단계에 따른 컴포넌트 렌더링
             if st.session_state.current_step == 'upload':
                 st.header("📁 문서 업로드")
-                st.info("검사할 한국어 .docx 파일을 업로드해주세요.")
+                
+                # 업로드된 파일이 있는지 확인
+                if st.session_state.get('uploaded_file_id'):
+                    st.success("✅ 파일 업로드가 완료되었습니다!")
+                else:
+                    st.info("검사할 한국어 .docx 파일을 업로드해주세요.")
                 
                 # API 클라이언트 생성
                 try:
@@ -248,6 +253,9 @@ def main():
                         st.session_state.current_step = 'checking'
                         st.session_state.uploaded_file_id = file_id
                         st.session_state.uploaded_filename = filename
+                        # check_started 상태 초기화
+                        if 'check_started' in st.session_state:
+                            del st.session_state.check_started
                         st.rerun()
                         
                 except Exception as e:
@@ -279,12 +287,32 @@ def main():
                     
                     # 백그라운드에서 검사 시작
                     if 'check_started' not in st.session_state:
+                        st.session_state.check_started = True
+                        
+                        # 백엔드 연결 확인
                         try:
-                            # 비동기적으로 검사 시작
-                            check_results = api_client.check_document(st.session_state.uploaded_file_id)
-                            st.session_state.check_results = check_results
-                            st.session_state.check_started = True
+                            # 백엔드 연결 테스트
+                            health_status = api_client.check_health()
+                            
+                            # 검사 시작 표시
+                            with st.spinner("문서 검사를 시작하고 있습니다..."):
+                                # 실제 API 호출
+                                check_results = api_client.check_document(st.session_state.uploaded_file_id)
+                                st.session_state.check_results = check_results
+                                st.session_state.current_step = 'results'
+                                st.rerun()
+                                
                         except APIClientError as e:
+                            # 백엔드 연결 실패 시 샘플 데이터 사용
+                            logger.warning(f"백엔드 연결 실패, 샘플 데이터 사용: {str(e)}")
+                            st.warning("⚠️ 백엔드 서버에 연결할 수 없어 샘플 데이터를 표시합니다.")
+                            
+                            from components.sample_data import generate_sample_check_results
+                            st.session_state.check_results = generate_sample_check_results(st.session_state.uploaded_filename)
+                            st.session_state.current_step = 'results'
+                            st.rerun()
+                            
+                        except Exception as e:
                             logger.error(f"문서 검사 시작 실패: {str(e)}")
                             
                             # 에러 복구 시스템 사용

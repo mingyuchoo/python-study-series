@@ -5,7 +5,7 @@ Azure OpenAI를 활용한 종합적인 문서 품질 검사
 
 import logging
 from datetime import datetime
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import JSONResponse
 
@@ -38,7 +38,7 @@ async def get_checker_service() -> CheckerService:
 @router.post("/check/{file_id}", response_model=ComprehensiveReport)
 async def check_document(
     file_id: str,
-    request: CheckRequest = None,
+    request: Optional[CheckRequest] = None,
     checker_service: CheckerService = Depends(get_checker_service)
 ):
     """
@@ -66,6 +66,8 @@ async def check_document(
         # 요청 파라미터 기본값 설정
         if request is None:
             request = CheckRequest(file_id=file_id, check_types=["all"])
+        elif not request.check_types:
+            request.check_types = ["all"]
         
         # 진행률 추적 시작
         task_id = f"check_{file_id}"

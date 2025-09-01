@@ -1736,3 +1736,309 @@ class CheckerService:
                 "message": f"종합 요약 생성 실패: {str(e)}",
                 "file_path": file_path
             }
+
+    async def korean_spell_check(self, content: str) -> Dict[str, Any]:
+        """
+        한국어 맞춤법 검사 수행
+        GPT-4.1 모델을 활용한 정밀한 맞춤법 및 띄어쓰기 검사
+        
+        Args:
+            content: 검사할 텍스트 내용
+            
+        Returns:
+            Dict: 맞춤법 검사 결과
+        """
+        try:
+            logger.info("한국어 맞춤법 검사 시작")
+            
+            # 한국어 텍스트만 추출
+            korean_content = self._extract_korean_text(content)
+            
+            if not korean_content.strip():
+                return {
+                    "status": "success",
+                    "check_type": "korean_spelling",
+                    "result": {
+                        "errors": [],
+                        "summary": "검사할 한국어 텍스트가 없습니다."
+                    }
+                }
+            
+            # 긴 텍스트의 경우 청크 단위로 처리
+            if len(korean_content) > 3000:
+                return await self._process_long_text_korean_spelling(content, korean_content)
+            
+            # 프롬프트 생성
+            system_prompt = self.prompt_templates["korean_spelling"]["system"]
+            user_prompt = self.prompt_templates["korean_spelling"]["user"].format(content=korean_content)
+            
+            # Azure OpenAI 호출
+            result = await self._call_azure_openai(
+                system_prompt=system_prompt,
+                user_prompt=user_prompt,
+                check_type="korean_spelling"
+            )
+            
+            # 결과 후처리
+            if result.get("status") == "success":
+                result = self._post_process_spelling_result(result, content, "korean")
+            
+            logger.info(f"한국어 맞춤법 검사 완료: {result.get('summary', {}).get('total_errors', 0)}개 오류 발견")
+            return result
+            
+        except Exception as e:
+            logger.error(f"한국어 맞춤법 검사 오류: {str(e)}")
+            return {
+                "status": "error",
+                "message": f"한국어 맞춤법 검사 실패: {str(e)}",
+                "check_type": "korean_spelling"
+            }
+
+    async def english_spell_check(self, content: str) -> Dict[str, Any]:
+        """
+        영어 맞춤법 검사 수행
+        GPT-4.1 모델을 활용한 영어 단어 철자 검사
+        
+        Args:
+            content: 검사할 텍스트 내용
+            
+        Returns:
+            Dict: 영어 맞춤법 검사 결과
+        """
+        try:
+            logger.info("영어 맞춤법 검사 시작")
+            
+            # 영어 단어 추출
+            english_words = self._extract_english_words(content)
+            
+            if not english_words:
+                return {
+                    "status": "success",
+                    "check_type": "english_spelling",
+                    "result": {
+                        "errors": [],
+                        "english_words_found": [],
+                        "summary": "검사할 영어 단어가 없습니다."
+                    }
+                }
+            
+            logger.info(f"발견된 영어 단어 수: {len(english_words)}")
+            
+            # 프롬프트 생성
+            system_prompt = self.prompt_templates["english_spelling"]["system"]
+            user_prompt = self.prompt_templates["english_spelling"]["user"].format(content=content)
+            
+            # Azure OpenAI 호출
+            result = await self._call_azure_openai(
+                system_prompt=system_prompt,
+                user_prompt=user_prompt,
+                check_type="english_spelling"
+            )
+            
+            # 결과 후처리
+            if result.get("status") == "success":
+                result = self._post_process_spelling_result(result, content, "english")
+                # 발견된 영어 단어 목록 추가
+                if "result" in result:
+                    result["result"]["english_words_found"] = english_words
+            
+            logger.info(f"영어 맞춤법 검사 완료: {result.get('summary', {}).get('total_errors', 0)}개 오류 발견")
+            return result
+            
+        except Exception as e:
+            logger.error(f"영어 맞춤법 검사 오류: {str(e)}")
+            return {
+                "status": "error",
+                "message": f"영어 맞춤법 검사 실패: {str(e)}",
+                "check_type": "english_spelling"
+            }
+
+    async def layout_consistency_check(self, structure: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        문서 레이아웃 및 일관성 검사 수행
+        문서 구조, 용어 통일성, 형식 일관성을 검사
+        
+        Args:
+            structure: 문서 구조 정보
+            
+        Returns:
+            Dict: 일관성 검사 결과
+        """
+        try:
+            logger.info("일관성 검사 시작")
+            
+            # 문서 구조 분석
+            structure_analysis = self._analyze_document_structure(structure)
+            
+            # 구조 정보를 텍스트로 변환
+            structure_text = self._structure_to_detailed_text(structure, structure_analysis)
+            
+            # 내용에서 용어 분석
+            content = structure.get("content", "")
+            terminology_analysis = self._analyze_terminology(content)
+            
+            # 분석 결과를 포함한 상세 내용 생성
+            enhanced_content = self._enhance_content_with_terminology(content, terminology_analysis)
+            
+            # 프롬프트 생성
+            system_prompt = self.prompt_templates["consistency"]["system"]
+            user_prompt = self.prompt_templates["consistency"]["user"].format(
+                content=f"{structure_text}\n\n=== 문서 내용 ===\n{enhanced_content}"
+            )
+            
+            # Azure OpenAI 호출
+            result = await self._call_azure_openai(
+                system_prompt=system_prompt,
+                user_prompt=user_prompt,
+                check_type="consistency"
+            )
+            
+            # 결과 후처리
+            if result.get("status") == "success":
+                result = self._post_process_consistency_result(result, structure, terminology_analysis)
+            
+            logger.info(f"일관성 검사 완료: {result.get('summary', {}).get('total_errors', 0)}개 문제 발견")
+            return result
+            
+        except Exception as e:
+            logger.error(f"일관성 검사 오류: {str(e)}")
+            return {
+                "status": "error",
+                "message": f"일관성 검사 실패: {str(e)}",
+                "check_type": "consistency"
+            }
+
+    async def _call_azure_openai(self, system_prompt: str, user_prompt: str, check_type: str) -> Dict[str, Any]:
+        """
+        Azure OpenAI API 호출
+        
+        Args:
+            system_prompt: 시스템 프롬프트
+            user_prompt: 사용자 프롬프트
+            check_type: 검사 유형
+            
+        Returns:
+            Dict: API 호출 결과
+        """
+        try:
+            result = await self.azure_client.analyze_document(user_prompt, check_type)
+            return result
+            
+        except Exception as e:
+            logger.error(f"Azure OpenAI 호출 오류 ({check_type}): {str(e)}")
+            return {
+                "status": "error",
+                "message": f"Azure OpenAI 호출 실패: {str(e)}",
+                "check_type": check_type
+            }
+
+    def _post_process_consistency_result(self, result: Dict[str, Any], structure: Dict[str, Any], terminology_analysis: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        일관성 검사 결과 후처리
+        
+        Args:
+            result: 원본 결과
+            structure: 문서 구조 정보
+            terminology_analysis: 용어 분석 결과
+            
+        Returns:
+            Dict: 후처리된 결과
+        """
+        try:
+            if "result" in result and isinstance(result["result"], dict):
+                errors = result["result"].get("errors", [])
+                
+                # 각 오류에 대해 우선순위 계산
+                for error in errors:
+                    error["priority"] = self._calculate_consistency_priority(error)
+                
+                # 오류를 우선순위별로 정렬
+                errors.sort(key=lambda x: x.get("priority", 0), reverse=True)
+                
+                # 일관성 검사 특화 요약 정보 추가
+                error_types = {}
+                for error in errors:
+                    error_type = error.get("error_type", "기타")
+                    error_types[error_type] = error_types.get(error_type, 0) + 1
+                
+                result["summary"] = {
+                    "total_errors": len(errors),
+                    "high_priority_errors": len([e for e in errors if e.get("priority", 0) >= 0.8]),
+                    "error_types": error_types,
+                    "terminology_issues": len(terminology_analysis.get("repeated_phrases", [])),
+                    "style_issues": len(terminology_analysis.get("style_patterns", [])),
+                    "check_type": "consistency",
+                    "description": result["result"].get("summary", "")
+                }
+            
+            return result
+            
+        except Exception as e:
+            logger.error(f"일관성 결과 후처리 오류: {str(e)}")
+            return result
+
+    def _calculate_consistency_priority(self, error: Dict[str, Any]) -> float:
+        """
+        일관성 오류 우선순위 계산
+        
+        Args:
+            error: 오류 정보
+            
+        Returns:
+            float: 우선순위 점수
+        """
+        base_confidence = error.get("confidence", 0.5)
+        error_type = error.get("error_type", "").lower()
+        
+        # 일관성 오류 유형별 가중치
+        type_weights = {
+            "용어": 0.9,
+            "문체": 0.8,
+            "표기법": 0.7,
+            "서식": 0.6,
+            "구조": 0.85
+        }
+        
+        # 오류 유형에 따른 가중치 적용
+        weight = 0.5
+        for key, value in type_weights.items():
+            if key in error_type:
+                weight = value
+                break
+        
+        return min(base_confidence * weight, 1.0)
+
+    def _enhance_content_with_terminology(self, content: str, terminology_analysis: Dict[str, Any]) -> str:
+        """
+        용어 분석 결과를 포함하여 내용 강화
+        
+        Args:
+            content: 원본 내용
+            terminology_analysis: 용어 분석 결과
+            
+        Returns:
+            str: 강화된 내용
+        """
+        try:
+            enhanced_parts = [content]
+            
+            if terminology_analysis.get("repeated_phrases"):
+                enhanced_parts.append("\n\n=== 반복 사용된 구문 ===")
+                for phrase in terminology_analysis["repeated_phrases"]:
+                    enhanced_parts.append(f"- {phrase}")
+            
+            if terminology_analysis.get("style_patterns"):
+                enhanced_parts.append("\n\n=== 문체 패턴 ===")
+                for pattern in terminology_analysis["style_patterns"]:
+                    enhanced_parts.append(f"- {pattern}")
+            
+            if terminology_analysis.get("word_frequency"):
+                enhanced_parts.append("\n\n=== 주요 용어 빈도 ===")
+                for word, freq in list(terminology_analysis["word_frequency"].items())[:10]:
+                    enhanced_parts.append(f"- {word}: {freq}회")
+            
+            return "\n".join(enhanced_parts)
+            
+        except Exception as e:
+            logger.error(f"내용 강화 오류: {str(e)}")
+            return content

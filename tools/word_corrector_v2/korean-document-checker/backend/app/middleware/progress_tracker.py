@@ -117,9 +117,6 @@ class ProgressTracker:
             data["message"] = message
             data["last_update"] = datetime.now()
             data["estimated_remaining"] = 0
-            
-            # 완료된 작업은 5분 후 자동 삭제
-            asyncio.create_task(self._cleanup_task(task_id, delay=300))
         
         logger.info(f"Progress completed for task: {task_id}")
     
@@ -140,9 +137,7 @@ class ProgressTracker:
             data["status"] = "failed"
             data["message"] = error_message
             data["last_update"] = datetime.now()
-            
-            # 실패한 작업은 1분 후 자동 삭제
-            asyncio.create_task(self._cleanup_task(task_id, delay=60))
+            data["estimated_remaining"] = None
         
         logger.error(f"Progress failed for task {task_id}: {error_message}")
     
@@ -157,21 +152,36 @@ class ProgressTracker:
             진행률 정보 또는 None
         """
         async with self._lock:
-            return self._progress_data.get(task_id)
+            return self._progress_data.get(task_id, None)
     
-    async def _cleanup_task(self, task_id: str, delay: int = 300) -> None:
+    async def cleanup_old_progress(self, max_age_hours: int = 1) -> int:
         """
-        지정된 시간 후 작업 데이터를 정리합니다.
+        오래된 진행률 데이터를 정리합니다.
         
         Args:
-            task_id: 작업 고유 ID
-            delay: 지연 시간 (초)
+            max_age_hours: 최대 보관 시간 (시간)
+            
+        Returns:
+            정리된 항목 수
         """
-        await asyncio.sleep(delay)
+        cutoff_time = datetime.now() - timedelta(hours=max_age_hours)
+        cleaned_count = 0
+        
         async with self._lock:
-            if task_id in self._progress_data:
+            tasks_to_remove = []
+            
+            for task_id, data in self._progress_data.items():
+                if data["last_update"] < cutoff_time:
+                    tasks_to_remove.append(task_id)
+            
+            for task_id in tasks_to_remove:
                 del self._progress_data[task_id]
-                logger.info(f"Progress data cleaned up for task: {task_id}")
+                cleaned_count += 1
+        
+        if cleaned_count > 0:
+            logger.info(f"Cleaned up {cleaned_count} old progress entries")
+        
+        return cleaned_count
 
 
 # 전역 진행률 추적기 인스턴스
@@ -181,47 +191,32 @@ progress_tracker = ProgressTracker()
 class ProgressTrackingMiddleware(BaseHTTPMiddleware):
     """진행률 추적 미들웨어"""
     
-    async def dispatch(self, request: Request, call_next):
+    async def dispatch(self, request: Request, call_next: Callable) -> Response:
         """
-        요청을 처리하고 진행률 추적 정보를 헤더에 추가합니다.
+        요청을 처리하고 진행률 추적을 관리합니다.
         
         Args:
-            request: FastAPI Request 객체
+            request: HTTP 요청
             call_next: 다음 미들웨어 또는 엔드포인트
             
         Returns:
-            응답 객체
+            HTTP 응답
         """
-        # 진행률 추적이 필요한 엔드포인트 확인
-        if request.url.path.startswith("/api/check/"):
-            # 작업 ID를 요청 헤더나 URL에서 추출
-            task_id = request.headers.get("X-Task-ID")
-            if not task_id:
-                # URL에서 파일 ID를 작업 ID로 사용
-                path_parts = request.url.path.split("/")
-                if len(path_parts) >= 4:
-                    task_id = f"check_{path_parts[3]}"
-            
-            # 요청 상태에 작업 ID 저장
-            request.state.task_id = task_id
+        # 작업 ID가 헤더에 있는 경우 추출
+        task_id = request.headers.get("X-Task-ID")
         
-        # 다음 미들웨어/엔드포인트 실행
+        if task_id:
+            logger.info(f"Processing request with task ID: {task_id}")
+        
+        # 요청 처리
         response = await call_next(request)
-        
-        # 진행률 정보를 응답 헤더에 추가
-        if hasattr(request.state, 'task_id') and request.state.task_id:
-            progress_info = await progress_tracker.get_progress(request.state.task_id)
-            if progress_info:
-                response.headers["X-Progress"] = str(progress_info["progress"])
-                response.headers["X-Progress-Status"] = progress_info["status"]
-                response.headers["X-Progress-Message"] = progress_info["message"]
         
         return response
 
 
 # 편의 함수들
 async def start_task_progress(task_id: str, total_steps: int, description: str = "") -> None:
-    """작업 진행률 추적을 시작하는 편의 함수"""
+    """진행률 추적 시작"""
     await progress_tracker.start_progress(task_id, total_steps, description)
 
 
@@ -229,22 +224,25 @@ async def update_task_progress(
     task_id: str,
     current_step: int,
     step_name: str = "",
-    message: str = ""
+    message: str = "",
+    estimated_remaining: Optional[int] = None
 ) -> None:
-    """작업 진행률을 업데이트하는 편의 함수"""
-    await progress_tracker.update_progress(task_id, current_step, step_name, message)
+    """진행률 업데이트"""
+    await progress_tracker.update_progress(
+        task_id, current_step, step_name, message, estimated_remaining
+    )
 
 
 async def complete_task_progress(task_id: str, message: str = "작업이 완료되었습니다") -> None:
-    """작업 진행률을 완료로 표시하는 편의 함수"""
+    """진행률 완료"""
     await progress_tracker.complete_progress(task_id, message)
 
 
 async def fail_task_progress(task_id: str, error_message: str) -> None:
-    """작업 진행률을 실패로 표시하는 편의 함수"""
+    """진행률 실패"""
     await progress_tracker.fail_progress(task_id, error_message)
 
 
 async def get_task_progress(task_id: str) -> Optional[Dict[str, Any]]:
-    """작업 진행률을 조회하는 편의 함수"""
+    """진행률 조회"""
     return await progress_tracker.get_progress(task_id)

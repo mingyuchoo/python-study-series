@@ -874,4 +874,136 @@ def render_comprehensive_report(results: Dict[str, Any]) -> None:
         return
     
     component = ResultDisplayComponent()
-    component.render_comprehensive_dashboard(results)
+    component.render_comprehensive_dashboard(results)    
+    with col2:
+            st.metric(
+                label="🔍 총 오류 수",
+                value=results.get('total_errors', 0),
+                help="발견된 전체 오류 개수"
+            )
+        
+        with col3:
+            score = results.get('overall_score', 0)
+            score_color = "🟢" if score >= 80 else "🟡" if score >= 60 else "🔴"
+            st.metric(
+                label=f"{score_color} 품질 점수",
+                value=f"{score}/100",
+                help="문서 전체 품질 점수"
+            )
+        
+        st.divider()
+
+def render_check_results(results: Dict[str, Any]) -> None:
+    """
+    검사 결과를 렌더링하는 메인 함수
+    
+    Args:
+        results: 검사 결과 데이터
+    """
+    try:
+        component = ResultDisplayComponent()
+        
+        # 헤더 렌더링
+        component.render_results_header(results)
+        
+        # 검사 결과가 있는 경우
+        if 'check_results' in results:
+            st.header("📋 상세 검사 결과")
+            
+            # 각 검사 유형별 결과 표시
+            for check_result in results['check_results']:
+                check_type = check_result.get('check_type', 'unknown')
+                config = component.CHECK_TYPE_CONFIG.get(check_type, {
+                    'icon': '📄',
+                    'name': check_type,
+                    'color': '#666666',
+                    'description': '검사 결과'
+                })
+                
+                with st.expander(f"{config['icon']} {config['name']} ({check_result.get('errors_found', 0)}개 오류)", expanded=check_result.get('errors_found', 0) > 0):
+                    st.write(f"**설명:** {config['description']}")
+                    st.write(f"**요약:** {check_result.get('summary', '요약 없음')}")
+                    
+                    # 오류 목록 표시
+                    suggestions = check_result.get('suggestions', [])
+                    if suggestions:
+                        st.subheader("🔧 수정 제안")
+                        for i, suggestion in enumerate(suggestions):
+                            with st.container():
+                                st.markdown(f"**{i+1}. {suggestion.get('title', suggestion.get('error_type', '오류'))}**")
+                                
+                                col1, col2 = st.columns(2)
+                                with col1:
+                                    st.write("**현재:**")
+                                    st.code(suggestion.get('current_text', ''), language=None)
+                                
+                                with col2:
+                                    st.write("**제안:**")
+                                    st.code(suggestion.get('suggested_text', ''), language=None)
+                                
+                                st.write(f"**설명:** {suggestion.get('explanation', '설명 없음')}")
+                                
+                                confidence = suggestion.get('confidence', 0)
+                                if isinstance(confidence, (int, float)):
+                                    st.progress(confidence / 100 if confidence > 1 else confidence)
+                                    st.caption(f"신뢰도: {confidence}%")
+                                
+                                st.divider()
+                    else:
+                        st.success("✅ 이 영역에서는 문제점이 발견되지 않았습니다.")
+        
+        # 우선순위 이슈 표시
+        if 'priority_issues' in results and results['priority_issues']:
+            st.header("⚠️ 우선순위 문제점")
+            
+            for issue in results['priority_issues']:
+                priority = issue.get('priority', 'medium')
+                priority_config = component.PRIORITY_CONFIG.get(priority, component.PRIORITY_CONFIG['medium'])
+                
+                with st.container():
+                    st.markdown(f"""
+                    <div style="background-color: {priority_config['background']}; padding: 10px; border-radius: 5px; margin: 10px 0;">
+                        <h4>{priority_config['icon']} {issue.get('title', '문제점')}</h4>
+                        <p><strong>위치:</strong> {issue.get('location', '위치 정보 없음')}</p>
+                        <p><strong>설명:</strong> {issue.get('explanation', '설명 없음')}</p>
+                    </div>
+                    """, unsafe_allow_html=True)
+        
+        # 권장사항 표시
+        if 'recommendations' in results and results['recommendations']:
+            st.header("💡 권장사항")
+            
+            for i, recommendation in enumerate(results['recommendations']):
+                st.write(f"{i+1}. {recommendation}")
+        
+        # 다운로드 및 추가 작업 버튼
+        st.divider()
+        st.header("📥 추가 작업")
+        
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            if st.button("📄 보고서 다운로드", help="검사 결과를 PDF로 다운로드"):
+                st.info("보고서 다운로드 기능은 준비 중입니다.")
+        
+        with col2:
+            if st.button("🔄 재검사", help="동일한 파일을 다시 검사"):
+                st.session_state.current_step = 'checking'
+                st.rerun()
+        
+        with col3:
+            if st.button("📁 새 파일 업로드", help="새로운 파일을 업로드하여 검사"):
+                # 세션 초기화
+                st.session_state.uploaded_file_id = None
+                st.session_state.uploaded_filename = None
+                st.session_state.check_results = None
+                st.session_state.current_step = 'upload'
+                st.rerun()
+        
+    except Exception as e:
+        logger.error(f"결과 표시 오류: {str(e)}")
+        st.error(f"결과를 표시하는 중 오류가 발생했습니다: {str(e)}")
+        
+        # 원시 데이터 표시 (디버깅용)
+        with st.expander("원시 검사 결과 데이터 (디버깅용)", expanded=False):
+            st.json(results)
