@@ -15,6 +15,12 @@ from app.services.file_manager import FileManager
 from app.services.checker_service import CheckerService
 from app.core.azure_client import get_azure_client
 from app.core.config import get_settings
+from app.middleware.progress_tracker import (
+    start_task_progress, 
+    update_task_progress, 
+    complete_task_progress, 
+    fail_task_progress
+)
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -61,18 +67,37 @@ async def check_document(
         if request is None:
             request = CheckRequest(file_id=file_id, check_types=["all"])
         
-        # 파일 정보 확인
+        # 진행률 추적 시작
+        task_id = f"check_{file_id}"
+        check_types = request.check_types
+        if "all" in check_types:
+            check_types = ["grammar", "korean_spell", "english_spell", "consistency"]
+        
+        total_steps = len(check_types) + 2  # 파일 처리 + 검사들 + 보고서 생성
+        await start_task_progress(task_id, total_steps, f"문서 검사: {file_id}")
+        
+        current_step = 0
+        
+        # 1단계: 파일 정보 확인
+        current_step += 1
+        await update_task_progress(task_id, current_step, "파일 확인", "업로드된 파일 정보를 확인하고 있습니다...")
+        
         file_info = file_manager.get_file_info(file_id)
         if not file_info:
+            await fail_task_progress(task_id, f"파일을 찾을 수 없음: {file_id}")
             logger.error(f"파일을 찾을 수 없음: {file_id}")
             raise HTTPException(
                 status_code=404,
                 detail=f"File not found: {file_id}"
             )
         
-        # 문서 처리 (텍스트 추출)
+        # 2단계: 문서 처리 (텍스트 추출)
+        current_step += 1
+        await update_task_progress(task_id, current_step, "문서 처리", "문서에서 텍스트를 추출하고 구조를 분석하고 있습니다...")
+        
         processing_result = file_manager.process_document(file_id)
         if not processing_result.get("success"):
+            await fail_task_progress(task_id, f"문서 처리 실패: {processing_result.get('error')}")
             logger.error(f"문서 처리 실패: {processing_result.get('error')}")
             raise HTTPException(
                 status_code=400,
@@ -84,16 +109,12 @@ async def check_document(
         structure = document_summary.get("structure", {})
         
         if not content.strip():
+            await fail_task_progress(task_id, f"문서에서 텍스트를 추출할 수 없음: {file_id}")
             logger.error(f"문서에서 텍스트를 추출할 수 없음: {file_id}")
             raise HTTPException(
                 status_code=400,
                 detail="No text content found in document"
             )
-        
-        # 검사 유형 결정
-        check_types = request.check_types
-        if "all" in check_types:
-            check_types = ["grammar", "korean_spell", "english_spell", "consistency"]
         
         logger.info(f"수행할 검사 유형: {check_types}")
         
@@ -101,8 +122,19 @@ async def check_document(
         check_results = []
         all_errors = []
         
-        for check_type in check_types:
+        for i, check_type in enumerate(check_types):
             try:
+                # 진행률 업데이트
+                current_step += 1
+                check_names = {
+                    "grammar": "구문 검사",
+                    "korean_spell": "한국어 맞춤법 검사", 
+                    "english_spell": "영어 맞춤법 검사",
+                    "consistency": "일관성 검사"
+                }
+                check_name = check_names.get(check_type, check_type)
+                await update_task_progress(task_id, current_step, check_name, f"{check_name}를 수행하고 있습니다...")
+                
                 logger.info(f"{check_type} 검사 시작")
                 
                 if check_type == "grammar":
@@ -149,6 +181,10 @@ async def check_document(
                     summary=f"{check_type} 검사 중 오류 발생: {str(e)}"
                 ))
         
+        # 마지막 단계: 보고서 생성
+        current_step += 1
+        await update_task_progress(task_id, current_step, "보고서 생성", "검사 결과를 종합하여 보고서를 생성하고 있습니다...")
+        
         # 우선순위 이슈 선별 (상위 10개)
         priority_issues = _get_priority_issues(all_errors, limit=10)
         
@@ -170,12 +206,19 @@ async def check_document(
             processing_time=datetime.now().isoformat()
         )
         
+        # 진행률 완료
+        await complete_task_progress(task_id, f"문서 검사 완료: 총 {len(all_errors)}개 오류 발견")
+        
         logger.info(f"문서 검사 완료: {file_id}, 총 {len(all_errors)}개 오류 발견")
         return comprehensive_report
         
     except HTTPException:
         raise
     except Exception as e:
+        # 진행률 실패 처리
+        task_id = f"check_{file_id}"
+        await fail_task_progress(task_id, f"문서 검사 중 오류 발생: {str(e)}")
+        
         logger.error(f"문서 검사 중 예상치 못한 오류: {str(e)}")
         raise HTTPException(
             status_code=500,

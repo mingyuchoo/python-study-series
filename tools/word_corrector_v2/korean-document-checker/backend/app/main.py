@@ -8,11 +8,24 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi import HTTPException
 import uvicorn
+import logging
 from datetime import datetime
+
+# 미들웨어 임포트
+from app.middleware.error_handler import ErrorHandlingMiddleware, RequestValidationMiddleware
+from app.middleware.progress_tracker import ProgressTrackingMiddleware
 
 # API 라우터 임포트
 from app.api.endpoints import upload
 from app.api.endpoints import check
+from app.api.endpoints import progress
+
+# 로깅 설정
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 app = FastAPI(
     title="Korean Document Checker API",
@@ -22,7 +35,17 @@ app = FastAPI(
     redoc_url="/redoc"
 )
 
-# CORS 미들웨어 설정 - 프론트엔드 연동을 위한 설정
+# 미들웨어 설정
+# 1. 에러 처리 미들웨어 (가장 바깥쪽)
+app.add_middleware(ErrorHandlingMiddleware)
+
+# 2. 진행률 추적 미들웨어
+app.add_middleware(ProgressTrackingMiddleware)
+
+# 3. 요청 검증 미들웨어
+app.add_middleware(RequestValidationMiddleware)
+
+# 3. CORS 미들웨어 설정 - 프론트엔드 연동을 위한 설정
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:8501", "http://127.0.0.1:8501"],  # Streamlit 기본 포트
@@ -30,29 +53,6 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["*"],
 )
-
-# 전역 예외 핸들러
-@app.exception_handler(HTTPException)
-async def http_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=exc.status_code,
-        content={
-            "error_code": f"HTTP_{exc.status_code}",
-            "message": exc.detail,
-            "timestamp": datetime.now().isoformat()
-        }
-    )
-
-@app.exception_handler(Exception)
-async def general_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=500,
-        content={
-            "error_code": "INTERNAL_SERVER_ERROR",
-            "message": "내부 서버 오류가 발생했습니다.",
-            "timestamp": datetime.now().isoformat()
-        }
-    )
 
 # 헬스체크 엔드포인트
 @app.get("/api/health")
@@ -99,6 +99,7 @@ async def root():
 # API 라우터 등록
 app.include_router(upload.router, prefix="/api", tags=["upload"])
 app.include_router(check.router, prefix="/api", tags=["check"])
+app.include_router(progress.router, prefix="/api", tags=["progress"])
 
 if __name__ == "__main__":
     uvicorn.run(

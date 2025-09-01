@@ -9,6 +9,12 @@ from fastapi.responses import JSONResponse
 from app.models.request import FileUploadResponse, ErrorResponse
 from app.services.file_manager import FileManager
 from app.core.config import get_settings
+from app.core.exceptions import (
+    FileValidationError,
+    FileProcessingError,
+    ValidationError,
+    create_success_response
+)
 
 logger = logging.getLogger(__name__)
 
@@ -50,9 +56,9 @@ async def upload_file(
         
         # 파일이 제공되었는지 확인
         if not file or not file.filename:
-            raise HTTPException(
-                status_code=400,
-                detail="No file provided"
+            raise ValidationError(
+                message="파일이 제공되지 않았습니다",
+                field="file"
             )
         
         # 파일 내용 읽기

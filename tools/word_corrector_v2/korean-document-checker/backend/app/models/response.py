@@ -3,7 +3,7 @@ Response models for the Korean Document Checker API
 """
 
 from pydantic import BaseModel, Field
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Union
 from datetime import datetime
 
 
@@ -56,3 +56,59 @@ class HealthCheckResponse(BaseModel):
     azure_openai_config: str = Field(..., description="Azure OpenAI configuration status")
     azure_openai_connection: Optional[str] = Field(None, description="Azure OpenAI connection status")
     azure_openai_error: Optional[str] = Field(None, description="Azure OpenAI connection error if any")
+
+class ErrorResponse(BaseModel):
+    """표준화된 에러 응답 모델"""
+    error: bool = Field(True, description="에러 발생 여부")
+    error_code: str = Field(..., description="에러 코드")
+    message: str = Field(..., description="에러 메시지")
+    details: Optional[Dict[str, Any]] = Field(None, description="에러 세부 정보")
+    timestamp: str = Field(..., description="에러 발생 시간")
+    success: bool = Field(False, description="요청 성공 여부")
+
+
+class SuccessResponse(BaseModel):
+    """표준화된 성공 응답 모델"""
+    success: bool = Field(True, description="요청 성공 여부")
+    message: str = Field(..., description="성공 메시지")
+    data: Any = Field(..., description="응답 데이터")
+    timestamp: str = Field(..., description="응답 생성 시간")
+    error: bool = Field(False, description="에러 발생 여부")
+
+
+class ValidationErrorDetail(BaseModel):
+    """검증 오류 세부 정보"""
+    field: Optional[str] = Field(None, description="오류가 발생한 필드")
+    message: str = Field(..., description="검증 오류 메시지")
+    invalid_value: Optional[Any] = Field(None, description="잘못된 값")
+
+
+class ProgressUpdate(BaseModel):
+    """진행 상태 업데이트 모델"""
+    step: str = Field(..., description="현재 진행 단계")
+    progress: float = Field(..., description="진행률 (0.0-1.0)")
+    message: str = Field(..., description="진행 상태 메시지")
+    timestamp: str = Field(..., description="업데이트 시간")
+    estimated_remaining: Optional[int] = Field(None, description="예상 남은 시간 (초)")
+
+
+class FileUploadProgress(BaseModel):
+    """파일 업로드 진행 상태"""
+    file_id: Optional[str] = Field(None, description="파일 ID")
+    filename: str = Field(..., description="파일명")
+    uploaded_bytes: int = Field(..., description="업로드된 바이트 수")
+    total_bytes: int = Field(..., description="전체 파일 크기")
+    progress: float = Field(..., description="업로드 진행률 (0.0-1.0)")
+    status: str = Field(..., description="업로드 상태")
+    message: str = Field(..., description="상태 메시지")
+
+
+class CheckProgress(BaseModel):
+    """문서 검사 진행 상태"""
+    file_id: str = Field(..., description="파일 ID")
+    current_check: str = Field(..., description="현재 수행 중인 검사")
+    completed_checks: List[str] = Field(..., description="완료된 검사 목록")
+    total_checks: int = Field(..., description="전체 검사 수")
+    progress: float = Field(..., description="전체 진행률 (0.0-1.0)")
+    estimated_remaining: Optional[int] = Field(None, description="예상 남은 시간 (초)")
+    message: str = Field(..., description="진행 상태 메시지")
