@@ -1,0 +1,10 @@
+[tasks.all]
+  dependencies = ["backend", "frontend"]
+[tasks.backend]
+  args        = ["run", "uvicorn", "backend.main:backend", "--reloead"]
+  command     = "uv"
+  description = "Run Backend"
+[tasks.frontend]
+  args        = ["run", "streamlit", "run", "frontend/app.py"]
+  command     = "uv"
+  description = "Run Frontend"

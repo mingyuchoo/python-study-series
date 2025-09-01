@@ -1,11 +1,7 @@
 from fastapi import APIRouter, HTTPException
 
 from backend.models.request_models import RecommendationRequest, SearchRequest
-from backend.models.response_models import (
-    APIResponse,
-    RecommendationResponse,
-    TravelPackage,
-)
+from backend.models.response_models import ( APIResponse, RecommendationResponse, TravelPackage, )
 from backend.services.recommendation_service import recommendation_service
 
 router = APIRouter(prefix="/recommendations", tags=["Recommendations"])
@@ -17,9 +13,7 @@ async def get_recommendations(rec_request: RecommendationRequest):
     개인화된 여행 상품 추천
     """
     try:
-        recommendations = recommendation_service.get_recommendations(
-            rec_request.session_id, rec_request.limit
-        )
+        recommendations = recommendation_service.get_recommendations( rec_request.session_id, rec_request.limit )
 
         return RecommendationResponse(
             session_id=rec_request.session_id,

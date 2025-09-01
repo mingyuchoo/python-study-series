@@ -16,6 +16,7 @@ install:
 format:
 	black .
 	isort .
+	taplo format .
 
 backend:
 	uv run uvicorn backend.main:backend --reload
