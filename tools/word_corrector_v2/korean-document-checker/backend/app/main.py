@@ -10,8 +10,9 @@ from fastapi import HTTPException
 import uvicorn
 from datetime import datetime
 
-# API 라우터 임포트 (향후 구현될 예정)
-# from app.api.endpoints import upload, check
+# API 라우터 임포트
+from app.api.endpoints import upload
+from app.api.endpoints import check
 
 app = FastAPI(
     title="Korean Document Checker API",
@@ -95,9 +96,9 @@ async def root():
         "health": "/api/health"
     }
 
-# API 라우터 등록 (향후 구현될 예정)
-# app.include_router(upload.router, prefix="/api", tags=["upload"])
-# app.include_router(check.router, prefix="/api", tags=["check"])
+# API 라우터 등록
+app.include_router(upload.router, prefix="/api", tags=["upload"])
+app.include_router(check.router, prefix="/api", tags=["check"])
 
 if __name__ == "__main__":
     uvicorn.run(

@@ -24,6 +24,7 @@ class Settings(BaseSettings):
     max_file_size: int = 10 * 1024 * 1024  # 10MB
     temp_file_retention_hours: int = 1
     allowed_file_extensions: list = [".docx"]
+    temp_dir: Optional[str] = None  # 임시 파일 저장 디렉터리 (None이면 시스템 기본값 사용)
     
     # 서버 설정
     backend_host: str = "0.0.0.0"
