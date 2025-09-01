@@ -1,7 +1,7 @@
 [tasks.all]
   dependencies = ["backend", "frontend"]
 [tasks.backend]
-  args        = ["run", "uvicorn", "backend.main:backend", "--reloead"]
+  args        = ["run", "uvicorn", "backend.main:backend", "--reload"]
   command     = "uv"
   description = "Run Backend"
 [tasks.frontend]
