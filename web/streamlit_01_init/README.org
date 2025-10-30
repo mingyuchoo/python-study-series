@@ -3,7 +3,7 @@
 #+BEGIN_SRC shell
   uv init  streamlit_01_init
   cd streamlit_01_init
-  uv venv --python 3.12
+  uv venv --python 3.14
   source .venv/bin/activate
   uv add streamlit pandas matplotlib
   touch streamlit_config.toml

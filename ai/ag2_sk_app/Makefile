@@ -12,8 +12,9 @@ install:
 	uv pip install -r requirements.txt
 
 format:
-	black .
-	isort .
+	uv run black .
+	uv run isort .
+	taplo format .
 
 cli:
 	python cli.py

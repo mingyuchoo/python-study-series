@@ -1,2 +1,2 @@
 --line-length=160
---target-version=py38
+--target-version=py313

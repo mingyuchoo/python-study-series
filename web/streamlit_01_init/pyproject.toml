@@ -1,11 +1,11 @@
 [project]
-  dependencies    = [
+  dependencies = [
     "matplotlib>=3.10.0",
     "pandas>=2.2.3",
     "streamlit>=1.41.1",
-]
-  description     = "Add your description here"
-  name            = "streamlit-01-init"
-  readme          = "README.md"
-  requires-python = ">=3.12"
-  version         = "0.1.0"
+  ]
+  description = "Add your description here"
+  name = "streamlit-01-init"
+  readme = "README.md"
+  requires-python = ">=3.14"
+  version = "0.1.0"

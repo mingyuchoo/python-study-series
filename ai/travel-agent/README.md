@@ -7,7 +7,7 @@
 ### 1. 의존성 설치
 
 ```bash
-uv venv --python 3.12
+uv venv --python 3.14
 .\.venv\Scripts\activate.ps1
 uv pip install -r requirements.txt
 ```

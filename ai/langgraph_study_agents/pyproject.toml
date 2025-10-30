@@ -1,17 +1,13 @@
 [project]
-authors = [{ name = "mingyuchoo", email = "mingyuchoo@gmail.com" }]
-description = "Default template for PDM package"
-license = { text = "BSD 3-Clause" }
-name = "langgraph_study_agents"
-readme = "README.md"
-requires-python = ">=3.11"
-version = "0.1.0"
-
-[tool.black]
-line-length = 120
-target-version = ['py311', 'py312']
+  authors         = [{email = "mingyuchoo@gmail.com", name = "mingyuchoo"}]
+  description     = "Default template for PDM package"
+  license         = {text = "BSD 3-Clause"}
+  name            = "langgraph_study_agents"
+  readme          = "README.md"
+  requires-python = ">=3.14"
+  version         = "0.1.0"
 
 [tool.mypy]
-python_version = "3.11"
-warn_return_any = true
-warn_unused_configs = true
+  python_version      = "3.14"
+  warn_return_any     = true
+  warn_unused_configs = true

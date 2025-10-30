@@ -17,7 +17,7 @@ if (Test-Path ".venv") {
 
 # Create fresh virtual environment
 Write-Host "Creating virtual environment..."
-uv venv --python 3.12
+uv venv --python 3.14
 
 # Install dependencies using uv
 Write-Host "Installing dependencies (including Korean packages from GitHub)..."
